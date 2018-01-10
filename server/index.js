@@ -9,10 +9,6 @@ app.use(bodyParser.urlencoded())
 // parse application/json
 app.use(bodyParser.json())
 
-// app.get('/', (req, res) => {
-//   res.send('hello world! unchanged');
-// }) 
-
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.get('/feed/global', (req, res) => {
@@ -36,7 +32,6 @@ app.get('/feed/user/:userId', (req, res) => {
 
   Promise.resolve(sampledata.sampleFeed)
     .then((results) => {
-      
       res.status(200).json({items: results});
     })
     .catch((err) => {
