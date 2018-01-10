@@ -20,7 +20,7 @@ app.get('/feed/global', (req, res) => {
   // DB query should replace default promise
   Promise.resolve(sampledata.sampleFeed)
     .then((results) => {
-      res.status(200).json(results);
+      res.status(200).json({items: results});
     })
     .catch((err) => {
       console.log(err);
@@ -37,7 +37,7 @@ app.get('/feed/user/:userId', (req, res) => {
   Promise.resolve(sampledata.sampleFeed)
     .then((results) => {
       
-      res.status(200).json(results);
+      res.status(200).json({items: results});
     })
     .catch((err) => {
       console.log(err);
@@ -45,3 +45,5 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 
 });
+
+module.exports = app;
