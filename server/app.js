@@ -41,9 +41,5 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 });
 
-app.get('/login', (req, res) => {
-
-});
-
 module.exports = app;
 
