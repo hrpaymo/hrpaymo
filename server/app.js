@@ -2,15 +2,17 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
-const db = require('../database/signup.js');
+const signupdb = require('../database/signup.js');
+const db = require('../database/index.js');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/../client/dist'));
+
 
 app.post('/login', (req, res) => {
   console.log('login body', req.body);
@@ -67,6 +69,7 @@ app.get('/feed/user/:userId', (req, res) => {
       res.sendStatus(404);
     })
 });
+
 
 module.exports = app;
 
