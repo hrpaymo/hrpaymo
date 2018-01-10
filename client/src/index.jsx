@@ -21,7 +21,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Hello Paymo</h1>
-        {this.state.auth 
+        {!this.state.auth 
           ? <LoggedOutHome/>
           : <Home/>}
       </div>
