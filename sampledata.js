@@ -7,7 +7,7 @@ const sampleFeed = [
     payee: {
       userId: 1234,
       username: 'sarah-jacobs',
-      displayName: 'Sarah Jacobs',
+      fullName: 'Sarah Jacobs',
       firstName: 'Sarah',
       lastName: 'Jacobs'
     },
@@ -15,7 +15,7 @@ const sampleFeed = [
       userId: 1435,
       displayName: 'Daniel Rimmings',
       username: 'daniel-dog',
-      displayName: 'Daniel Rimmings',
+      fullName: 'Daniel Rimmings',
       firstName: 'Daniel',
       lastName: 'Rimmings',
       avatar_url: 'https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/male/45.png'
@@ -30,14 +30,14 @@ const sampleFeed = [
       userId: '1435',
       displayName: 'Daniel Rimmings',
       username: 'daniel-dog',
-      displayName: 'Daniel Rimmings',
+      fullName: 'Daniel Rimmings',
       firstName: 'Daniel',
       lastName: 'Rimmings'
     },
     payer: {
       userId: '1234',
       username: 'sarah-jacobs',
-      displayName: 'Sarah Jacobs',
+      fullName: 'Sarah Jacobs',
       firstName: 'Sarah',
       lastName: 'Jacobs',
       avatar_url: 'https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/female/45.png'
