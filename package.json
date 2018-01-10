@@ -10,7 +10,6 @@
     "npm": ">=5.4.2"
   },
   "scripts": {
-
     "heroku-postbuild": "webpack -p --config ./webpack.config.js",
     "react-dev": "webpack -d --watch",
     "start": "nodemon index.js",
