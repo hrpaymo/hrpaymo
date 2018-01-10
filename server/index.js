@@ -38,7 +38,7 @@ app.get('/feed/user/:userId', (req, res) => {
       console.log(err);
       res.sendStatus(404);
     })
-
 });
 
 module.exports = app;
+
