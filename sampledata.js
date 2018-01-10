@@ -13,7 +13,6 @@ const sampleFeed = [
     },
     payer: {
       userId: 1435,
-      displayName: 'Daniel Rimmings',
       username: 'daniel-dog',
       fullName: 'Daniel Rimmings',
       firstName: 'Daniel',
@@ -28,7 +27,6 @@ const sampleFeed = [
     note: '🏡 Rent due',
     payee: {
       userId: '1435',
-      displayName: 'Daniel Rimmings',
       username: 'daniel-dog',
       fullName: 'Daniel Rimmings',
       firstName: 'Daniel',

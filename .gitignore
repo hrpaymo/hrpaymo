@@ -18,6 +18,10 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
+# Local attributes
+.DS_Store
+client/.DS_Store
+
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
 client/dist/bundle.js
