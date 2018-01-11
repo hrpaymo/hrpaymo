@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 module.exports = {
   pg: require('knex') ({
@@ -6,3 +7,4 @@ module.exports = {
     pool: { min: 0, max: 7 }
   })
 }
+
