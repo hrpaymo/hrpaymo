@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
+const db = require('../database/signup.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded())
@@ -17,9 +18,18 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  console.log('signup body', req.body);
-  res.sendStatus(200);
-});
+  // console.log('signup post with data:', req.body);
+  db.newUserSignup(req.body, 100)
+    .then(userId => {
+      console.log('successful signup with userId:', userId);
+      res.status(201).json({ userid: userId });
+    })
+    .catch(errorReason => {
+      console.error('error on user signup:', errorReason);
+      // TODO: send responses depending on what type of error is thrown
+      res.status(422).json({ error : "Username must be unique." });
+    })
+})
 
 app.get('/feed/global', (req, res) => {
 
