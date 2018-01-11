@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
-const axios = require('axios');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded())
