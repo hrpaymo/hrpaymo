@@ -16,7 +16,6 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 
 app.post('/login', (req, res) => {
-  console.log('login body', req.body);
   var {username, password} = req.body;
   login.checkPasswordAtUsername(username, (row) => {
     if (row.length) {

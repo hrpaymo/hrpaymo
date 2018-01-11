@@ -26,7 +26,7 @@ var pg = require('knex')({
 });
 
 module.exports = {
-  checkPasswordAtUsername: (username, callback) => { // login = {username:<username>, password:<password>}
+  checkPasswordAtUsername: (username, callback) => {
     pg.table('users')
       .where({user_name: username})
       .select('id', 'password')
