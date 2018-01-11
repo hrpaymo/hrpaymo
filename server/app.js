@@ -17,7 +17,20 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   console.log('login body', req.body);
-  res.sendStatus(200);
+  var {username, password} = req.body;
+  login.checkPasswordAtUsername(username, (row) => {
+    if (row.length) {
+      if (row[0].password === password) {
+        res.status(200).send({ userId: row[0].id });
+      }
+      else {
+        res.status(401).send("Error: incorrect password");
+      }
+    }
+    else{
+        res.status(401).send("Error: invalid username");
+    }
+  });
 });
 
 app.post('/signup', (req, res) => {
@@ -71,12 +84,6 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 });
 
-<<<<<<< HEAD
-=======
-app.get('/login', (req, res) => {
-  // call function in database/login.js with info 
-});
->>>>>>> Create basic database connection with knex
 
 module.exports = app;
 
