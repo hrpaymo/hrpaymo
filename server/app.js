@@ -16,17 +16,20 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  logindb.checkPasswordAtUsername(username, (row) => {
-    if (row.length) {
-      if (row[0].password === password) {
-        res.status(200).send({ userId: row[0].id });
-      }
-      else {
-        res.status(401).json({ error : "Incorrect password"});
-      }
-    }
-    else{
+  logindb.checkPasswordAtUsername(username, (err, row) => {
+    if (err) {
+      console.error("Error retrieving from database: ", err);
+      res.status(500).json(err);
+    } else {
+      if (row.length) {
+        if (row[0].password === password) {
+          res.status(200).json({ userId: row[0].id });
+        }else {
+          res.status(401).json({ error : "Incorrect password"});
+        }
+      }else{
         res.status(401).json({ error : "Invalid username"});
+      }
     }
   });
 });

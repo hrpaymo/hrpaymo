@@ -6,9 +6,11 @@ module.exports = {
       .where({username: username})
       .select('id', 'password')
       .then((result) => {
-        callback(result);
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error, null);
       });
-
   } 
 }
 
