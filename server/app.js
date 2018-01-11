@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
 const signupdb = require('../database/signup.js');
 const db = require('../database/index.js');
+const login = require('../database/login.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -70,6 +71,12 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 });
 
+<<<<<<< HEAD
+=======
+app.get('/login', (req, res) => {
+  // call function in database/login.js with info 
+});
+>>>>>>> Create basic database connection with knex
 
 module.exports = app;
 
