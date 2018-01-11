@@ -27,7 +27,7 @@ class Login extends React.Component {
 
     axios.post('/login', user)
       .then((response) => {
-        let userId = 2;
+        let userId = response.userId;
         this.props.logUserIn(userId);
       })
       .catch((error) => {
@@ -68,7 +68,7 @@ class Login extends React.Component {
           <span className="error-text">
             {this.state.errorCode === 401
               ? <span>Username or Password incorrect. Please try again</span>
-              : <span>Our servers are having issues! Please try later</span>
+              : <span>Our servers are having issues. Please try later</span>
             }
           </span>
         }
