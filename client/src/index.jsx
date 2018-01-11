@@ -20,8 +20,7 @@ class App extends React.Component {
 
   loadUserData(userId) {
     // Feel free to rename.
-    // Here we will load all additional user-specific data for the 
-    // logged-in user homepage
+    // Here we will load all additional user-specific data
 
     this.getGlobalFeed();
   }
