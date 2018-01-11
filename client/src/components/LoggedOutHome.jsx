@@ -19,7 +19,7 @@ class LoggedOutHome extends React.Component {
   render() {
     return (
       <div>
-      {this.state.view === 'signup' && <SignUp signUserUp={this.props.signUserUp} />}
+      {this.state.view === 'signup' && <SignUp logUserIn={this.props.logUserIn} />}
       {this.state.view === 'login' && <Login logUserIn={this.props.logUserIn}/>}
       {this.state.view === null && 
         <div>

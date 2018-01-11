@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class SignUp extends React.Component {
   constructor (props) {
@@ -35,8 +36,11 @@ class SignUp extends React.Component {
       avatarUrl: this.state.avatarUrl
     };
 
-    this.props.signUserUp(user)
-      .then()
+    axios.post('/signup', user)
+      .then((response) => {
+        let userId = response.userId;
+        this.props.logUserIn(userId);
+      })
       .catch((error) => {
         if (error.response && error.response.status === 422) {
           console.log('error authenticating user errors', error.response)

@@ -18,7 +18,7 @@ app.post('/login', (req, res) => {
 
 app.post('/signup', (req, res) => {
   console.log('signup body', req.body);
-  res.sendStatus(422);
+  res.sendStatus(200);
 });
 
 app.get('/feed/global', (req, res) => {
