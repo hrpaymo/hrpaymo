@@ -11,6 +11,16 @@ app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/../client/dist'));
 
+app.post('/login', (req, res) => {
+  console.log('login body', req.body);
+  res.sendStatus(200);
+});
+
+app.post('/signup', (req, res) => {
+  console.log('signup body', req.body);
+  res.sendStatus(422);
+});
+
 app.get('/feed/global', (req, res) => {
 
   // DB query should replace default promise
