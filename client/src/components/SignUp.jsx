@@ -38,7 +38,7 @@ class SignUp extends React.Component {
 
     axios.post('/signup', user)
       .then((response) => {
-        let userId = 2;
+        let userId = response.userId;
         this.props.logUserIn(userId);
       })
       .catch((error) => {
