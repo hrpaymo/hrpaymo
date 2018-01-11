@@ -7,6 +7,11 @@
   align-items: center;
 }
 
+.navbar-logo a {
+  text-decoration: none;
+  color: white;
+}
+
 .navbar-logout {
   text-decoration-style: underline;
   cursor: pointer;

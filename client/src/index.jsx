@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom'
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
 import NavBar from './components/Navbar.jsx';
 import axios from 'axios';
+import Login from './components/Login.jsx';
+import SignUp from './components/SignUp.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -172,9 +175,10 @@ class App extends React.Component {
   }
 
   render () {
-    return (
-      <div>
-        <NavBar 
+    const home = (props) => {
+      return (
+        <div>
+          <NavBar 
           isLoggedIn={this.state.isLoggedIn}
           logUserOut={this.logUserOut.bind(this)}/>
         {!this.state.isLoggedIn 
@@ -189,6 +193,46 @@ class App extends React.Component {
               refreshUserData={this.refreshUserData.bind(this)}
               /> 
         }
+        </div>
+      )
+    }
+
+    const LoginWithProps = (props) => {
+      return (
+        <Login 
+          logUserIn={this.logUserIn.bind(this)}
+          {...props}
+        />
+      );
+    }
+
+    const SignupWithProps = (props) => {
+      return (
+        <SignUp 
+          logUserIn={this.logUserIn.bind(this)}
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <div>
+        <BrowserRouter>
+          <Switch>
+            <Route 
+              exact path="/signup" 
+              component={SignupWithProps} />
+            <Route 
+              exact path="/login" 
+              component={LoginWithProps} />
+            <Route 
+              path="/" 
+              component={home} />
+            <Route 
+              path="/?feed=(/:pathParam)" 
+              component={home} />
+          </Switch>
+        </BrowserRouter>
       </div>
     )
   }
