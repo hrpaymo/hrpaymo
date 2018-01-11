@@ -66,8 +66,8 @@ app.get('/feed/global', (req, res) => {
       res.status(200).json({items: results});
     })
     .catch((err) => {
-      console.log(err);
-      res.sendStatus(404);
+      console.error('error retrieving global feed: ', err);
+      res.sendStatus(500).json({error: 'server error'});
     })
 
 });
