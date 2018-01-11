@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
 const signupdb = require('../database/signup.js');
 const logindb = require('../database/login.js');
+const feeddb = require('../database/feed.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -59,7 +60,8 @@ app.post('/signup', (req, res) => {
 app.get('/feed/global', (req, res) => {
 
   // DB query should replace default promise
-  Promise.resolve(sampledata.sampleFeed)
+  let limit = 25;
+  feeddb(limit)
     .then((results) => {
       res.status(200).json({items: results});
     })
