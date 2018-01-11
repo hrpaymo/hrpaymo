@@ -1,7 +1,7 @@
 const pg = require('./index.js').pg;
 
 const newUserSignup = function(signupData, startingAmount) {
-  console.log('hopefully connected to:', process.env.DATABASE_URL);
+  // console.log('hopefully connected to:', process.env.DATABASE_URL);
   console.log('signing up user:', signupData);
   let userId = undefined;
   let errorReason = undefined;
@@ -22,19 +22,17 @@ const newUserSignup = function(signupData, startingAmount) {
     .then(id => {
       console.log('signup returned id[0]:', id[0]);
       userId = id[0];
+      return userId;
     })
-    .then(userInsert.commit)
-  })
-  .then(() => {
-    return pg.transaction(balanceInsert => {
+    .then(id => {
       return pg.table('balance')
-      .transacting(balanceInsert)
+      .transacting(userInsert)
       .insert({
-        user_id: userId,
+        user_id: id,
         amount: startingAmount
       })
-      .then(balanceInsert.commit)
     })
+    .then(userInsert.commit)
   })
   .then(() => {
     return userId;
