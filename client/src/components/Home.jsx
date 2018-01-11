@@ -12,15 +12,9 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <div>
-          <Payment/>
-        </div>
-        <div>
-          <Feed/>
-        </div>
-        <div>
-          <MiniProfile/>
-        </div>
+        <Payment/>
+        <MiniProfile/>
+        <Feed globalFeed={this.props.globalFeed && this.props.globalFeed.items}/>
       </div>
     );
   }

@@ -24,3 +24,24 @@
 button {
   width: 100px;
 }
+
+.feed-container {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #d3d3d3;
+  padding: 10px;
+}
+
+.feed-avatar {
+  border-radius: 50px;
+  padding: 15px;
+}
+
+.feed-timestamp {
+  color: #A9A9A9;
+}
+
+.feed-user {
+  font-weight: bold;
+}
