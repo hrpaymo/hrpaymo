@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import NavBar from './Navbar.jsx';
 
 class Login extends React.Component {
   constructor (props) {
@@ -29,6 +30,7 @@ class Login extends React.Component {
       .then((response) => {
         let userId = response.data.userId;
         this.props.logUserIn(userId);
+        this.props.history.push('/');
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
@@ -51,6 +53,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
+        <NavBar isLoggedIn={false} />
         <label>
           Username
           <input 

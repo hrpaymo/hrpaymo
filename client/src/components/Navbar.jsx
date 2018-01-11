@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter, Link } from "react-router-dom";
 
 class Navbar extends React.Component {
   constructor (props) {
@@ -9,15 +10,20 @@ class Navbar extends React.Component {
     }
   }
 
+  logOutAndRedirect () {
+    this.props.logUserOut();
+    this.props.history.push("/login");
+  }
+
   render() {
     return (
       <div className='navbar'>
         <div className='navbar-logo'>
-          <h1>Hello Paymo</h1>
+          <Link to="/"><h1>Hello Paymo</h1></Link>
         </div>
         <div className='navbar-menu'>
           {this.props.isLoggedIn && 
-            <div className='navbar-logout' onClick={this.props.logUserOut}> Log Out</div>
+            <div className='navbar-logout' onClick={this.logOutAndRedirect.bind(this)}> Log Out</div>
           }
         </div>
       </div>
@@ -26,4 +32,4 @@ class Navbar extends React.Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

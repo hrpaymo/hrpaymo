@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
 const db = require('../database/queries.js');
+var path = require('path');
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -130,5 +132,13 @@ app.get('/feed/user/:userId', (req, res) => {
 });
 
 
+<<<<<<< HEAD
+=======
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..' , './client/dist/index.html'));
+});
+
+
+>>>>>>> routing with login and signup form working
 module.exports = app;
 
