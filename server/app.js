@@ -24,10 +24,18 @@ app.post('/signup', (req, res) => {
       console.log('successful signup with userId:', userId);
       res.status(201).json({ userid: userId });
     })
-    .catch(errorReason => {
-      console.error('error on user signup:', errorReason);
+    .catch(err => {
+      console.error('error on user signup:', err);
       // TODO: send responses depending on what type of error is thrown
-      res.status(422).json({ error : "Username must be unique." });
+      if(err.constraint.includes('users_user')) {
+        res.status(422).json({ error : "Username must be unique." });
+      } else if(err.constraint.includes('users_email')) {
+        res.status(422).json({ error: "Email must be unique." });
+      } else if(err.constraint.includes('users_phone')) {
+        res.status(422).json({ error: "Phone number must be unique." });
+      } else {
+        res.status(400).json({ error: "Improper format." });
+      }
     })
 })
 
