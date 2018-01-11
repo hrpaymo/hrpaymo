@@ -41,13 +41,13 @@ class SignUp extends React.Component {
         if (error.response && error.response.status === 422) {
           console.log('error authenticating user errors', error.response)
           this.setState({
-            didLoginFail: true,
+            didSignupFail: true,
             errorCode: 422
           })
         } else {
           console.log('Error in component', error.response)
           this.setState({
-            didLoginFail: true,
+            didSignupFail: true,
             errorCode: 500
           })   
         }
