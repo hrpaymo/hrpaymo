@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
+const axios = require('axios');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded())
@@ -10,6 +11,16 @@ app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/../client/dist'));
+
+app.post('/login', (req, res) => {
+  console.log('login body', req.body);
+  res.sendStatus(200);
+});
+
+app.post('/signup', (req, res) => {
+  console.log('signup body', req.body);
+  res.sendStatus(200);
+});
 
 app.get('/feed/global', (req, res) => {
 

@@ -13,9 +13,6 @@ class Home extends React.Component {
     return (
       <div>
         <div>
-          <Navbar/>
-        </div>
-        <div>
           <Payment/>
         </div>
         <div>

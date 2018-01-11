@@ -1,0 +1,26 @@
+.navbar {
+  background: #3D95CE;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.navbar-logout {
+  text-decoration-style: underline;
+  cursor: pointer;
+}
+
+.error-text{
+  color: red;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  width: 100px;
+}

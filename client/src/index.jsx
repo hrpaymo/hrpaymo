@@ -3,32 +3,44 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
-// import <Component Name> from './components/<component>.jsx';
-// import <Component Name> from './components/<component>.jsx';
+import NavBar from './components/Navbar.jsx';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      isLoggedIn: false,
-      userId: undefined
+      isLoggedIn: false
     }
   }
 
   componentDidMount() {
   }
 
-  logUserIn(user) {
-    // user is currently in form: 
-    // {username: 'ginger', password: 'test'}
-    
-    // Add GET request here once endpoint is defined
+  loadUserData(userId) {
+    // Feel free to rename.
+    // Here we will load all additional user-specific data for the 
+    // logged-in user homepage
+    console.log('user data loaded for user: ', userId);
+  }
 
-    // After successful Login
-    this.setState({
-      userId: 2,
-      isLoggedIn: true
-    })
+  logUserIn(user) {
+    let request = axios.post('/login', user);
+
+    // Return Axios request as a promise so that the log-in component can handle 
+    // appropriate user-facing error responses
+    return request
+      .then(response => {
+        let userId = response.userId;
+        this.setState({
+          isLoggedIn: true
+        })
+        this.loadUserData(userId);
+        return response;
+        })
+      .catch(error => {
+        return Promise.reject(error)
+      });
   }
 
   logUserOut() {
@@ -38,21 +50,28 @@ class App extends React.Component {
   }
 
   signUserUp(user){
-    // console.log('user to sign up:', user)
-    // Add POST request here once endpoint is defined
-
-    // After successful Post request
-    this.setState({
-      userId: 4,
-      isLoggedIn: true
-    })
-
+    let request = axios.post('/signup', user);
+    
+    // Return Axios request as a promise so that the log-in component can handle 
+    // appropriate user-facing error responses
+    return request
+      .then(response => {
+        let userId = response.userId;
+        this.setState({
+          isLoggedIn: true
+        })
+        this.loadUserData(userId);
+        return response;
+        })
+      .catch(error => {
+        return Promise.reject(error)
+      });
   }
 
   render () {
     return (
       <div>
-        <h1>Hello Paymo</h1>
+        <NavBar isLoggedIn={this.state.isLoggedIn} logUserOut={this.logUserOut.bind(this)}/>
         {!this.state.isLoggedIn 
           ? <LoggedOutHome 
               signUserUp={this.signUserUp.bind(this)}

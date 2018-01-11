@@ -9,7 +9,10 @@ class SignUp extends React.Component {
       firstName: '',
       lastName: '',
       phone: '',
-      password: ''
+      password: '',
+      avatarUrl: '',
+      didSignupFail: false,
+      errorCode: null
     }
   }
 
@@ -28,15 +31,32 @@ class SignUp extends React.Component {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       phone: this.state.phone,
-      password: this.state.password
+      password: this.state.password,
+      avatarUrl: this.state.avatarUrl
     };
 
-    this.props.signUserUp(user);
+    this.props.signUserUp(user)
+      .then()
+      .catch((error) => {
+        if (error.response && error.response.status === 422) {
+          console.log('error authenticating user errors', error.response)
+          this.setState({
+            didLoginFail: true,
+            errorCode: 422
+          })
+        } else {
+          console.log('Error in component', error.response)
+          this.setState({
+            didLoginFail: true,
+            errorCode: 500
+          })   
+        }
+      });
   }
 
   render() {
     return (
-      <div>
+      <div className='signup form'>
         <label>
           Username
           <input 
@@ -79,6 +99,21 @@ class SignUp extends React.Component {
             onChange = {this.handleInputChanges.bind(this)}
             />
         </label>
+        <label>
+          Avatar Url
+          <input 
+            name='avatarUrl'
+            onChange = {this.handleInputChanges.bind(this)}
+            />
+        </label>
+        {this.state.didSignupFail && 
+          <span className="error-text">
+            {this.state.errorCode === 422
+              ? <span>Username, Phone Number, or Email is not unique. Please try again.</span>
+              : <span>Our servers are having issues. Please try later</span>
+            }
+          </span>
+        }
         <button onClick={this.signUserUp.bind(this)} >Sign up</button>
       </div>
     );
