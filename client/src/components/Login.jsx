@@ -32,12 +32,14 @@ class Login extends React.Component {
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
+          console.log('error authenticating user errors', error.response);
           this.setState({
             didLoginFail: true,
             errorCode: 401,
-            errorMessage: error.response.data
+            errorMessage: error.response.data.error
           })
         } else {
+          console.log('Error in login component:', error.response)
           this.setState({
             didLoginFail: true,
             errorCode: 500

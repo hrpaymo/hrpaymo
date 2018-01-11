@@ -3,8 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
 const signupdb = require('../database/signup.js');
-const db = require('../database/index.js');
-const login = require('../database/login.js');
+const logindb = require('../database/login.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,24 +16,24 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  login.checkPasswordAtUsername(username, (row) => {
+  logindb.checkPasswordAtUsername(username, (row) => {
     if (row.length) {
       if (row[0].password === password) {
         res.status(200).send({ userId: row[0].id });
       }
       else {
-        res.status(401).send("Error: incorrect password");
+        res.status(401).json({ error : "Incorrect password"});
       }
     }
     else{
-        res.status(401).send("Error: invalid username");
+        res.status(401).json({ error : "Invalid username"});
     }
   });
 });
 
 app.post('/signup', (req, res) => {
   // console.log('signup post with data:', req.body);
-  db.newUserSignup(req.body, 100)
+  signupdb.newUserSignup(req.body, 100)
     .then(userId => {
       console.log('successful signup with userId:', userId);
       res.status(201).json({ userid: userId });
