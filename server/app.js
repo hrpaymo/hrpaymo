@@ -100,7 +100,7 @@ app.post('/signup', (req, res) => {
 
 app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
-  paydb.pay(req.body)
+  db.payment(req.body)
     .then(balance => {
       console.log('successful payment from userId:', req.body.payerId, 'to payee:', req.body.payeeUsername, 'for', req.body.amount, 'New balance:', balance);
       res.status(201).json({ balance: balance });

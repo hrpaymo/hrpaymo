@@ -81,8 +81,7 @@ class App extends React.Component {
   logUserIn(userId) {
     console.log('called logUserIn with userId:', userId);
     this.setState({
-      isLoggedIn: true,
-      userId: userId
+      isLoggedIn: true
     })
     this.loadUserData(userId);
   }

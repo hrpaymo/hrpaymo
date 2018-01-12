@@ -20,18 +20,18 @@ class Payment extends React.Component {
   }
 
   payUser() {
-    console.log('payment props:', this.props);
+    // console.log('payment props:', this.props);
     let payment = {
       payerId: this.props.payerId,
       payeeUsername: this.state.payeeUsername,
       amount: this.state.amount,
       note: this.state.note
     };
-    console.log('about to send payment info:', payment);
+    // console.log('about to send payment info:', payment);
     axios.post('/pay', payment)
       .then((response) => {
-        console.log('new balance for user', this.state.payerId, ':', response.balance);
-        let balance = response.balance
+        console.log('new balance for user', this.props.payerId, ':', response.data.balance);
+        let balance = response.data.balance;
       })
       .catch(error => {
         if (error.response) {
