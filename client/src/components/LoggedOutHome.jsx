@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import NavBar from './Navbar.jsx';
 
 class LoggedOutHome extends React.Component {
   constructor (props) {
@@ -9,8 +10,14 @@ class LoggedOutHome extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/login"><button>Login Here</button></Link>
-        <Link to="/signup"><button>Sign-up Here</button></Link>
+        <NavBar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
+        <div className='splash'>
+          Send money and make purchases with Paymo.
+          <Link to="/signup"><button>Create an Account</button></Link>
+          <Link to="/login">Or sign in to your account here</Link>
+        </div>
       </div>
     );
   }

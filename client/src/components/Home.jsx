@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Payment from './Payment.jsx';
 import FeedContainer from './FeedContainer.jsx';
 import MiniProfile from './MiniProfile.jsx';
+import NavBar from './Navbar.jsx';
 
 class Home extends React.Component {
   constructor (props) {
@@ -17,6 +18,9 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <NavBar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
         <Payment/>
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <FeedContainer
