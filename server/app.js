@@ -1,8 +1,11 @@
+// import { unescape } from 'querystring';
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const db = require('../database/queries.js');
 const helpers = require('./helpers.js');
+const _ = require('underscore');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,7 +18,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  db.getPasswordAtUsername(username, (err, row) => {
+  db.getPasswordAtUsername(_.escape(username), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -36,7 +39,7 @@ app.post('/login', (req, res) => {
 
 app.get('/profile', (req, res) => {
   var userId = req.query.userId;
-  db.profile.getUserInfo(userId, (err, row) => {
+  db.profile.getUserInfo(parseInt(_.escape(userId)), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -49,6 +52,7 @@ app.get('/profile', (req, res) => {
           displayName: ui.first_name + ' ' + ui.last_name,
           avatarUrl: ui.avatar_url
         }
+        userInfo = JSON.parse(_.unescape(JSON.stringify(userInfo)));
         res.status(200).json(userInfo);
       } else{
         res.status(400).json({ error : "No such user in database."});
@@ -60,7 +64,7 @@ app.get('/profile', (req, res) => {
 
 app.get('/balance', (req, res) => {
   var userId = req.query.userId;
-  db.profile.getBalance(userId, (err, row) => {
+  db.profile.getBalance(parseInt(_.escape(userId)), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -77,7 +81,8 @@ app.get('/balance', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-  db.signup.newUserSignup(req.body, 100)
+  let signupData = JSON.parse(_.escape(JSON.stringify(req.body)));
+  db.signup.newUserSignup(signupData, 100)
     .then(userId => {
       res.status(201).json({ userId: userId });
     })
@@ -98,7 +103,13 @@ app.post('/signup', (req, res) => {
 
 app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
-  db.payment(req.body)
+  let paymentData = JSON.parse(_.escape(JSON.stringify(req.body)));
+  if(!isNan(paymentData.amount)) {
+    console.error('payment amount is not a number:', paymentData.amount);
+    res.status(400).json({ error : 'Improper format.' });
+    return;
+  }
+  db.payment(paymentData)
     .then(balance => {
       res.status(201).json({ balance: balance });
     })
@@ -120,7 +131,8 @@ app.get('/feed/global', (req, res) => {
 
   db.globalFeed(limit + 1, beforeId)
     .then((results) => {
-      res.status(200).json(helpers.buildFeedObject(results, limit));
+      unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
     })
     .catch((err) => {
       console.error('error retrieving global feed: ', err);
@@ -140,7 +152,8 @@ app.get('/feed/user/:userId', (req, res) => {
 
   db.myFeed(limit + 1, userId, beforeId)
     .then((results) => {
-      res.status(200).json(helpers.buildFeedObject(results, limit));
+      unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
     })
     .catch((err) => {
       console.error('error retrieving user feed: ', err);
