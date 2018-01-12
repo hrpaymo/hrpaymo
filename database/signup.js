@@ -4,7 +4,6 @@ const newUserSignup = function(signupData, startingAmount) {
   // console.log('hopefully connected to:', process.env.DATABASE_URL);
   console.log('signing up user:', signupData);
   let userId = undefined;
-  let errorReason = undefined;
   return pg.transaction(userInsert => {
     return pg.table('users')
     .transacting(userInsert)

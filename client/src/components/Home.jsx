@@ -12,11 +12,11 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Payment/>
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <FeedContainer 
           userFeed={this.props.userFeed && this.props.userFeed.items}
           globalFeed={this.props.globalFeed && this.props.globalFeed.items} />
+        <Payment payerId={this.props.userInfo.userId} />
       </div>
     );
   }
