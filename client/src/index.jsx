@@ -174,6 +174,14 @@ class App extends React.Component {
     })
   }
 
+  requireAuth(nextState, replace) {
+    if (!this.state.isLoggedIn) {
+      replace({
+        pathname: '/login'
+      })
+    }
+  }
+
   render () {
     const home = (props) => {
       return (
@@ -183,6 +191,7 @@ class App extends React.Component {
           logUserOut={this.logUserOut.bind(this)}/>
         {!this.state.isLoggedIn 
           ? <LoggedOutHome 
+              isLoggedIn={this.state.isLoggedIn}
               logUserIn={this.logUserIn.bind(this)}/>
           : <Home
               userFeed={this.state.userFeed}
@@ -191,6 +200,7 @@ class App extends React.Component {
               balance={this.state.balance}
               userInfo={this.state.userInfo}
               refreshUserData={this.refreshUserData.bind(this)}
+              {...props}
               /> 
         }
         </div>
@@ -226,10 +236,11 @@ class App extends React.Component {
               exact path="/login" 
               component={LoginWithProps} />
             <Route 
-              path="/" 
-              component={home} />
+              path="/view/:id" 
+              component={home} 
+              onEnter={ this.requireAuth }/>
             <Route 
-              path="/?feed=(/:pathParam)" 
+              path="/" 
               component={home} />
           </Switch>
         </BrowserRouter>

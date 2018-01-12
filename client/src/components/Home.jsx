@@ -22,8 +22,10 @@ class Home extends React.Component {
         <FeedContainer 
           userId={this.props.userInfo.userId}
           loadMoreFeed={this.props.loadMoreFeed}
-          userFeed={this.props.userFeed}
-          globalFeed={this.props.globalFeed} />
+          view={this.props.match && this.props.match.params && this.props.match.params.id || 'mine'}
+          userFeed={this.props.userFeed && this.props.userFeed.items}
+          globalFeed={this.props.globalFeed && this.props.globalFeed.items} 
+        />
       </div>
     );
   }

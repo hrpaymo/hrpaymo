@@ -1,7 +1,5 @@
 import React from 'react';
 import FeedTransaction from './FeedTransaction.jsx'
-import GlobalFeed from './GlobalFeed.jsx';
-import MyFeed from './MyFeed.jsx';
 
 class Feed extends React.Component {
   constructor (props) {
