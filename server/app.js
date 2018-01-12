@@ -132,7 +132,8 @@ app.get('/feed/user/:userId', (req, res) => {
   let userId = req.params && req.params.userId;
   let limit = 5;
   let beforeId = req.query['startingTransactionId'] || null; 
-
+  console.log(userId, limit, beforeId);
+  
   if (isNaN(userId)) {
     res.sendStatus(400).json({ error: "Improper format." });
     return;
@@ -140,7 +141,7 @@ app.get('/feed/user/:userId', (req, res) => {
 
   db.myFeed(limit + 1, userId, beforeId)
     .then((results) => {
-      res.status(200).json({items: results});
+      res.status(200).json(helpers.buildFeedObject(results, limit));
     })
     .catch((err) => {
       console.error('error retrieving user feed: ', err);

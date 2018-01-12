@@ -63,10 +63,10 @@ const globalFeed = function(limit, startingTransactionId) {
 const myFeed = function(limit, userId, startingTransactionId) {
   return pg('users_transactions')
     .modify(baseQuery)
+    .modify(olderThanId, startingTransactionId)
     .limit(limit)
     .where('users_transactions.payer_id', userId)
     .orWhere('users_transactions.payee_id', userId)
-    .modify(olderThanId, startingTransactionId)
     .then(rows => {
       return rows.map(formatOutput);
    })
