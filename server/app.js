@@ -77,10 +77,8 @@ app.get('/balance', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-  // console.log('signup post with data:', req.body);
   db.signup.newUserSignup(req.body, 100)
     .then(userId => {
-      console.log('successful signup with userId:', userId);
       res.status(201).json({ userId: userId });
     })
     .catch(err => {
@@ -102,7 +100,6 @@ app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
   db.payment(req.body)
     .then(balance => {
-      console.log('successful payment from userId:', req.body.payerId, 'to payee:', req.body.payeeUsername, 'for', req.body.amount, 'New balance:', balance);
       res.status(201).json({ balance: balance });
     })
     .catch(err => {

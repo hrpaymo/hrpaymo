@@ -1,8 +1,6 @@
 const pg = require('./index.js').pg;
 
 const newUserSignup = function(signupData, startingAmount) {
-  // console.log('hopefully connected to:', process.env.DATABASE_URL);
-  console.log('signing up user:', signupData);
   let userId = undefined;
   return pg.transaction(userInsert => {
     return pg.table('users')
@@ -19,7 +17,6 @@ const newUserSignup = function(signupData, startingAmount) {
       avatar_url: signupData.avatarUrl ? signupData.avatarUrl : null
     })
     .then(id => {
-      console.log('signup returned id[0]:', id[0]);
       userId = id[0];
       return userId;
     })

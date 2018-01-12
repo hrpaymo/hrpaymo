@@ -53,7 +53,6 @@ const getPayerBalance = function(paymentTransaction, localPaymentInfo, paymentDa
   .then(rows => {
     localPaymentInfo.payerBalance = parseFloat(rows[0].amount);
     if(localPaymentInfo.payerBalance < parseFloat(paymentDataFromServer.amount)) {
-      console.error('INSUFFICIENT FUNDS for userId:', paymentDataFromServer.payerId);
       // return Promise.reject(new Error('Insufficient funds.'));
       throw new Error('Insufficient funds.');
     }
