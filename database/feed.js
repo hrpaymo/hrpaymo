@@ -26,7 +26,7 @@ const formatOutput = (item) => {
 
 const feed = function(limit) {
   return pg('users_transactions')
-   .select('transactions.id', 
+   .select('transactions.txn_id', 
       'transactions.amount', 
       'transactions.note',
       'transactions.created_at',
@@ -40,9 +40,9 @@ const feed = function(limit) {
       {payee_firstName: 'payee.first_name'},
       {payee_lastName: 'payee.last_name'})
    .limit(limit)
-   .join('transactions', 'users_transactions.id', '=', 'transactions.id')
-   .join('users as payee',{'payee.id':'users_transactions.payee_id'})
-   .join('users as payer',{'payer.id':'users_transactions.payer_id'})
+   .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
+   .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
+   .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
    .orderBy('transactions.created_at', 'desc')
    .then(rows => {
       return rows.map(formatOutput);
