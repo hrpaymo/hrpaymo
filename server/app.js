@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  db.login.checkPasswordAtUsername(username, (err, row) => {
+  db.getPasswordAtUsername(username, (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -36,7 +36,7 @@ app.post('/login', (req, res) => {
 
 app.get('/profile', (req, res) => {
   var userId = req.query.userId;
-  profiledb.getUserInfo(userId, (err, row) => {
+  db.profile.getUserInfo(userId, (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);

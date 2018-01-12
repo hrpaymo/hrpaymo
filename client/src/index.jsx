@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = { 
       isLoggedIn: false,
       globalFeed: {},
-      userFeed: {}
+      userFeed: {},
       balance: 0,
       userInfo: {}
     }

@@ -5,8 +5,8 @@ const profile = require('../database/profile.js');
 
 module.exports = {
   signup: signup,
-  login: login,
   profile: profile,
+  getPasswordAtUsername: login.getPasswordAtUsername,
   globalFeed: feed.globalFeed,
   myFeed: feed.myFeed
 }
