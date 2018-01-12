@@ -1,32 +1,24 @@
 import React from 'react';
-import Login from './Login.jsx';
-import SignUp from './SignUp.jsx';
+import { Link } from 'react-router-dom';
+import NavBar from './Navbar.jsx';
 
 class LoggedOutHome extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      view: null
-    }
-  }
-
-  changeViews(selectedView) {
-    this.setState({
-      view: selectedView
-    })
   }
 
   render() {
     return (
       <div>
-      {this.state.view === 'signup' && <SignUp logUserIn={this.props.logUserIn} />}
-      {this.state.view === 'login' && <Login logUserIn={this.props.logUserIn}/>}
-      {this.state.view === null && 
-        <div>
-          <button onClick={this.changeViews.bind(this, 'login')}>Log in here </button>
-          <button onClick={this.changeViews.bind(this, 'signup')}>Sign up here </button>
-          </div>}
+        <NavBar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
+        <div className='splash'>
+          Send money and make purchases with Paymo.
+          <Link to="/signup"><button>Create an Account</button></Link>
+          <Link to="/login">Or sign in to your account here</Link>
         </div>
+      </div>
     );
   }
 }

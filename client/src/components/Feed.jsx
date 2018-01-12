@@ -13,7 +13,7 @@ class Feed extends React.Component {
 
     return (
       <div>
-        {!this.props.transactions
+        {!this.props.transactions ||  this.props.transactions.length <= 0
           ? <div> No transactions. </div>
           : displayedTransations
         }

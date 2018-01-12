@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import NavBar from './Navbar.jsx';
 
 class SignUp extends React.Component {
   constructor (props) {
@@ -39,6 +40,7 @@ class SignUp extends React.Component {
       .then((response) => {
         let userId = response.data.userId;
         this.props.logUserIn(userId);
+        this.props.history.push('/');
       })
       .catch((error) => {
         if (error.response && error.response.status === 422) {
@@ -59,65 +61,68 @@ class SignUp extends React.Component {
 
   render() {
     return (
-      <div className='signup form'>
-        <label>
-          Username
-          <input 
-            name='username'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          First Name
-          <input 
-            name='firstName'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          Last Name
-          <input 
-            name='lastName'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          Email
-          <input 
-            name='email'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          Phone
-          <input 
-            name='phone'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          Password
-          <input 
-            name='password'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        <label>
-          Avatar Url
-          <input 
-            name='avatarUrl'
-            onChange = {this.handleInputChanges.bind(this)}
-            />
-        </label>
-        {this.state.didSignupFail && 
-          <span className="error-text">
-            {this.state.errorCode === 422
-              ? <span>Username, Phone Number, or Email is not unique. Please try again.</span>
-              : <span>Our servers are having issues. Please try later</span>
-            }
-          </span>
-        }
-        <button onClick={this.signUserUp.bind(this)} >Sign up</button>
+      <div>
+        <NavBar isLoggedIn={false} />
+        <div className='signup form'>
+          <label>
+            Username
+            <input 
+              name='username'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            First Name
+            <input 
+              name='firstName'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            Last Name
+            <input 
+              name='lastName'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            Email
+            <input 
+              name='email'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            Phone
+            <input 
+              name='phone'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            Password
+            <input 
+              name='password'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          <label>
+            Avatar Url
+            <input 
+              name='avatarUrl'
+              onChange = {this.handleInputChanges.bind(this)}
+              />
+          </label>
+          {this.state.didSignupFail && 
+            <span className="error-text">
+              {this.state.errorCode === 422
+                ? <span>Username, Phone Number, or Email is not unique. Please try again.</span>
+                : <span>Our servers are having issues. Please try later</span>
+              }
+            </span>
+          }
+          <button onClick={this.signUserUp.bind(this)} >Sign up</button>
+        </div>
       </div>
     );
   }

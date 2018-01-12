@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import $ from 'jquery';
+import axios from 'axios';
+
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
-import NavBar from './components/Navbar.jsx';
-import axios from 'axios';
+import Login from './components/Login.jsx';
+import SignUp from './components/SignUp.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -91,22 +94,59 @@ class App extends React.Component {
     })
   }
 
+  requireAuth(nextState, replace) {
+    if (!this.state.isLoggedIn) {
+      replace({
+        pathname: '/login'
+      })
+    }
+  }
+
   render () {
+    const HomeWithProps = (props) => {
+      return (
+        <div>
+          {!this.state.isLoggedIn 
+            ? <LoggedOutHome 
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                {...props}
+                />
+            : <Home
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                userFeed={this.state.userFeed} 
+                globalFeed={this.state.globalFeed}
+                userInfo={this.state.userInfo}
+                balance={this.state.balance}
+                {...props}
+                />
+          }
+        </div>
+      )
+    }
+
     return (
       <div>
-        <NavBar 
-          isLoggedIn={this.state.isLoggedIn}
-          logUserOut={this.logUserOut.bind(this)}/>
-        {!this.state.isLoggedIn 
-          ? <LoggedOutHome 
-              logUserIn={this.logUserIn.bind(this)}/>
-          : <Home
-              userFeed={this.state.userFeed}
-              globalFeed={this.state.globalFeed}
-              balance={this.state.balance}
-              userInfo={this.state.userInfo}
-              /> 
-        }
+        <BrowserRouter>
+          <Switch>
+            <Route 
+              exact path="/signup" 
+              render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              exact path="/login" 
+              render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              path="/view?=(:id)" 
+              render={HomeWithProps} 
+              onEnter={ this.requireAuth }/>
+            <Route 
+              path="/" 
+              render={HomeWithProps} />
+          </Switch>
+        </BrowserRouter>
       </div>
     )
   }
