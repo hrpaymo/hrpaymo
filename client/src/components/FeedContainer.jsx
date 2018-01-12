@@ -1,38 +1,31 @@
 import React from 'react';
 import Feed from './Feed.jsx'
+import { Link } from 'react-router-dom';
 
 class FeedContainer extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      view: 'mine'
-    }
-  }
-
-  changeFeedView(view) {
-    this.setState({
-      view: view
-    })
   }
 
   render() {
+
     return (
       <div className='feed-container'>
         <div className='feed-selections'>
-          <button 
-            className={this.state.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} 
-            onClick={this.changeFeedView.bind(this, 'mine')}>
-            Mine
-          </button>
-          <button 
-            className={this.state.view === 'global' ? 'feed-buttons selected' : 'feed-buttons'}
-            onClick={this.changeFeedView.bind(this, 'global')}>
-            Public
-          </button>
+          <Link to="/view/mine">
+            <button className={this.props.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} >
+              Mine
+            </button>
+          </Link>
+          <Link to="/view/public">
+            <button className={this.props.view === 'public' ? 'feed-buttons selected' : 'feed-buttons'} >
+              Public
+            </button>
+          </Link>
         </div>
-        {this.state.view === 'mine'
-          ? <Feed title='my feed' transactions={this.props.userFeed} />
-          : <Feed title='global' transactions={this.props.globalFeed} />}
+        {this.props.view === 'mine'
+          ? <Feed transactions={this.props.userFeed} />
+          : <Feed transactions={this.props.globalFeed} />}
       </div>
     );
   }

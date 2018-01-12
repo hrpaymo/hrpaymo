@@ -33,6 +33,7 @@ class App extends React.Component {
     this.getUserFeed(userId);
   }
 
+
   getUserFeed(userId) {
     axios(`/feed/user/${userId}`)
       .then((response) => {
@@ -94,6 +95,14 @@ class App extends React.Component {
     })
   }
 
+  requireAuth(nextState, replace) {
+    if (!this.state.isLoggedIn) {
+      replace({
+        pathname: '/login'
+      })
+    }
+  }
+
   render () {
     const home = (props) => {
       return (
@@ -103,7 +112,11 @@ class App extends React.Component {
             logUserOut={this.logUserOut.bind(this)} />
           {!this.state.isLoggedIn 
             ? <LoggedOutHome />
-            : <Home userFeed={this.state.userFeed} globalFeed={this.state.globalFeed}/>
+            : <Home 
+                userFeed={this.state.userFeed} 
+                globalFeed={this.state.globalFeed}
+                {...props}
+                />
           }
         </div>
       )
@@ -138,10 +151,11 @@ class App extends React.Component {
               exact path="/login" 
               component={LoginWithProps} />
             <Route 
-              path="/" 
-              component={home} />
+              path="/view/:id" 
+              component={home} 
+              onEnter={ this.requireAuth }/>
             <Route 
-              path="/?feed=(/:pathParam)" 
+              path="/" 
               component={home} />
           </Switch>
         </BrowserRouter>
