@@ -24,7 +24,7 @@ const formatOutput = (item) => {
   })
 }
 
-var baseQuery = function(queryBuilder) {
+var baseQuery = function(queryBuilder, limit) {
   queryBuilder.select('transactions.txn_id', 
       'transactions.amount', 
       'transactions.note',
@@ -41,14 +41,23 @@ var baseQuery = function(queryBuilder) {
    .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
    .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
    .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
+   .limit(limit)
    .orderBy('transactions.created_at', 'desc');
 };
 
+var olderThanId = function(queryBuilder, startingTransactionId) {
+  console.log('made it into older', startingTransactionId);
+  if (startingTransactionId) {
+     console.log('made it older again', startingTransactionId);
+    queryBuilder.where('transactions.txn_id', '<=', startingTransactionId);
+  }
+}
 
-const globalFeed = function(limit) {
+const globalFeed = function(limit, startingTransactionId) {
+  console.log('made it here', limit, startingTransactionId);
   return pg('users_transactions')
-    .modify(baseQuery)
-    .limit(limit)
+    .modify(baseQuery, limit)
+    .modify(olderThanId, startingTransactionId)
     .then(rows => {
       return rows.map(formatOutput);
    })

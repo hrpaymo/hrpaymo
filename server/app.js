@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const sampledata = require('../sampledata.js');
 const db = require('../database/queries.js');
+const helpers = require('./helpers.js');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/../client/dist'));
 
@@ -115,10 +115,16 @@ app.post('/pay', (req, res) => {
 });
 
 app.get('/feed/global', (req, res) => {
-  let limit = 25;
-  db.globalFeed(limit)
+  let limit = 2;
+
+  // Grab limit + 1 items from the database, so we can return a next page token
+  // for pagination
+
+  let limitId = req.query['startingTransactionId']; 
+
+  db.globalFeed(limit + 1, limitId)
     .then((results) => {
-      res.status(200).json({items: results});
+      res.status(200).json(helpers.buildFeedObject(results, limit));
     })
     .catch((err) => {
       console.error('error retrieving global feed: ', err);

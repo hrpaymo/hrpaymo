@@ -18,8 +18,10 @@ class Home extends React.Component {
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <Payment payerId={this.props.userInfo.userId} />
         <FeedContainer 
-          userFeed={this.props.userFeed && this.props.userFeed.items}
-          globalFeed={this.props.globalFeed && this.props.globalFeed.items} />
+          userId={this.props.userInfo.userId}
+          loadMoreFeed={this.props.loadMoreFeed}
+          userFeed={this.props.userFeed}
+          globalFeed={this.props.globalFeed} />
       </div>
     );
   }
