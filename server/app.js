@@ -100,14 +100,20 @@ app.post('/signup', (req, res) => {
 
 app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
-  db.pay(req.body)
+  paydb.pay(req.body)
     .then(balance => {
-      console.log('successful payment from userId:', req.body.payerId, 'to payee:', req.body.payeeUsername, 'for', req.body.amount, '. New balance:', balance);
+      console.log('successful payment from userId:', req.body.payerId, 'to payee:', req.body.payeeUsername, 'for', req.body.amount, 'New balance:', balance);
       res.status(201).json({ balance: balance });
     })
-    .catch(errObject => {
-      console.error('error on payment:', errObject);
-      res.status(400).json({ error : 'Improper format.' })
+    .catch(err => {
+      console.error('error on payment:', err.message);
+      if(err.message.includes('Insufficient funds')) {
+        res.status(422).json({ error: 'Insufficient funds.' });
+      } else if(err.message.includes('Invalid payee username')) {
+        res.status(422).json({ error: 'Invalid payee username.' });
+      } else {
+        res.status(400).json({ error : 'Improper format.' })
+      }
     })
 });
 
