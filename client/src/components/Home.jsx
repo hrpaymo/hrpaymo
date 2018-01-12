@@ -13,10 +13,15 @@ class Home extends React.Component {
     return (
       <div>
         <Payment/>
+<<<<<<< HEAD
         <MiniProfile/>
         <FeedContainer 
           userFeed={this.props.userFeed && this.props.userFeed.items}
           globalFeed={this.props.globalFeed && this.props.globalFeed.items} />
+=======
+        <MiniProfile balance={this.props.balance}/>
+        <Feed globalFeed={this.props.globalFeed && this.props.globalFeed.items}/>
+>>>>>>> Create balance sub component
       </div>
     );
   }

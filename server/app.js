@@ -33,6 +33,29 @@ app.post('/login', (req, res) => {
   });
 });
 
+
+app.get('/profile', (req, res) => {
+  console.log("Profile endpoint got: ", req.body);
+});
+
+
+app.get('/balance', (req, res) => {
+  var userId = req.query.userId;
+  db.profile.getBalance(userId, (err, row) => {
+    if (err) {
+      console.error("Error retrieving from database: ", err);
+      res.status(500).json(err);
+    } else {
+      if (row.length) {
+        var amount = row[0].amount;
+        res.status(200).json({amount: amount});
+      }else{
+        res.status(400).json({ error : "No such user in database."});
+      }
+    }});
+});
+
+
 app.post('/signup', (req, res) => {
   // console.log('signup post with data:', req.body);
   db.signup.newUserSignup(req.body, 100)
