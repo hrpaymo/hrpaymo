@@ -28,8 +28,6 @@ class Payment extends React.Component {
     };
     axios.post('/pay', payment)
       .then((response) => {
-        console.log('new balance for user', this.props.payerId, ':', response.data.balance);
-        let balance = response.data.balance;
         this.setState({
           payeeUsername: '',
           amount: '',

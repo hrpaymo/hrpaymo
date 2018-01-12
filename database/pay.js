@@ -1,7 +1,6 @@
 const pg = require('./index.js').pg;
 
 const pay = function(paymentDataFromServer) {
-  console.log('paying with info:', paymentDataFromServer);
   let localPaymentInfo = {
     payerBalance: undefined,
     payeeBalance: undefined,
@@ -70,10 +69,8 @@ const getPayeeInfo = function(paymentTransaction, localPaymentInfo, paymentDataF
   .then(rows => {
     // if no user or payer userid === payee userid, throw error
     if(rows.length === 0 || rows[0].id === parseInt(paymentDataFromServer.payerId)) {
-      console.error('INVALID PAYEE USERNAME:', paymentDataFromServer.payeeUsername);
       throw new Error('Invalid payee username.');
     }
-    console.log('select payee balance amount:', rows[0].amount, 'with user id:', rows[0].id);
     localPaymentInfo.payeeBalance = parseFloat(rows[0].amount);
     localPaymentInfo.payeeUserId = parseInt(rows[0].id);
   })

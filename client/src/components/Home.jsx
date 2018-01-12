@@ -8,12 +8,8 @@ class Home extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      balance: 0
+      balance: undefined
     }
-  }
-
-  componentDidMount() {
-    console.log('Home props:', this.props);
   }
 
   render() {
