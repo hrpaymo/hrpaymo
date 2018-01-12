@@ -26,22 +26,54 @@ button {
 }
 
 .feed-container {
+  border: 1px solid #ccc;
   width: 50%;
+}
+
+.feed-buttons {
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    color: #999;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-right: 15px;
+    padding: 5px 10px;
+    outline: none;
+    text-transform: uppercase;
+    transition: color .1s,border-color .1s,background .1s;
+}
+
+.feed-selections {
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ccc;
+}
+
+.feed-buttons.selected {
+  background-color: #e9f4fa;
+  border-color: #adccf7;
+  color: #4884f7;
+}
+
+.feed-item-container {
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #d3d3d3;
   padding: 10px;
 }
 
-.feed-avatar {
+.feed-item-avatar {
   border-radius: 50px;
   padding: 15px;
 }
 
-.feed-timestamp {
+.feed-item-timestamp {
   color: #A9A9A9;
 }
 
-.feed-user {
+.feed-item-user {
   font-weight: bold;
 }

@@ -27,7 +27,7 @@ class Login extends React.Component {
 
     axios.post('/login', user)
       .then((response) => {
-        let userId = response.userId;
+        let userId = response.data.userId;
         this.props.logUserIn(userId);
       })
       .catch((error) => {
@@ -39,7 +39,7 @@ class Login extends React.Component {
             errorMessage: error.response.data.error
           })
         } else {
-          console.log('Error in login component:', error.response)
+          console.log('Error in login component:', error)
           this.setState({
             didLoginFail: true,
             errorCode: 500
