@@ -118,6 +118,7 @@ class App extends React.Component {
                 userFeed={this.state.userFeed} 
                 globalFeed={this.state.globalFeed}
                 userInfo={this.state.userInfo}
+                balance={this.state.balance}
                 {...props}
                 />
           }
