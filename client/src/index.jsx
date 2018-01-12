@@ -236,7 +236,7 @@ class App extends React.Component {
               exact path="/login" 
               component={LoginWithProps} />
             <Route 
-              path="/view/:id" 
+              path="/view?=(:id)" 
               component={home} 
               onEnter={ this.requireAuth }/>
             <Route 
