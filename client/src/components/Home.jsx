@@ -22,7 +22,9 @@ class Home extends React.Component {
           isLoggedIn={this.props.isLoggedIn} 
           logUserOut={this.props.logUserOut} />
         <Payment/>
-        <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
+        <MiniProfile 
+          balance={this.props.balance} 
+          userInfo={this.props.userInfo}/>
         <FeedContainer
           view={this.extractView(this.props.location) || 'mine'}
           userFeed={this.props.userFeed && this.props.userFeed.items}

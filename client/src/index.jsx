@@ -117,6 +117,7 @@ class App extends React.Component {
                 logUserOut={this.logUserOut.bind(this)}
                 userFeed={this.state.userFeed} 
                 globalFeed={this.state.globalFeed}
+                userInfo={this.state.userInfo}
                 {...props}
                 />
           }
