@@ -6,7 +6,7 @@ class Payment extends React.Component {
     super(props);
     this.state = {
       payeeUsername: '',
-      amount: 0,
+      amount: '',
       note: '',
       paymentFail: false
     }
@@ -20,18 +20,22 @@ class Payment extends React.Component {
   }
 
   payUser() {
-    // console.log('payment props:', this.props);
     let payment = {
       payerId: this.props.payerId,
       payeeUsername: this.state.payeeUsername,
       amount: this.state.amount,
       note: this.state.note
     };
-    // console.log('about to send payment info:', payment);
     axios.post('/pay', payment)
       .then((response) => {
         console.log('new balance for user', this.props.payerId, ':', response.data.balance);
         let balance = response.data.balance;
+        this.setState({
+          payeeUsername: '',
+          amount: '',
+          note: '',
+          paymentFail: false
+        });
       })
       .catch(error => {
         if (error.response) {
@@ -62,6 +66,7 @@ class Payment extends React.Component {
           Recipient Username
           <input
             name='payeeUsername'
+            value={this.state.payeeUsername}
             onChange = {this.handleInputChanges.bind(this)}
           />
         </label>
@@ -69,8 +74,9 @@ class Payment extends React.Component {
           Payment Amount
           <input
             type="text"
-            pattern="^[0-9]*\.[0-9]{0,2}$"
+            // pattern="^[0-9]*\.[0-9]{0,2}$"
             name='amount'
+            value={this.state.amount}
             onChange = {this.handleInputChanges.bind(this)}
           />
         </label>
@@ -78,6 +84,7 @@ class Payment extends React.Component {
           Note
           <input
             name='note'
+            value={this.state.note}
             onChange = {this.handleInputChanges.bind(this)}
           />
         </label>

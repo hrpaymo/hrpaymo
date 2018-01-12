@@ -1,86 +1,108 @@
 const pg = require('./index.js').pg;
 
-const pay = function(paymentData) {
-  console.log('paying with info:', paymentData);
-  let payerBalance = undefined;
-  let payeeBalance = undefined;
-  let payeeUserId = undefined;
+const pay = function(paymentDataFromServer) {
+  console.log('paying with info:', paymentDataFromServer);
+  let localPaymentInfo = {
+    payerBalance: undefined,
+    payeeBalance: undefined,
+    payeeUserId: undefined
+  }
 
   return new Promise ((res, rej) => {
-    pg.transaction(paymentTransaction => {
-      // get the balance for the payer and ensure it's not too low
-      return pg.table('balance')
-      .transacting(paymentTransaction)
-      .select('amount')
-      .where({user_id: paymentData.payerId})
-      .then(rows => {
-        payerBalance = parseFloat(rows[0].amount);
-        if(payerBalance < parseFloat(paymentData.amount)) {
-          console.error('INSUFFICIENT FUNDS for userId:', paymentData.payerId);
-          throw new Error('Insufficient funds.');
-        }
-      })
-      // get the balance and user id for the payee
-      .then(() => {
-        return pg.table('users')
-        .transacting(paymentTransaction)
-        .select('amount', 'id')
-        .innerJoin('balance', 'users.id', 'balance.user_id')
-        .where({username: paymentData.payeeUsername})
-        .then(rows => {
-          if(rows.length === 0) {
-            console.error('INVALID PAYEE USERNAME:', paymentData.payeeUsername);
-            throw new Error('Invalid payee username.');
-          }
-          console.log('select payee balance amount:', rows[0].amount, 'with user id:', rows[0].id);
-          payeeBalance = parseFloat(rows[0].amount);
-          payeeUserId = parseInt(rows[0].id);
-        })
-      })
-      // add a transaction to the users_transactions table and return the created txn_id
+    return pg.transaction(paymentTransaction => {
+      return Promise.all([
+        getPayerBalance(paymentTransaction, localPaymentInfo, paymentDataFromServer),
+        getPayeeInfo(paymentTransaction, localPaymentInfo, paymentDataFromServer)
+      ])
+      // add to the users_transactions table and return created txn_id
       .then(() => {
         return pg.table('users_transactions')
         .transacting(paymentTransaction)
         .returning('txn_id')
         .insert({
-          payer_id: parseInt(paymentData.payerId),
-          payee_id: payeeUserId
+          payer_id: parseInt(paymentDataFromServer.payerId),
+          payee_id: localPaymentInfo.payeeUserId
         })
       })
-      // add a transaction to the transactions table with that txn_id
+      // add to the transactions table with txn_id
       .then(txn_id => {
-        return pg.table('transactions')
-        .transacting(paymentTransaction)
-        .insert({
-          txn_id: parseInt(txn_id[0]),
-          amount: parseFloat(paymentData.amount).toFixed(2),
-          note: paymentData.note
-        })
-      })
-      // update the payer's balance
-      .then(() => {
-        payerBalance -= parseFloat(paymentData.amount);
-        return pg.table('balance')
-        .transacting(paymentTransaction)
-        .update({ amount: payerBalance })
-        .where({ user_id: parseInt(paymentData.payerId) })
-      })
-      // update the payee's balance
-      .then(() => {
-        payeeBalance += parseFloat(paymentData.amount);
-        return pg.table('balance')
-        .transacting(paymentTransaction)
-        .update({ amount: payeeBalance })
-        .where({ user_id: payeeUserId})
+        return Promise.all([
+          addTransaction(paymentTransaction, txn_id, paymentDataFromServer),
+          updatePayerBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo),
+          updatePayeeBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo)
+        ])
       })
       // commit
       .then(paymentTransaction.commit)
       // return the payer's balance
       .then(() => {
-        res(payerBalance);
+        res(localPaymentInfo.payerBalance);
+      })
+      .catch(err => {
+        paymentTransaction.rollback;
+        rej(err);
       })
     });
   })
+}
+
+const getPayerBalance = function(paymentTransaction, localPaymentInfo, paymentDataFromServer) {
+  return pg.table('balance')
+  .transacting(paymentTransaction)
+  .select('amount')
+  .where({user_id: paymentDataFromServer.payerId})
+  .then(rows => {
+    localPaymentInfo.payerBalance = parseFloat(rows[0].amount);
+    if(localPaymentInfo.payerBalance < parseFloat(paymentDataFromServer.amount)) {
+      console.error('INSUFFICIENT FUNDS for userId:', paymentDataFromServer.payerId);
+      // return Promise.reject(new Error('Insufficient funds.'));
+      throw new Error('Insufficient funds.');
+    }
+  })
+}
+
+const getPayeeInfo = function(paymentTransaction, localPaymentInfo, paymentDataFromServer) {
+  return pg.table('users')
+  .transacting(paymentTransaction)
+  .select('amount', 'id')
+  .innerJoin('balance', 'users.id', 'balance.user_id')
+  .where({username: paymentDataFromServer.payeeUsername})
+  .then(rows => {
+    // if no user or payer userid === payee userid, throw error
+    if(rows.length === 0 || rows[0].id === parseInt(paymentDataFromServer.payerId)) {
+      console.error('INVALID PAYEE USERNAME:', paymentDataFromServer.payeeUsername);
+      throw new Error('Invalid payee username.');
+    }
+    console.log('select payee balance amount:', rows[0].amount, 'with user id:', rows[0].id);
+    localPaymentInfo.payeeBalance = parseFloat(rows[0].amount);
+    localPaymentInfo.payeeUserId = parseInt(rows[0].id);
+  })
+}
+
+const addTransaction = function(paymentTransaction, txn_id, paymentDataFromServer) {
+  return pg.table('transactions')
+  .transacting(paymentTransaction)
+  .insert({
+    txn_id: parseInt(txn_id[0]),
+    amount: parseFloat(paymentDataFromServer.amount).toFixed(2),
+    note: paymentDataFromServer.note
+  })
+}
+
+const updatePayerBalance = function(paymentTransaction, paymentDataFromServer, localPaymentInfo) {
+  localPaymentInfo.payerBalance -= parseFloat(paymentDataFromServer.amount);
+  return pg.table('balance')
+  .transacting(paymentTransaction)
+  .update({ amount: localPaymentInfo.payerBalance })
+  .where({ user_id: parseInt(paymentDataFromServer.payerId) })
+}
+
+const updatePayeeBalance = function(paymentTransaction, paymentDataFromServer, localPaymentInfo) {
+  localPaymentInfo.payeeBalance += parseFloat(paymentDataFromServer.amount);
+  return pg.table('balance')
+  .transacting(paymentTransaction)
+  .update({ amount: localPaymentInfo.payeeBalance })
+  .where({ user_id: localPaymentInfo.payeeUserId})
 }
 
 module.exports = {
