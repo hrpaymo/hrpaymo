@@ -12,7 +12,9 @@ class App extends React.Component {
     this.state = { 
       isLoggedIn: false,
       globalFeed: {},
-      userFeed: {}
+      userFeed: {},
+      balance: 0,
+      userInfo: {}
     }
   }
 
@@ -20,6 +22,10 @@ class App extends React.Component {
   }
 
   loadUserData(userId) {
+    // Feel free to rename.
+    // Here we will load all additional user-specific data
+    this.getUserInfo(userId)
+    this.getBalance(userId);
     this.getGlobalFeed();
     this.getUserFeed(userId);
   }
@@ -48,6 +54,30 @@ class App extends React.Component {
       });
   }
 
+  getBalance(userId) {
+    axios('/balance', {params: {userId: userId}})
+      .then((response) => {
+        this.setState({
+          balance: response.data.amount
+        });
+      })
+      .catch((err) =>{
+        console.log(err);
+      });
+  }
+
+  getUserInfo(userId) {
+    axios('/profile', {params: {userId: userId}})
+      .then((response) => {
+        this.setState({
+          userInfo: response.data
+        });
+      })
+      .catch((err) =>{
+        console.log(err);
+      });
+  }
+
   logUserIn(userId) {
     this.setState({
       isLoggedIn: true
@@ -72,7 +102,10 @@ class App extends React.Component {
               logUserIn={this.logUserIn.bind(this)}/>
           : <Home
               userFeed={this.state.userFeed}
-              globalFeed={this.state.globalFeed}/> 
+              globalFeed={this.state.globalFeed}
+              balance={this.state.balance}
+              userInfo={this.state.userInfo}
+              /> 
         }
       </div>
     )

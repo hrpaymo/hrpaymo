@@ -27,7 +27,6 @@ class SignUp extends React.Component {
   signUserUp() {
     let user = {
       username: this.state.username,
-      password: this.state.password,
       email: this.state.email,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -38,7 +37,7 @@ class SignUp extends React.Component {
 
     axios.post('/signup', user)
       .then((response) => {
-        let userId = response.userId;
+        let userId = response.data.userId;
         this.props.logUserIn(userId);
       })
       .catch((error) => {

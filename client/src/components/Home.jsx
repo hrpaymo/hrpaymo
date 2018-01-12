@@ -13,7 +13,7 @@ class Home extends React.Component {
     return (
       <div>
         <Payment/>
-        <MiniProfile/>
+        <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <FeedContainer 
           userFeed={this.props.userFeed && this.props.userFeed.items}
           globalFeed={this.props.globalFeed && this.props.globalFeed.items} />

@@ -77,3 +77,8 @@ button {
 .feed-item-user {
   font-weight: bold;
 }
+
+.profile-container {
+  width: 200px;
+  border: 1px solid #444;
+}
