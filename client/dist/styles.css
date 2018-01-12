@@ -87,3 +87,8 @@ button {
   width: 200px;
   border: 1px solid #444;
 }
+
+.splash {
+  display: flex;
+  flex-direction: column;
+}

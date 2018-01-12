@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Payment from './Payment.jsx';
 import FeedContainer from './FeedContainer.jsx';
 import MiniProfile from './MiniProfile.jsx';
+import NavBar from './Navbar.jsx';
 
 class Home extends React.Component {
   constructor (props) {

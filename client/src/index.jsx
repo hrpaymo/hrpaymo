@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import $ from 'jquery';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom'
+import axios from 'axios';
+
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
-import NavBar from './components/Navbar.jsx';
-import axios from 'axios';
 import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
 
@@ -30,6 +30,7 @@ class App extends React.Component {
     this.getGlobalFeed();
     this.getUserFeed(userId);
   }
+
 
   refreshUserData(userId) {
     this.getBalance(userId);
@@ -183,7 +184,7 @@ class App extends React.Component {
   }
 
   render () {
-    const home = (props) => {
+    const HomeWithProps = (props) => {
       return (
         <div>
           <NavBar 
@@ -207,41 +208,25 @@ class App extends React.Component {
       )
     }
 
-    const LoginWithProps = (props) => {
-      return (
-        <Login 
-          logUserIn={this.logUserIn.bind(this)}
-          {...props}
-        />
-      );
-    }
-
-    const SignupWithProps = (props) => {
-      return (
-        <SignUp 
-          logUserIn={this.logUserIn.bind(this)}
-          {...props}
-        />
-      );
-    }
-
     return (
       <div>
         <BrowserRouter>
           <Switch>
             <Route 
               exact path="/signup" 
-              component={SignupWithProps} />
+              render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
             <Route 
               exact path="/login" 
-              component={LoginWithProps} />
+              render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
             <Route 
               path="/view?=(:id)" 
-              component={home} 
+              render={HomeWithProps} 
               onEnter={ this.requireAuth }/>
             <Route 
               path="/" 
-              component={home} />
+              render={HomeWithProps} />
           </Switch>
         </BrowserRouter>
       </div>
