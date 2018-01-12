@@ -2,7 +2,7 @@ const pg = require('./index.js').pg;
 
 const formatOutput = (item) => {
   return ({
-    transactionId: item.id,
+    transactionId: item.txn_id,
     amount: item.amount,
     note: item.note,
     timestamp: item.created_at,
@@ -24,14 +24,13 @@ const formatOutput = (item) => {
   })
 }
 
-const feed = function(limit) {
-  return pg('users_transactions')
-   .select('transactions.txn_id', 
+var baseQuery = function(queryBuilder) {
+  queryBuilder.select('transactions.txn_id', 
       'transactions.amount', 
       'transactions.note',
       'transactions.created_at',
       {payer_id: 'users_transactions.payer_id'}, 
-      {payer_firstName: 'payer.last_name'},
+      {payer_firstName: 'payer.first_name'},
       {payer_username: 'payer.last_name'},
       {payer_lastName: 'payer.last_name'},
       {payer_avatarUrl: 'payer.avatar_url'},
@@ -39,14 +38,34 @@ const feed = function(limit) {
       {payee_username: 'payee.username'},
       {payee_firstName: 'payee.first_name'},
       {payee_lastName: 'payee.last_name'})
-   .limit(limit)
    .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
    .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
    .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
-   .orderBy('transactions.created_at', 'desc')
-   .then(rows => {
+   .orderBy('transactions.created_at', 'desc');
+};
+
+
+const globalFeed = function(limit) {
+  return pg('users_transactions')
+    .modify(baseQuery)
+    .limit(limit)
+    .then(rows => {
       return rows.map(formatOutput);
    })
 }
 
-module.exports = feed;
+const myFeed = function(limit, userId) {
+  return pg('users_transactions')
+    .modify(baseQuery)
+    .limit(limit)
+    .where('users_transactions.payer_id', userId)
+    .orWhere('users_transactions.payee_id', userId)
+    .then(rows => {
+      return rows.map(formatOutput);
+   })
+}
+
+module.exports = {
+  globalFeed: globalFeed,
+  myFeed: myFeed
+};

@@ -27,19 +27,19 @@ class Login extends React.Component {
 
     axios.post('/login', user)
       .then((response) => {
-        let userId = response.userId;
+        let userId = response.data.userId;
         this.props.logUserIn(userId);
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
-          console.log('error authenticating user errors', error.response);
+          console.log('Error authenticating user:', error);
           this.setState({
             didLoginFail: true,
             errorCode: 401,
             errorMessage: error.response.data.error
           })
         } else {
-          console.log('Error in login component:', error.response)
+          console.log('Error in login component:', error)
           this.setState({
             didLoginFail: true,
             errorCode: 500

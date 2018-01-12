@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './Navbar.jsx';
 import Payment from './Payment.jsx';
-import Feed from './Feed.jsx';
+import FeedContainer from './FeedContainer.jsx';
 import MiniProfile from './MiniProfile.jsx';
 
 class Home extends React.Component {
@@ -14,7 +14,9 @@ class Home extends React.Component {
       <div>
         <Payment/>
         <MiniProfile/>
-        <Feed globalFeed={this.props.globalFeed && this.props.globalFeed.items}/>
+        <FeedContainer 
+          userFeed={this.props.userFeed && this.props.userFeed.items}
+          globalFeed={this.props.globalFeed && this.props.globalFeed.items} />
       </div>
     );
   }

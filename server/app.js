@@ -2,9 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const sampledata = require('../sampledata.js');
-const signupdb = require('../database/signup.js');
-const logindb = require('../database/login.js');
-const feeddb = require('../database/feed.js');
+const db = require('../database/queries.js');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,7 +15,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  logindb.checkPasswordAtUsername(username, (err, row) => {
+  db.login.checkPasswordAtUsername(username, (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -37,7 +35,7 @@ app.post('/login', (req, res) => {
 
 app.post('/signup', (req, res) => {
   // console.log('signup post with data:', req.body);
-  signupdb.newUserSignup(req.body, 100)
+  db.signup.newUserSignup(req.body, 100)
     .then(userId => {
       console.log('successful signup with userId:', userId);
       res.status(201).json({ userid: userId });
@@ -58,10 +56,8 @@ app.post('/signup', (req, res) => {
 })
 
 app.get('/feed/global', (req, res) => {
-
-  // DB query should replace default promise
   let limit = 25;
-  feeddb(limit)
+  db.globalFeed(limit)
     .then((results) => {
       res.status(200).json({items: results});
     })
@@ -69,21 +65,24 @@ app.get('/feed/global', (req, res) => {
       console.error('error retrieving global feed: ', err);
       res.sendStatus(500).json({error: 'server error'});
     })
-
 });
 
 app.get('/feed/user/:userId', (req, res) => {
-  
-  // DB query should replace default promise
   let userId = req.params && req.params.userId;
+  let limit = 25;
 
-  Promise.resolve(sampledata.sampleFeed)
+  if (isNaN(userId)) {
+    res.sendStatus(400).json({ error: "Improper format." });
+    return;
+  }
+
+  db.myFeed(limit, userId)
     .then((results) => {
       res.status(200).json({items: results});
     })
     .catch((err) => {
-      console.log(err);
-      res.sendStatus(404);
+      console.error('error retrieving user feed: ', err);
+      res.sendStatus(500).json({error: 'server error'});
     })
 });
 

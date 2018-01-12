@@ -11,7 +11,8 @@ class App extends React.Component {
     super(props);
     this.state = { 
       isLoggedIn: false,
-      globalFeed: {}
+      globalFeed: {},
+      userFeed: {}
     }
   }
 
@@ -19,10 +20,20 @@ class App extends React.Component {
   }
 
   loadUserData(userId) {
-    // Feel free to rename.
-    // Here we will load all additional user-specific data
-
     this.getGlobalFeed();
+    this.getUserFeed(userId);
+  }
+
+  getUserFeed(userId) {
+    axios(`/feed/user/${userId}`)
+      .then((response) => {
+        this.setState({
+          userFeed: response.data
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   getGlobalFeed() {
@@ -60,6 +71,7 @@ class App extends React.Component {
           ? <LoggedOutHome 
               logUserIn={this.logUserIn.bind(this)}/>
           : <Home
+              userFeed={this.state.userFeed}
               globalFeed={this.state.globalFeed}/> 
         }
       </div>

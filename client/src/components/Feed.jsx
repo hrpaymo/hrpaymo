@@ -7,12 +7,16 @@ class Feed extends React.Component {
   }
 
   render() {
+    let displayedTransations = this.props.transactions && this.props.transactions.map((transaction) => {
+      return (<FeedTransaction key={transaction.transactionId} transaction={transaction} />);
+    })
+
     return (
       <div>
-        <h3>Global Feed</h3>
-        {this.props.globalFeed && this.props.globalFeed.map((transaction) => {
-          return (<FeedTransaction key={transaction.transactionId} transaction={transaction} />);
-        })}
+        {!this.props.transactions
+          ? <div> No transactions. </div>
+          : displayedTransations
+        }
       </div>
     );
   }
