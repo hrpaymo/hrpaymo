@@ -187,23 +187,22 @@ class App extends React.Component {
     const HomeWithProps = (props) => {
       return (
         <div>
-          <NavBar 
-          isLoggedIn={this.state.isLoggedIn}
-          logUserOut={this.logUserOut.bind(this)}/>
-        {!this.state.isLoggedIn 
-          ? <LoggedOutHome 
-              isLoggedIn={this.state.isLoggedIn}
-              logUserIn={this.logUserIn.bind(this)}/>
-          : <Home
-              userFeed={this.state.userFeed}
-              globalFeed={this.state.globalFeed}
-              loadMoreFeed={this.loadMoreFeed.bind(this)}
-              balance={this.state.balance}
-              userInfo={this.state.userInfo}
-              refreshUserData={this.refreshUserData.bind(this)}
-              {...props}
-              /> 
-        }
+          {!this.state.isLoggedIn 
+            ? <LoggedOutHome 
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                {...props}
+                />
+            : <Home
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                userFeed={this.state.userFeed} 
+                globalFeed={this.state.globalFeed}
+                userInfo={this.state.userInfo}
+                balance={this.state.balance}
+                {...props}
+                />
+          }
         </div>
       )
     }
