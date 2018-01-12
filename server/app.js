@@ -77,10 +77,8 @@ app.get('/balance', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-  // console.log('signup post with data:', req.body);
   db.signup.newUserSignup(req.body, 100)
     .then(userId => {
-      console.log('successful signup with userId:', userId);
       res.status(201).json({ userId: userId });
     })
     .catch(err => {
@@ -97,6 +95,24 @@ app.post('/signup', (req, res) => {
       }
     })
 })
+
+app.post('/pay', (req, res) => {
+  // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
+  db.payment(req.body)
+    .then(balance => {
+      res.status(201).json({ balance: balance });
+    })
+    .catch(err => {
+      console.error('error on payment:', err.message);
+      if(err.message.includes('Insufficient funds')) {
+        res.status(422).json({ error: 'Insufficient funds.' });
+      } else if(err.message.includes('Invalid payee username')) {
+        res.status(422).json({ error: 'Invalid payee username.' });
+      } else {
+        res.status(400).json({ error : 'Improper format.' })
+      }
+    })
+});
 
 app.get('/feed/global', (req, res) => {
   let limit = 25;
