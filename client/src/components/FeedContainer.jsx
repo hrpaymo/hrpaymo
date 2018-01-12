@@ -12,12 +12,12 @@ class FeedContainer extends React.Component {
     return (
       <div className='feed-container'>
         <div className='feed-selections'>
-          <Link to="/view/mine">
+          <Link to="/?view=mine">
             <button className={this.props.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} >
               Mine
             </button>
           </Link>
-          <Link to="/view/public">
+          <Link to="/?view=public">
             <button className={this.props.view === 'public' ? 'feed-buttons selected' : 'feed-buttons'} >
               Public
             </button>
