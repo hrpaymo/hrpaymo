@@ -4,8 +4,8 @@ module.exports = {
 
   getUserInfo: (userId, callback) => {
     pg.table('users')
-      .where({username: username})
-      .select('id', 'password')
+      .where({id: userId})
+      .select('id', 'username', 'first_name', 'last_name', 'avatar_url')
       .then((result) => {
         callback(null, result);
       })

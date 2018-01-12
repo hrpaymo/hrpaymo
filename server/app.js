@@ -23,10 +23,10 @@ app.post('/login', (req, res) => {
       if (row.length) {
         if (row[0].password === password) {
           res.status(200).json({ userId: row[0].id });
-        }else {
+        } else {
           res.status(401).json({ error : "Incorrect password"});
         }
-      }else{
+      } else{
         res.status(401).json({ error : "Invalid username"});
       }
     }
@@ -35,7 +35,26 @@ app.post('/login', (req, res) => {
 
 
 app.get('/profile', (req, res) => {
-  console.log("Profile endpoint got: ", req.body);
+  var userId = req.query.userId;
+  profiledb.getUserInfo(userId, (err, row) => {
+    if (err) {
+      console.error("Error retrieving from database: ", err);
+      res.status(500).json(err);
+    } else {
+      if (row.length) {
+        var ui = row[0];
+        var userInfo = {
+          userId: ui.id,
+          username: ui.username,
+          displayName: ui.first_name + ' ' + ui.last_name,
+          avatarUrl: ui.avatar_url
+        }
+        res.status(200).json(userInfo);
+      } else{
+        res.status(400).json({ error : "No such user in database."});
+      }
+    }
+  });
 });
 
 
@@ -49,10 +68,11 @@ app.get('/balance', (req, res) => {
       if (row.length) {
         var amount = row[0].amount;
         res.status(200).json({amount: amount});
-      }else{
+      } else{
         res.status(400).json({ error : "No such user in database."});
       }
-    }});
+    }
+  });
 });
 
 

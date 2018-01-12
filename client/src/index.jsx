@@ -12,11 +12,9 @@ class App extends React.Component {
     this.state = { 
       isLoggedIn: false,
       globalFeed: {},
-<<<<<<< HEAD
       userFeed: {}
-=======
-      balance: 0
->>>>>>> Create balance sub component
+      balance: 0,
+      userInfo: {}
     }
   }
 
@@ -24,12 +22,10 @@ class App extends React.Component {
   }
 
   loadUserData(userId) {
-<<<<<<< HEAD
-=======
     // Feel free to rename.
     // Here we will load all additional user-specific data
+    this.getUserInfo(userId)
     this.getBalance(userId);
->>>>>>> Create balance sub component
     this.getGlobalFeed();
     this.getUserFeed(userId);
   }
@@ -70,6 +66,18 @@ class App extends React.Component {
       });
   }
 
+  getUserInfo(userId) {
+    axios('/profile', {params: {userId: userId}})
+      .then((response) => {
+        this.setState({
+          userInfo: response.data
+        });
+      })
+      .catch((err) =>{
+        console.log(err);
+      });
+  }
+
   logUserIn(userId) {
     this.setState({
       isLoggedIn: true
@@ -93,14 +101,11 @@ class App extends React.Component {
           ? <LoggedOutHome 
               logUserIn={this.logUserIn.bind(this)}/>
           : <Home
-<<<<<<< HEAD
               userFeed={this.state.userFeed}
-              globalFeed={this.state.globalFeed}/> 
-=======
               globalFeed={this.state.globalFeed}
               balance={this.state.balance}
+              userInfo={this.state.userInfo}
               /> 
->>>>>>> Create balance sub component
         }
       </div>
     )

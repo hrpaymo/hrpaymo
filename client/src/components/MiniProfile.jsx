@@ -12,10 +12,12 @@ class MiniProfile extends React.Component {
       <div>
         <h4>User Info</h4>
         <div className="profile-container">
-          <div className="profile-avatar">Avatar</div>
-          <div className="profile-name">Name</div>
-          <div className="profile-username">Username</div>
-          <div className="profile-balance">{this.props.balance}</div>
+          <div className="profile-avatar">
+            <img className='feed-avatar' width='50' height='50' src={this.props.userInfo.avatarUrl || '/images/no-image.gif'} />
+          </div>
+          <div className="profile-name">{this.props.userInfo.displayName}</div>
+          <div className="profile-username">{this.props.userInfo.username}</div>
+          <div className="profile-balance">Current Balance: ${this.props.balance}</div>
         </div>
       </div>
     );
