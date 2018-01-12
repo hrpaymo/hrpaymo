@@ -81,7 +81,7 @@ app.post('/signup', (req, res) => {
   db.signup.newUserSignup(req.body, 100)
     .then(userId => {
       console.log('successful signup with userId:', userId);
-      res.status(201).json({ userid: userId });
+      res.status(201).json({ userId: userId });
     })
     .catch(err => {
       console.error('error on user signup:', err);
