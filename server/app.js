@@ -115,14 +115,10 @@ app.post('/pay', (req, res) => {
 });
 
 app.get('/feed/global', (req, res) => {
-  let limit = 2;
+  let limit = 5;
+  let beforeId = req.query['startingTransactionId'] || null; 
 
-  // Grab limit + 1 items from the database, so we can return a next page token
-  // for pagination
-
-  let limitId = req.query['startingTransactionId']; 
-
-  db.globalFeed(limit + 1, limitId)
+  db.globalFeed(limit + 1, beforeId)
     .then((results) => {
       res.status(200).json(helpers.buildFeedObject(results, limit));
     })
@@ -134,14 +130,15 @@ app.get('/feed/global', (req, res) => {
 
 app.get('/feed/user/:userId', (req, res) => {
   let userId = req.params && req.params.userId;
-  let limit = 25;
+  let limit = 5;
+  let beforeId = req.query['startingTransactionId'] || null; 
 
   if (isNaN(userId)) {
     res.sendStatus(400).json({ error: "Improper format." });
     return;
   }
 
-  db.myFeed(limit, userId)
+  db.myFeed(limit + 1, userId, beforeId)
     .then((results) => {
       res.status(200).json({items: results});
     })

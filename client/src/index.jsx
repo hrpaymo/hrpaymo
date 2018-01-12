@@ -66,34 +66,24 @@ class App extends React.Component {
       return;
     }
 
-    let params = {
-      startingTransactionId: this.state[stateRef].nextPageTransactionId
-    }
+    let additionalData = {params: {startingTransactionId: this.state[stateRef].nextPageTransactionId}}
 
-    axios(endpoint, params)
+    axios(endpoint, additionalData)
       .then((response) => {
-        console.log('load more response', response);
-        // Push further items to end of state object
         // Confirm additional items to load
-
         if (response.data && response.data.count > 0) {
-          console.log(this.state[stateRef].items, response.data.items)
-          // let itemCopy = this.state[stateRef].items.slice;
-          // itemCopy.push[response.data.items];
 
-          // Contemplate making a deep copy of state and only manipulating some items.
-          // See FB-recommended module immutability-helper
+          let combinedItems = this.state[stateRef].items.concat(response.data.items);
 
-          // let newFeedState = {
-          //   items: itemCopy,
-          //   count: this.state[stateRef].count + response.data.count,
-          //   nextPageTransactionId: response.data.nextPageTransactionId,
-          //   newestTransactionId: this.state[stateRef].newestTransactionId
-          // }
+          // Might be a better design to make a deep copy of state and then 
+          // manipulate. See the module "immutability-helper"
 
-          let newFeedState = {};
-
-          console.log(this.state[stateRef], newFeedState)
+          let newFeedState = {
+            items: combinedItems,
+            count: this.state[stateRef].count + response.data.count,
+            nextPageTransactionId: response.data.nextPageTransactionId,
+            newestTransactionId: this.state[stateRef].newestTransactionId
+          }
 
           this.setState({
             [stateRef]: newFeedState
@@ -102,8 +92,7 @@ class App extends React.Component {
       })
       .catch((err) => {
         console.log(err);
-      });    
-
+      }); 
   }
 
   getBalance(userId) {
