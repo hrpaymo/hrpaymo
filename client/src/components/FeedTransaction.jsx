@@ -1,5 +1,5 @@
 import React from 'react';
-import ListItem from 'material-ui/List';
+import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 

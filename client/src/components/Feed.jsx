@@ -1,6 +1,6 @@
 import React from 'react';
 import FeedTransaction from './FeedTransaction.jsx'
-import List from 'material-ui/List';
+import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 
 class Feed extends React.Component {
