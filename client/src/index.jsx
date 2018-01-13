@@ -227,29 +227,26 @@ class App extends React.Component {
     }
 
     return (
-
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          <BrowserRouter>
-            <Switch>
-              <Route 
-                exact path="/signup" 
-                render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-                />
-              <Route 
-                exact path="/login" 
-                render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-                />
-              <Route 
-                path="/view?=(:id)" 
-                render={HomeWithProps} 
-                onEnter={ this.requireAuth }/>
-              <Route 
-                path="/" 
-                render={HomeWithProps} />
-            </Switch>
-          </BrowserRouter>
-        </div>
+      <MuiThemeProvider>
+        <BrowserRouter>
+          <Switch>
+            <Route 
+              exact path="/signup" 
+              render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              exact path="/login" 
+              render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              path="/view?=(:id)" 
+              render={HomeWithProps} 
+              onEnter={ this.requireAuth }/>
+            <Route 
+              path="/" 
+              render={HomeWithProps} />
+          </Switch>
+        </BrowserRouter>
       </MuiThemeProvider>
     )
   }
