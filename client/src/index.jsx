@@ -10,11 +10,13 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // ---------- Componenets ---------- //
-import LoggedOutHome from './components/LoggedOutHome.jsx';
-import Home from './components/Home.jsx';
-import NavBar from './components/Navbar.jsx';
-import Login from './components/Login.jsx';
-import SignUp from './components/SignUp.jsx';
+import LoggedOutHome from './pages/LoggedOutHome.jsx';
+import Home from './pages/Home.jsx';
+import Login from './pages/Login.jsx';
+import SignUp from './pages/SignUp.jsx';
+import Profile from './pages/Profile.jsx';
+import Navbar from './components/Navbar.jsx';
+
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -218,6 +220,7 @@ class App extends React.Component {
     const HomeWithProps = (props) => {
       return (
         <div>
+          <Navbar />
           {!this.state.isLoggedIn 
             ? <LoggedOutHome 
                 isLoggedIn={this.state.isLoggedIn} 
@@ -256,6 +259,10 @@ class App extends React.Component {
             <Route 
               path="/view?=(:id)" 
               render={HomeWithProps}
+              onEnter={ this.requireAuth }/>
+            <Route 
+              path="/view?=(:id)" 
+              render={HomeWithProps} 
               onEnter={ this.requireAuth }/>
             <Route 
               path="/" 

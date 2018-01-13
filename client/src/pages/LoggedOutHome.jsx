@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NavBar from './Navbar.jsx';
+import NavBar from '../components/Navbar.jsx';
 
 class LoggedOutHome extends React.Component {
   constructor (props) {

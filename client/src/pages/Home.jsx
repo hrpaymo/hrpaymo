@@ -1,9 +1,8 @@
 import React from 'react';
-import Navbar from './Navbar.jsx';
-import Payment from './Payment.jsx';
-import FeedContainer from './FeedContainer.jsx';
-import MiniProfile from './MiniProfile.jsx';
-import NavBar from './Navbar.jsx';
+import Navbar from '../components/Navbar.jsx';
+import Payment from '../components/Payment.jsx';
+import FeedContainer from '../components/FeedContainer.jsx';
+import MiniProfile from '../components/MiniProfile.jsx';
 
 class Home extends React.Component {
   constructor (props) {

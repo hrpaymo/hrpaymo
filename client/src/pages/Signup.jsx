@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import NavBar from './Navbar.jsx';
+import NavBar from '../components/Navbar.jsx';
 
 class SignUp extends React.Component {
   constructor (props) {
