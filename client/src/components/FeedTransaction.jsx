@@ -1,8 +1,7 @@
 import React from 'react';
-import {ListItem} from 'material-ui/List';
+import ListItem from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
-
 
 const FeedTransaction = (props) => {
   let isDebit = props.transaction.amount && (props.transaction.amount[0] === '-');
