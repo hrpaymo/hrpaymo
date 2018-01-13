@@ -15,7 +15,7 @@ const FeedTransaction = (props) => {
         </div>
       }
       secondaryText={
-       <div>{props.transaction.note}</div>
+       <div>{props.transaction.note}, {props.transaction.amount}</div>
       }
       secondaryTextLines={2}
     />
