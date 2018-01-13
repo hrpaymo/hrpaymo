@@ -1,10 +1,17 @@
+// ---------- Packages ---------- //
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import axios from 'axios';
+
+// ---------- Material UI ---------- //
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// ---------- Componenets ---------- //
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
 import NavBar from './components/Navbar.jsx';
-import axios from 'axios';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -93,21 +100,23 @@ class App extends React.Component {
 
   render () {
     return (
-      <div>
-        <NavBar 
-          isLoggedIn={this.state.isLoggedIn}
-          logUserOut={this.logUserOut.bind(this)}/>
-        {!this.state.isLoggedIn 
-          ? <LoggedOutHome 
-              logUserIn={this.logUserIn.bind(this)}/>
-          : <Home
-              userFeed={this.state.userFeed}
-              globalFeed={this.state.globalFeed}
-              balance={this.state.balance}
-              userInfo={this.state.userInfo}
-              /> 
-        }
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <NavBar 
+            isLoggedIn={this.state.isLoggedIn}
+            logUserOut={this.logUserOut.bind(this)}/>
+          {!this.state.isLoggedIn 
+            ? <LoggedOutHome 
+                logUserIn={this.logUserIn.bind(this)}/>
+            : <Home
+                userFeed={this.state.userFeed}
+                globalFeed={this.state.globalFeed}
+                balance={this.state.balance}
+                userInfo={this.state.userInfo}
+                /> 
+          }
+        </div>
+      </MuiThemeProvider>
     )
   }
 }
