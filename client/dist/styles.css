@@ -1,5 +1,6 @@
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: #f2f2f5;
 }
 
 .navbar {
@@ -34,15 +35,16 @@ button {
   width: 100px;
 }
 
-.container {
-  display: flex;
-  border: 1px solid #ccc;
-  width: 50%;
+.pay-feed-container {
+  /*display: flex;*/
+  width: 60%;
   justify-content: center;
+  margin: 20px;
 }
 .feed-container {
   border: 1px solid #ccc;
-  width: 50%;
+  width: 100%;
+  margin: 20px;
 }
 
 .feed-buttons {
@@ -114,4 +116,7 @@ button {
 .user-info {
 
 }
-
+/*.form-box {
+  display:flex;
+  border: 1px solid #444;
+}*/

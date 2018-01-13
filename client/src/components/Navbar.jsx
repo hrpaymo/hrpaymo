@@ -1,5 +1,17 @@
 import React from 'react';
 import { withRouter, Link } from "react-router-dom";
+import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
+
+const style = {
+  nav: {
+    background: '#3D95CE',
+  },
+  left: {
+    display: 'none',
+
+  }
+};
 
 class Navbar extends React.Component {
   constructor (props) {
@@ -17,16 +29,27 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <div className='navbar'>
-        <div className='navbar-logo'>
-          <Link to="/"><h1>Hello Paymo</h1></Link>
-        </div>
-        <div className='navbar-menu'>
-          {this.props.isLoggedIn && 
-            <div className='navbar-logout' onClick={this.logOutAndRedirect.bind(this)}> Log Out</div>
-          }
-        </div>
-      </div>
+      <AppBar 
+        className='navbar'
+        style={style.nav}
+        title={
+          <div className='navbar-logo'>
+            <Link to="/"><h1>Hello Paymo</h1></Link>
+          </div>
+        }
+        iconElementRight={
+          <div className='navbar-menu'>
+            {this.props.isLoggedIn && 
+              <FlatButton 
+                className='navbar-logout' 
+                onClick={this.logOutAndRedirect.bind(this)} 
+                label="Log Out" 
+                iconStyleLeft={style.left}
+              />
+            }
+          </div>
+        }
+      />
 
     );
   }
