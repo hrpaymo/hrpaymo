@@ -4,6 +4,7 @@ import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import AutoComplete from 'material-ui/AutoComplete';
 
 const style = {
   form: {
@@ -24,6 +25,14 @@ const style = {
   }
 }
 
+const usernames = [
+  'ginger',
+  'mango',
+  'banana',
+  'test',
+  'fruit'
+];
+
 class Payment extends React.Component {
   constructor (props) {
     super(props);
@@ -39,6 +48,12 @@ class Payment extends React.Component {
     let target = event.target;
     this.setState({
       [target.name] : target.value
+    })
+  }
+
+  onDropdownInput(searchText) {
+    this.setState({
+      payeeUsername: searchText
     })
   }
 
@@ -86,14 +101,15 @@ class Payment extends React.Component {
       <Paper className='payment-container' style={style.form}>
         <div className='payment-item-container'>
           <div className="form-box top left">
-            <TextField
+            <AutoComplete
               hintText="Enter a username"
               floatingLabelText="Who do you want to pay?"
               style={style.input}
               name='payeeUsername'
-              value={this.state.payeeUsername}
-              onChange = {this.handleInputChanges.bind(this)}
-            /><br />
+              searchText={this.state.payeeUsername}
+              onUpdateInput = {this.onDropdownInput.bind(this)}
+            />
+          <br />
           </div>
           <div className="form-box top right">
             <TextField
@@ -103,7 +119,8 @@ class Payment extends React.Component {
               onChange = {this.handleInputChanges.bind(this)}
               hintText="Enter an amount"
               floatingLabelText="How much to give away?"
-            /><br />
+            />
+          <br />
           </div>
           <div className="form-box bottom">
             <TextField
@@ -115,7 +132,8 @@ class Payment extends React.Component {
               floatingLabelText="Got something to say?"
               fullWidth={true}
               multiLine={true}
-            /><br />
+            />
+          <br />
           </div>
         </div>
 

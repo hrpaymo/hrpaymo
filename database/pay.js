@@ -68,7 +68,7 @@ const getPayeeInfo = function(paymentTransaction, localPaymentInfo, paymentDataF
   .then(rows => {
     // if no user or payer userid === payee userid, throw error
     if(rows.length === 0 || rows[0].id === parseInt(paymentDataFromServer.payerId)) {
-      throw new Error('Invalid payee username.');
+      throw new Error('Invalid payee username:', paymentDataFromServer.payeeUsername);
     }
     localPaymentInfo.payeeBalance = parseFloat(rows[0].amount);
     localPaymentInfo.payeeUserId = parseInt(rows[0].id);
