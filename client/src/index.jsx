@@ -30,7 +30,8 @@ class App extends React.Component {
       globalFeed: {},
       userFeed: {},
       balance: null,
-      userInfo: {}
+      userInfo: {},
+      usernames: []
     }
   }
 
@@ -42,13 +43,26 @@ class App extends React.Component {
     this.getBalance(userId);
     this.getGlobalFeed();
     this.getUserFeed(userId);
+    this.getUsernames(userId);
   }
-
 
   refreshUserData(userId) {
     this.getBalance(userId);
     this.getGlobalFeed(this.state.globalFeed.newestTransactionId || null);
     this.getUserFeed(userId, this.state.userFeed.newestTransactionId || null);
+    this.getUsernames(userId)
+  }
+
+  getUsernames(userId) {
+    axios('/usernames', { params: { userId: userId }})
+    .then(response => {
+      this.setState({
+        usernames: response.data.usernames
+      });
+    })
+    .catch(err => {
+      console.error(err);
+    })
   }
 
   getUserFeed(userId, sinceId = null) {
@@ -219,6 +233,7 @@ class App extends React.Component {
                 globalFeed={this.state.globalFeed}
                 userInfo={this.state.userInfo}
                 balance={this.state.balance}
+                usernames={this.state.usernames}
                 {...props}
                 />
           }
@@ -227,29 +242,26 @@ class App extends React.Component {
     }
 
     return (
-
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          <BrowserRouter>
-            <Switch>
-              <Route 
-                exact path="/signup" 
-                render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-                />
-              <Route 
-                exact path="/login" 
-                render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-                />
-              <Route 
-                path="/view?=(:id)" 
-                render={HomeWithProps} 
-                onEnter={ this.requireAuth }/>
-              <Route 
-                path="/" 
-                render={HomeWithProps} />
-            </Switch>
-          </BrowserRouter>
-        </div>
+      <MuiThemeProvider>
+        <BrowserRouter>
+          <Switch>
+            <Route 
+              exact path="/signup" 
+              render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              exact path="/login" 
+              render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+              />
+            <Route 
+              path="/view?=(:id)" 
+              render={HomeWithProps}
+              onEnter={ this.requireAuth }/>
+            <Route 
+              path="/" 
+              render={HomeWithProps} />
+          </Switch>
+        </BrowserRouter>
       </MuiThemeProvider>
     )
   }

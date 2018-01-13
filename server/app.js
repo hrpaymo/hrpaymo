@@ -34,6 +34,20 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.get('/usernames', (req, res) => {
+  db.getUsernames(parseInt(_.escape(req.query.userId)))
+  .then(rows => {
+    unescapedRows = rows.map(row => {
+      return _.unescape(row.username);
+    })
+    res.json({ usernames: unescapedRows });
+  })
+  .catch(err => {
+    console.errror('error on get of usernames:', err.message);
+    res.status(400).json({ error : "Improper format." });
+  });
+})
+
 app.get('/profile', (req, res) => {
   var userId = req.query.userId;
   db.profile.getUserInfo(parseInt(_.escape(userId.replace(/"/g,"'"))), (err, row) => {
