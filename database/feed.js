@@ -41,29 +41,37 @@ var baseQuery = function(queryBuilder) {
    .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
    .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
    .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
-   .orderBy('transactions.created_at', 'desc');
+   .orderBy('transactions.txn_id', 'desc');
 };
 
-var olderThanId = function(queryBuilder, startingTransactionId) {
+var olderThanIdQuery = function(queryBuilder, startingTransactionId) {
   if (startingTransactionId) {
     queryBuilder.where('transactions.txn_id', '<=', startingTransactionId);
   }
 }
 
-const globalFeed = function(limit, startingTransactionId) {
+var sinceIdQuery = function(queryBuilder, sinceId) {
+  if (sinceId) {
+    queryBuilder.where('transactions.txn_id', '>', sinceId);
+  }
+}
+
+const globalFeed = function(limit, startingTransactionId, sinceId) {
   return pg('users_transactions')
     .modify(baseQuery)
-    .modify(olderThanId, startingTransactionId)
+    .modify(olderThanIdQuery, startingTransactionId)
+    .modify(sinceIdQuery, sinceId)
     .limit(limit)
     .then(rows => {
       return rows.map(formatOutput);
    })
 }
 
-const myFeed = function(limit, userId, startingTransactionId) {
+const myFeed = function(limit, userId, startingTransactionId, sinceId) {
   return pg('users_transactions')
     .modify(baseQuery)
-    .modify(olderThanId, startingTransactionId)
+    .modify(olderThanIdQuery, startingTransactionId)
+    .modify(sinceIdQuery, sinceId)
     .limit(limit)
     .where('users_transactions.payer_id', userId)
     .orWhere('users_transactions.payee_id', userId)

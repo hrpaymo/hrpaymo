@@ -34,6 +34,7 @@ class Payment extends React.Component {
           note: '',
           paymentFail: false
         });
+        this.props.refreshUserData(this.props.payerId);
       })
       .catch(error => {
         if (error.response) {

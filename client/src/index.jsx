@@ -28,8 +28,16 @@ class App extends React.Component {
     this.getUserFeed(userId);
   }
 
-  getUserFeed(userId) {
-    axios(`/feed/user/${userId}`)
+  refreshUserData(userId) {
+    this.getBalance(userId);
+    this.getGlobalFeed(this.state.globalFeed.newestTransactionId || null);
+    this.getUserFeed(userId, this.state.userFeed.newestTransactionId || null);
+  }
+
+  getUserFeed(userId, sinceId = null) {
+    let additionalData = {params: {sinceId: sinceId}}
+
+    axios(`/feed/user/${userId}`, additionalData)
       .then((response) => {
         this.setState({
           userFeed: response.data
@@ -40,8 +48,10 @@ class App extends React.Component {
       });
   }
 
-  getGlobalFeed() {
-    axios('/feed/global')
+  getGlobalFeed(sinceId = null) {
+    let additionalData = {params: {sinceId: sinceId}}
+
+    axios('/feed/global', additionalData)
       .then((response) => {
         this.setState({
           globalFeed: response.data
@@ -50,6 +60,29 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  appendNewTransactions(feedType, transactionSummary) {
+    if (!transactionSummary || transactionSummary.count === 0) {
+      return;
+    }
+
+    // prepend new array
+    let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
+
+    // Might be a better design to make a deep copy of state and then 
+    // manipulate. See the module "immutability-helper"
+
+    let newFeedState = {
+      items: combinedItems,
+      count: (this.state[stateRef].count || 0) + transactionSummary.count,
+      nextPageTransactionId: this.state[stateRef].nextPageTransactionId,
+      newestTransactionId: transactionSummary.newestTransactionId
+    }
+
+    this.setState({
+      [stateRef]: newFeedState
+    })
   }
 
   loadMoreFeed(feedType, userId) {
@@ -66,7 +99,7 @@ class App extends React.Component {
       return;
     }
 
-    let additionalData = {params: {startingTransactionId: this.state[stateRef].nextPageTransactionId}}
+    let additionalData = {params: {beforeId: this.state[stateRef].nextPageTransactionId}}
 
     axios(endpoint, additionalData)
       .then((response) => {
@@ -147,6 +180,7 @@ class App extends React.Component {
               loadMoreFeed={this.loadMoreFeed.bind(this)}
               balance={this.state.balance}
               userInfo={this.state.userInfo}
+              refreshUserData={this.refreshUserData.bind(this)}
               /> 
         }
       </div>
