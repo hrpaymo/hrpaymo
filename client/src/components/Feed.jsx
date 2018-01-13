@@ -4,6 +4,8 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 
+
+
 class Feed extends React.Component {
   constructor (props) {
     super(props);
@@ -22,7 +24,7 @@ class Feed extends React.Component {
               {this.props.transactions.items && this.props.transactions.items.map((transaction, i) => {
                 let isLastItem = i === this.props.transactions.items.length - 1;
                 return (
-                  <FeedTransaction key={transaction.transactionId} lastItem={isLastItem} transaction={transaction} />
+                  <FeedTransaction key={transaction.transactionId} isLastItem={isLastItem} transaction={transaction} />
                 );
               })}
             </List>

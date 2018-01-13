@@ -1,8 +1,21 @@
 import React from 'react';
-import {List, ListItem} from 'material-ui/List';
+import {ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+
+
+const style = {
+  button: {
+    label: {
+      color: '#fff',
+      position: 'relative'
+    },
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    width: 30,
+  }
+}
 
 const FeedTransaction = (props) => {
   let isDebit = props.transaction.amount && (props.transaction.amount[0] === '-');
