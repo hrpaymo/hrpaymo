@@ -16,7 +16,9 @@ class Home extends React.Component {
     return (
       <div>
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
-        <Payment payerId={this.props.userInfo.userId} />
+        <Payment 
+          payerId={this.props.userInfo.userId} 
+          refreshUserData={this.props.refreshUserData} />
         <FeedContainer 
           userId={this.props.userInfo.userId}
           loadMoreFeed={this.props.loadMoreFeed}

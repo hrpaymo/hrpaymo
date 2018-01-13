@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/../client/dist'));
 
-
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
   db.getPasswordAtUsername(username, (err, row) => {
@@ -32,7 +31,6 @@ app.post('/login', (req, res) => {
     }
   });
 });
-
 
 app.get('/profile', (req, res) => {
   var userId = req.query.userId;
@@ -116,9 +114,10 @@ app.post('/pay', (req, res) => {
 
 app.get('/feed/global', (req, res) => {
   let limit = 5;
-  let beforeId = req.query['startingTransactionId'] || null; 
+  let beforeId = parseInt(req.query['beforeId']) || null; 
+  let sinceId = parseInt(req.query['sinceId']) || null;
 
-  db.globalFeed(limit + 1, beforeId)
+  db.globalFeed(limit + 1, beforeId, sinceId)
     .then((results) => {
       res.status(200).json(helpers.buildFeedObject(results, limit));
     })
@@ -129,16 +128,18 @@ app.get('/feed/global', (req, res) => {
 });
 
 app.get('/feed/user/:userId', (req, res) => {
-  let userId = req.params && req.params.userId;
+  let userId = req.params && parseInt(req.params.userId);
+
   let limit = 5;
-  let beforeId = req.query['startingTransactionId'] || null; 
-  
+  let beforeId = parseInt(req.query['beforeId']) || null; 
+  let sinceId = parseInt(req.query['sinceId']) || null;
+
   if (isNaN(userId)) {
     res.sendStatus(400).json({ error: "Improper format." });
     return;
   }
 
-  db.myFeed(limit + 1, userId, beforeId)
+  db.myFeed(limit + 1, beforeId, sinceId, userId)
     .then((results) => {
       res.status(200).json(helpers.buildFeedObject(results, limit));
     })
