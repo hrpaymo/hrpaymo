@@ -20,26 +20,11 @@ class Feed extends React.Component {
           ? <div> No transactions available. </div>
           : <List>
               {this.props.transactions.items && this.props.transactions.items.map((transaction, i) => {
-                  return (
-                    <div key={transaction.transactionId}>
-                      <ListItem disabled={true}
-                        leftAvatar={<Avatar src={transaction.payer.avatarUrl || '/images/no-image.gif'} />}
-                        primaryText={
-                          <div>
-                            <span className='feed-item-user'>{transaction.payer.fullName}</span> paid <span className='feed-item-user'>{transaction.payee.fullName}</span>
-                            <div className='feed-item-note'>{transaction.note}</div>
-                          </div>
-                        }
-                        secondaryText={
-                         <div className='feed-item-timestamp'>{transaction.timestamp}</div>
-                        }
-                        secondaryTextLines={1}
-                      />
-                      {i !== this.props.transactions.length - 1 && <Divider/>}
-                    </div>
-                  );
-                })
-              }
+                let isLastItem = i === this.props.transactions.items.length - 1;
+                return (
+                  <FeedTransaction key={transaction.transactionId} lastItem={isLastItem} transaction={transaction} />
+                );
+              })}
             </List>
         }
         {showMoreButton && <button onClick={ () => this.props.loadMoreFeed(this.props.type, this.props.userId) } >Show More</button>}

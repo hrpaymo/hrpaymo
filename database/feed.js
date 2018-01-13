@@ -1,9 +1,17 @@
 const pg = require('./index.js').pg;
 
-const formatOutput = (item) => {
+const formatOutput = (item, userId) => {
+
+  // For private views, convert display amounts to negative, if paid by logged in user
+  let amount = item.amount;
+
+  if (amount && userId && (item.payer_id === userId)) {
+    amount = '-' + amount;
+  }
+
   return ({
     transactionId: item.txn_id,
-    amount: item.amount,
+    amount: amount,
     note: item.note,
     timestamp: item.created_at,
     payer: {
@@ -23,6 +31,7 @@ const formatOutput = (item) => {
     }
   })
 }
+
 
 // Does not include amount. For future development, can also filter out private messages
 var baseQueryPublic = function(queryBuilder) {
@@ -99,7 +108,7 @@ const myFeed = function(limit, beforeId, sinceId, userId) {
     .modify(sinceIdQuery, sinceId)
     .limit(limit)
     .then(rows => {
-      return rows.map(formatOutput);
+      return rows.map((item) => formatOutput(item, userId));
     })
 }
 
