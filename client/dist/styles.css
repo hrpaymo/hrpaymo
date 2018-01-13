@@ -1,3 +1,8 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f2f2f5;
+}
+
 .navbar {
   background: #3D95CE;
   color: white;
@@ -16,6 +21,11 @@
   text-decoration-style: underline;
   cursor: pointer;
 }
+.navbar-logo {
+  text-decoration-style: bold;
+  cursor: pointer;
+  color: #fff;
+}
 
 .error-text{
   color: red;
@@ -30,9 +40,18 @@ button {
   width: 100px;
 }
 
+.pay-feed-container {
+  display: block;
+  width: 60%;
+  justify-content: center;
+  margin: 20px;
+}
 .feed-container {
   border: 1px solid #ccc;
-  width: 50%;
+  width: 100%;
+  padding: 20;
+  position: 'relative';
+  margin: 20px;
 }
 
 .feed-buttons {
@@ -91,4 +110,47 @@ button {
 .splash {
   display: flex;
   flex-direction: column;
+}
+.profile-avatar {
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+
+.profile-name {
+  font-weight: bold;
+}
+.user-info {
+
+}
+.pay-button-container {
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.payment-container {
+  width: 100%;
+  padding: 20px;
+  position: 'relative';
+  margin: 20px;
+
+}
+.payment-item-container {
+  display: 'block';
+  justify-content: 'space-evenly';
+}
+.form-box {
+  padding-bottom: 20px;
+}
+.bottom {
+}
+.top {
+  width: 45%;
+}
+.left {
+  float: 'left';
+}
+.right {
+  float: 'right';
 }

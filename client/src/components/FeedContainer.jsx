@@ -1,6 +1,9 @@
 import React from 'react';
 import Feed from './Feed.jsx'
 import { Link } from 'react-router-dom';
+import Avatar from 'material-ui/Avatar';
+import Divider from 'material-ui/Divider';
+import Paper from 'material-ui/Paper';
 
 class FeedContainer extends React.Component {
   constructor (props) {
@@ -10,7 +13,7 @@ class FeedContainer extends React.Component {
   render() {
 
     return (
-      <div className='feed-container'>
+      <Paper className='feed-container'>
         <div className='feed-selections'>
           <Link to="/?view=mine">
             <button className={this.props.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} >
@@ -34,9 +37,10 @@ class FeedContainer extends React.Component {
               userId={this.props.userId}
               loadMoreFeed={this.props.loadMoreFeed} 
               transactions={this.props.globalFeed} />}
-      </div>
+      </Paper>
     );
   }
 }
 
 export default FeedContainer;
+

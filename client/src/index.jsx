@@ -1,13 +1,26 @@
+// ---------- Packages ---------- //
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import $ from 'jquery';
 import axios from 'axios';
 
+// ---------- Material UI ---------- //
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// ---------- Componenets ---------- //
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
+import NavBar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#3D95CE',
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -214,27 +227,30 @@ class App extends React.Component {
     }
 
     return (
-      <div>
-        <BrowserRouter>
-          <Switch>
-            <Route 
-              exact path="/signup" 
-              render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
-            <Route 
-              exact path="/login" 
-              render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
-            <Route 
-              path="/view?=(:id)" 
-              render={HomeWithProps} 
-              onEnter={ this.requireAuth }/>
-            <Route 
-              path="/" 
-              render={HomeWithProps} />
-          </Switch>
-        </BrowserRouter>
-      </div>
+
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <BrowserRouter>
+            <Switch>
+              <Route 
+                exact path="/signup" 
+                render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+                />
+              <Route 
+                exact path="/login" 
+                render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
+                />
+              <Route 
+                path="/view?=(:id)" 
+                render={HomeWithProps} 
+                onEnter={ this.requireAuth }/>
+              <Route 
+                path="/" 
+                render={HomeWithProps} />
+            </Switch>
+          </BrowserRouter>
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

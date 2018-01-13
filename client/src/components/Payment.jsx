@@ -1,5 +1,28 @@
 import React from 'react';
 import axios from 'axios';
+import Divider from 'material-ui/Divider';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+
+const style = {
+  form: {
+    display: 'block',
+  },
+  input: {
+    background: '#f8f8f8',
+  },
+  button: {
+    label: {
+      color: '#fff',
+      position: 'relative'
+    },
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    width: 30,
+  }
+}
 
 class Payment extends React.Component {
   constructor (props) {
@@ -60,41 +83,63 @@ class Payment extends React.Component {
 
   render() {
     return (
-      <div className='payment_component'>
-        <label>
-          Recipient Username
-          <input
-            name='payeeUsername'
-            value={this.state.payeeUsername}
-            onChange = {this.handleInputChanges.bind(this)}
-          />
-        </label>
-        <label>
-          Payment Amount
-          <input
-            type="text"
-            // pattern="^[0-9]*\.[0-9]{0,2}$"
-            name='amount'
-            value={this.state.amount}
-            onChange = {this.handleInputChanges.bind(this)}
-          />
-        </label>
-        <label>
-          Note
-          <input
-            name='note'
-            value={this.state.note}
-            onChange = {this.handleInputChanges.bind(this)}
-          />
-        </label>
-        <button className='pay_button' onClick={this.payUser.bind(this)}>Pay!</button>
-        {this.state.paymentFail
-          ? <label className='payment_fail'>
-              Error in payment processing
-            </label>
-          : null
-        }
-      </div>
+      <Paper className='payment-container' style={style.form}>
+        <div className='payment-item-container'>
+          <div className="form-box top left">
+            <TextField
+              hintText="Enter a username"
+              floatingLabelText="Who do you want to pay?"
+              style={style.input}
+              name='payeeUsername'
+              value={this.state.payeeUsername}
+              onChange = {this.handleInputChanges.bind(this)}
+            /><br />
+          </div>
+          <div className="form-box top right">
+            <TextField
+              style={style.input}
+              name='amount'
+              value={this.state.amount}
+              onChange = {this.handleInputChanges.bind(this)}
+              hintText="Enter an amount"
+              floatingLabelText="How much to give away?"
+            /><br />
+          </div>
+          <div className="form-box bottom">
+            <TextField
+              style={style.input}
+              name='note'
+              value={this.state.note}
+              onChange = {this.handleInputChanges.bind(this)}
+              hintText="Leave a comment"
+              floatingLabelText="Got something to say?"
+              fullWidth={true}
+              multiLine={true}
+            /><br />
+          </div>
+        </div>
+
+        <div className="pay-button-container"> 
+          {this.state.paymentFail
+            ? <label className='payment-fail'>
+                Error in payment processing
+              </label>
+            : null
+          }
+          <div>
+            <FlatButton 
+              className='pay-button' 
+              onClick={this.payUser.bind(this)} 
+              label="Pay!" 
+              primary={true} 
+              style={style.button} 
+              backgroundColor="#3D95CE"
+              hoverColor='#03A9F4'
+              labelStyle={style.button.label}
+            />
+          </div>
+        </div>
+      </Paper>
     );
   }
 }
