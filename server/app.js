@@ -77,6 +77,15 @@ app.get('/balance', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
+  // check to see if req fields are empty
+  if(!req.body.username ||
+    !req.body.password ||
+    !req.body.firstName ||
+    !req.body.lastName) {
+      res.status(400).json({ error: "Improper format." });
+      return;
+    }
+
   let signupData = {};
   for(let key in req.body) {
     signupData[_.escape(key.replace(/"/g,"'"))] = _.escape(req.body[key].replace(/"/g,"'"));
