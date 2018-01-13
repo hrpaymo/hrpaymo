@@ -18,11 +18,17 @@ import Profile from './components/Profile.jsx';
 import Navbar from './components/Navbar.jsx';
 
 
+
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: '#3D95CE',
   },
 });
+
+const FEED_ENDPOINTS = {
+  'globalFeed': '/feed/global',
+  'userFeed': '/feed/user'
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -68,11 +74,17 @@ class App extends React.Component {
   }
 
   getUserFeed(userId, sinceId = null) {
-    let additionalData = {params: {sinceId: sinceId}}
+    let feedType = 'userFeed';
+    let endpoint = FEED_ENDPOINTS[feedType];
+    endpoint = `${endpoint}/${userId}`
 
-    axios(`/feed/user/${userId}`, additionalData)
+    let params = {
+      sinceId: sinceId
+    }
+
+    axios(endpoint, {params: params})
       .then((response) => {
-        this.prependNewTransactions('mine', response.data);
+        this.prependNewTransactions(feedType, response.data);
       })
       .catch((err) => {
         console.error(err);
@@ -80,11 +92,16 @@ class App extends React.Component {
   }
 
   getGlobalFeed(sinceId = null) {
-    let additionalData = {params: {sinceId: sinceId}}
+    let feedType = 'globalFeed';
+    let endpoint = FEED_ENDPOINTS[feedType];
 
-    axios('/feed/global', additionalData)
+    let params = {
+      sinceId: sinceId
+    }
+
+    axios(endpoint, {params: params})
       .then((response) => {
-        this.prependNewTransactions('public', response.data);
+        this.prependNewTransactions(feedType, response.data);
       })
       .catch((err) => {
         console.error(err);
@@ -96,69 +113,63 @@ class App extends React.Component {
       return;
     }
 
-    let stateRef = (feedType === 'public') ? 'globalFeed' : 'userFeed';
-
-    // If there is no existing data in the feed, set the transaction summary
-    if (!this.state[stateRef].count || this.state[stateRef].count === 0) {
-        this.setState({
-          [stateRef]: transactionSummary
-        });  
+    // If feed was empty, set the returned transactions as the feed
+    if (!this.state[feedType].count || this.state[feedType].count === 0) {
+      this.setState({
+        [feedType]: transactionSummary
+      });  
     } else {
-      // If there is already existing data in the feed, combine them to prepend the new 
-      // transactions to the top
-      let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
+      // If there is already existing data in the feed, combine them, prepending the 
+      // more recent transactions to the top
+      let combinedItems = transactionSummary.items.concat(this.state[feedType].items);
 
-      // Might be a better design to make a deep copy of state and then 
-      // manipulate. See the module "immutability-helper"
-
+      // Update feed meta-data to accurately reflect combined data
       let newFeedState = {
         items: combinedItems,
-        count: (this.state[stateRef].count || 0) + transactionSummary.count,
-        nextPageTransactionId: this.state[stateRef].nextPageTransactionId,
+        count: (this.state[feedType].count || 0) + transactionSummary.count,
+        nextPageTransactionId: this.state[feedType].nextPageTransactionId,
         newestTransactionId: transactionSummary.newestTransactionId
       }
 
+      // Set state
       this.setState({
-        [stateRef]: newFeedState
+        [feedType]: newFeedState
       })
     }
   }
 
   loadMoreFeed(feedType, userId) {
-    let endpoint;
-    let stateRef;
+    let endpoint = FEED_ENDPOINTS[feedType];
 
-    if (feedType === 'public') {
-      endpoint = '/feed/global';
-      stateRef = 'globalFeed';
-    } else if (feedType == 'mine') {
-      endpoint = `/feed/user/${userId}`;
-      stateRef = 'userFeed';
-    } else {
-      return;
+    if (feedType === 'userFeed') {
+      endpoint = `${endpoint}/${userId}`;
+    } 
+
+    // Send along the next valid ID you'd like returned back
+    // from the database
+    let params = {
+      beforeId: this.state[feedType].nextPageTransactionId
     }
 
-    let additionalData = {params: {beforeId: this.state[stateRef].nextPageTransactionId}}
-
-    axios(endpoint, additionalData)
+    axios(endpoint, {params: params})
       .then((response) => {
-        // Confirm additional items to load
+
+        // Confirm there additional items to load
         if (response.data && response.data.count > 0) {
 
-          let combinedItems = this.state[stateRef].items.concat(response.data.items);
-
-          // Might be a better design to make a deep copy of state and then 
-          // manipulate. See the module "immutability-helper"
+          // combine the items, appending the 
+          // returned transactions to the bottom
+          let combinedItems = this.state[feedType].items.concat(response.data.items);
 
           let newFeedState = {
             items: combinedItems,
-            count: this.state[stateRef].count + response.data.count,
+            count: this.state[feedType].count + response.data.count,
             nextPageTransactionId: response.data.nextPageTransactionId,
-            newestTransactionId: this.state[stateRef].newestTransactionId
+            newestTransactionId: this.state[feedType].newestTransactionId
           }
 
           this.setState({
-            [stateRef]: newFeedState
+            [feedType]: newFeedState
           })
         }
       })

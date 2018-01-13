@@ -29,12 +29,12 @@ class FeedContainer extends React.Component {
         </div>
         {this.props.view === 'mine'
           ? <Feed 
-              type='mine'
+              type='userFeed'
               userId={this.props.userId}
               loadMoreFeed={this.props.loadMoreFeed} 
               transactions={this.props.userFeed} />
           : <Feed 
-              type='public'
+              type='globalFeed'
               userId={this.props.userId}
               loadMoreFeed={this.props.loadMoreFeed} 
               transactions={this.props.globalFeed} />}
