@@ -39,9 +39,7 @@ class App extends React.Component {
 
     axios(`/feed/user/${userId}`, additionalData)
       .then((response) => {
-        this.setState({
-          userFeed: response.data
-        });
+        this.prependNewTransactions('mine', response.data);
       })
       .catch((err) => {
         console.error(err);
@@ -53,44 +51,44 @@ class App extends React.Component {
 
     axios('/feed/global', additionalData)
       .then((response) => {
-        // If there is an existing feed, append
-        if (this.state.globalFeed.count > 0) {
-          this.appendNewTransactions('public', response.data);
-        } else {
-        // Otherwise, set state as new returned feed
-          this.setState({
-            globalFeed: response.data
-          });   
-        }
-
+        this.prependNewTransactions('public', response.data);
       })
       .catch((err) => {
         console.error(err);
       });
   }
 
-  appendNewTransactions(feedType, transactionSummary) {
+  prependNewTransactions(feedType, transactionSummary) {
     if (!transactionSummary || transactionSummary.count === 0) {
       return;
     }
 
     let stateRef = feedType === 'public' ? 'globalFeed' : 'userFeed';
-    // prepend new array
-    let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
 
-    // Might be a better design to make a deep copy of state and then 
-    // manipulate. See the module "immutability-helper"
+    // If there is no existing data in the feed, set the transaction summary
+    if (!this.state[stateRef].count || this.state[stateRef].count === 0) {
+        this.setState({
+          [stateRef]: transactionSummary
+        });  
+    } else {
+      // If there is already existing data in the feed, combine them to prepend the new 
+      // transactions to the top
+      let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
 
-    let newFeedState = {
-      items: combinedItems,
-      count: (this.state[stateRef].count || 0) + transactionSummary.count,
-      nextPageTransactionId: this.state[stateRef].nextPageTransactionId,
-      newestTransactionId: transactionSummary.newestTransactionId
+      // Might be a better design to make a deep copy of state and then 
+      // manipulate. See the module "immutability-helper"
+
+      let newFeedState = {
+        items: combinedItems,
+        count: (this.state[stateRef].count || 0) + transactionSummary.count,
+        nextPageTransactionId: this.state[stateRef].nextPageTransactionId,
+        newestTransactionId: transactionSummary.newestTransactionId
+      }
+
+      this.setState({
+        [stateRef]: newFeedState
+      })
     }
-
-    this.setState({
-      [stateRef]: newFeedState
-    })
   }
 
   loadMoreFeed(feedType, userId) {
