@@ -91,6 +91,11 @@ button {
 
 .feed-item-amount {
   font-weight: bold;
+  color: green;
+}
+
+.feed-item-amount.showDebit {
+  color: red;
 }
 
 .feed-item-avatar {
@@ -131,14 +136,6 @@ button {
   padding: 10px;
   background-color: #eee;
   border: 1px solid #ccc;
-}
-
-.feed-item-amount {
-  color: green;
-}
-
-.feed-item-amount.showDebit {
-  color: red;
 }
 
 .payment-container {

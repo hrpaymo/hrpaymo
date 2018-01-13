@@ -4,8 +4,6 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 
-
-
 class Feed extends React.Component {
   constructor (props) {
     super(props);
