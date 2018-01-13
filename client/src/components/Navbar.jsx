@@ -36,7 +36,7 @@ class Navbar extends React.Component {
         style={style.nav}
         title={
           <div className='navbar-logo'>
-            <Link to="/"><h1>Hello Paymo</h1></Link>
+            <Link to="/"><span>Hello Paymo</span></Link>
           </div>
         }
         iconStyleLeft={style.left}
