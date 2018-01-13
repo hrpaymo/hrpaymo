@@ -98,6 +98,7 @@ class Payment extends React.Component {
               floatingLabelText="Who do you want to pay?"
               style={style.input}
               name='payeeUsername'
+              filter={AutoComplete.caseInsensitiveFilter}
               dataSource={this.props.usernames}
               maxSearchResults={7}
               searchText={this.state.payeeUsername}
