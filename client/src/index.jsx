@@ -16,7 +16,7 @@ class App extends React.Component {
       isLoggedIn: false,
       globalFeed: {},
       userFeed: {},
-      balance: 0,
+      balance: null,
       userInfo: {}
     }
   }
@@ -171,7 +171,11 @@ class App extends React.Component {
 
   logUserOut() {
     this.setState({
-      isLoggedIn: false
+      isLoggedIn: false,
+      globalFeed: {},
+      userFeed: {},
+      balance: null,
+      userInfo: {}
     })
   }
 
