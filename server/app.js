@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/login', (req, res) => {
   var {username, password} = req.body;
-  db.getPasswordAtUsername(_.escape(username), (err, row) => {
+  db.getPasswordAtUsername(_.escape(username.replace(/"/g,"'")), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -36,7 +36,7 @@ app.post('/login', (req, res) => {
 
 app.get('/profile', (req, res) => {
   var userId = req.query.userId;
-  db.profile.getUserInfo(parseInt(_.escape(userId)), (err, row) => {
+  db.profile.getUserInfo(parseInt(_.escape(userId.replace(/"/g,"'"))), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -60,7 +60,7 @@ app.get('/profile', (req, res) => {
 
 app.get('/balance', (req, res) => {
   var userId = req.query.userId;
-  db.profile.getBalance(parseInt(_.escape(userId)), (err, row) => {
+  db.profile.getBalance(parseInt(_.escape(userId.replace(/"/g,"'"))), (err, row) => {
     if (err) {
       console.error("Error retrieving from database: ", err);
       res.status(500).json(err);
@@ -79,7 +79,7 @@ app.get('/balance', (req, res) => {
 app.post('/signup', (req, res) => {
   let signupData = {};
   for(let key in req.body) {
-    signupData[_.escape(key)] = _.escape(req.body[key]);
+    signupData[_.escape(key.replace(/"/g,"'"))] = _.escape(req.body[key].replace(/"/g,"'"));
   }
   db.signup.newUserSignup(signupData, 100)
     .then(userId => {
@@ -104,7 +104,7 @@ app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
   let paymentData = {};
   for(let key in req.body) {
-    paymentData[_.escape(key)] = _.escape(req.body[key]);
+    paymentData[_.escape(key.replace(/"/g,"'"))] = _.escape(req.body[key].toString().replace(/"/g,"'"));
   }
   if(isNaN(parseFloat(paymentData.amount))) {
     console.error('payment amount is not a number:', paymentData.amount);
@@ -134,7 +134,7 @@ app.get('/feed/global', (req, res) => {
 
   db.globalFeed(limit + 1, beforeId, sinceId)
     .then((results) => {
-      unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
       res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
     })
     .catch((err) => {
@@ -157,7 +157,7 @@ app.get('/feed/user/:userId', (req, res) => {
 
   db.myFeed(limit + 1, beforeId, sinceId, userId)
     .then((results) => {
-      unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
       res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
     })
     .catch((err) => {
