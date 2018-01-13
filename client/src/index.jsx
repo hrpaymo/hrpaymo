@@ -228,7 +228,7 @@ class App extends React.Component {
 
     return (
 
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <BrowserRouter>
             <Switch>
