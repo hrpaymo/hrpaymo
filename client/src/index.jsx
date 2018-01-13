@@ -63,7 +63,7 @@ class App extends React.Component {
       return;
     }
 
-    let stateRef = feedType === 'public' ? 'globalFeed' : 'userFeed';
+    let stateRef = (feedType === 'public') ? 'globalFeed' : 'userFeed';
 
     // If there is no existing data in the feed, set the transaction summary
     if (!this.state[stateRef].count || this.state[stateRef].count === 0) {
