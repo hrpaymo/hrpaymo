@@ -25,14 +25,6 @@ const style = {
   }
 }
 
-const usernames = [
-  'ginger',
-  'mango',
-  'banana',
-  'test',
-  'fruit'
-];
-
 class Payment extends React.Component {
   constructor (props) {
     super(props);
@@ -106,7 +98,7 @@ class Payment extends React.Component {
               floatingLabelText="Who do you want to pay?"
               style={style.input}
               name='payeeUsername'
-              dataSource={usernames}
+              dataSource={this.props.usernames}
               searchText={this.state.payeeUsername}
               onUpdateInput = {this.onDropdownInput.bind(this)}
             />

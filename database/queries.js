@@ -3,6 +3,7 @@ const login = require('../database/login.js');
 const feed = require('../database/feed.js');
 const profile = require('../database/profile.js');
 const payment = require('../database/pay.js');
+const usernames = require('../database/usernames.js');
 
 module.exports = {
   signup: signup,
@@ -10,5 +11,6 @@ module.exports = {
   getPasswordAtUsername: login.getPasswordAtUsername,
   globalFeed: feed.globalFeed,
   myFeed: feed.myFeed,
-  payment: payment.pay
+  payment: payment.pay,
+  getUsernames: usernames.getUsernames
 }

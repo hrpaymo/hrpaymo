@@ -8,9 +8,6 @@ import NavBar from './Navbar.jsx';
 class Home extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      balance: undefined
-    }
   }
 
   extractView(location) {
@@ -27,7 +24,8 @@ class Home extends React.Component {
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <div className="pay-feed-container">
         <Payment 
-          payerId={this.props.userInfo.userId} 
+          payerId={this.props.userInfo.userId}
+          usernames={this.props.usernames}
           refreshUserData={this.props.refreshUserData} />
         <FeedContainer 
           userId={this.props.userInfo.userId}
