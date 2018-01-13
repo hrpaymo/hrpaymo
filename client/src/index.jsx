@@ -44,7 +44,7 @@ class App extends React.Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -53,12 +53,19 @@ class App extends React.Component {
 
     axios('/feed/global', additionalData)
       .then((response) => {
-        this.setState({
-          globalFeed: response.data
-        });
+        // If there is an existing feed, append
+        if (this.state.globalFeed.count > 0) {
+          this.appendNewTransactions('public', response.data);
+        } else {
+        // Otherwise, set state as new returned feed
+          this.setState({
+            globalFeed: response.data
+          });   
+        }
+
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -67,6 +74,7 @@ class App extends React.Component {
       return;
     }
 
+    let stateRef = feedType === 'public' ? 'globalFeed' : 'userFeed';
     // prepend new array
     let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
 
@@ -124,7 +132,7 @@ class App extends React.Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       }); 
   }
 
@@ -136,7 +144,7 @@ class App extends React.Component {
         });
       })
       .catch((err) =>{
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -148,7 +156,7 @@ class App extends React.Component {
         });
       })
       .catch((err) =>{
-        console.log(err);
+        console.error(err);
       });
   }
 
