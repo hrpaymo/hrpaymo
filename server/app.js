@@ -48,11 +48,10 @@ app.get('/profile', (req, res) => {
         var ui = row[0];
         var userInfo = {
           userId: ui.id,
-          username: ui.username,
-          displayName: ui.first_name + ' ' + ui.last_name,
-          avatarUrl: ui.avatar_url
+          username: _.unescape(ui.username),
+          displayName: _.unescape(ui.first_name + ' ' + ui.last_name),
+          avatarUrl: _.unescape(ui.avatar_url)
         }
-        userInfo = JSON.parse(_.unescape(JSON.stringify(userInfo)));
         res.status(200).json(userInfo);
       } else{
         res.status(400).json({ error : "No such user in database."});
@@ -81,13 +80,16 @@ app.get('/balance', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-  let signupData = JSON.parse(_.escape(JSON.stringify(req.body)));
+  let signupData = {};
+  for(let key in req.body) {
+    signupData[_.escape(key)] = _.escape(req.body[key]);
+  }
   db.signup.newUserSignup(signupData, 100)
     .then(userId => {
       res.status(201).json({ userId: userId });
     })
     .catch(err => {
-      console.error('error on user signup:', err);
+      console.error('error on user signup:', err.message);
       // TODO: send responses depending on what type of error is thrown
       if(err.constraint.includes('users_user')) {
         res.status(422).json({ error : "Username must be unique." });
@@ -103,8 +105,11 @@ app.post('/signup', (req, res) => {
 
 app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
-  let paymentData = JSON.parse(_.escape(JSON.stringify(req.body)));
-  if(!isNan(paymentData.amount)) {
+  let paymentData = {};
+  for(let key in req.body) {
+    paymentData[_.escape(key)] = _.escape(req.body[key]);
+  }
+  if(isNaN(parseFloat(paymentData.amount))) {
     console.error('payment amount is not a number:', paymentData.amount);
     res.status(400).json({ error : 'Improper format.' });
     return;
