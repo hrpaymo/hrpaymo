@@ -7,16 +7,23 @@ class Feed extends React.Component {
   }
 
   render() {
-    let displayedTransations = this.props.transactions && this.props.transactions.map((transaction) => {
-      return (<FeedTransaction key={transaction.transactionId} transaction={transaction} />);
-    })
+
+    let listedTransactions = this.props.transactions.items && this.props.transactions.items.map((transaction) => 
+      {return (
+        <FeedTransaction key={transaction.transactionId} transaction={transaction} />);
+      }
+    )
+
+    let hasTransactions = this.props.transactions.items && this.props.transactions.items.length > 0;
+    let showMoreButton = Boolean(this.props.transactions.nextPageTransactionId);
 
     return (
       <div>
-        {!this.props.transactions
-          ? <div> No transactions. </div>
-          : displayedTransations
+        {hasTransactions
+          ? listedTransactions
+          : <div> No transactions available.</div>
         }
+        {showMoreButton && <button onClick={ () => this.props.loadMoreFeed(this.props.type, this.props.userId) } >Show More</button>}
       </div>
     );
   }

@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const sampledata = require('../sampledata.js');
 const db = require('../database/queries.js');
+const helpers = require('./helpers.js');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/../client/dist'));
 
@@ -115,10 +115,12 @@ app.post('/pay', (req, res) => {
 });
 
 app.get('/feed/global', (req, res) => {
-  let limit = 25;
-  db.globalFeed(limit)
+  let limit = 5;
+  let beforeId = req.query['startingTransactionId'] || null; 
+
+  db.globalFeed(limit + 1, beforeId)
     .then((results) => {
-      res.status(200).json({items: results});
+      res.status(200).json(helpers.buildFeedObject(results, limit));
     })
     .catch((err) => {
       console.error('error retrieving global feed: ', err);
@@ -128,16 +130,17 @@ app.get('/feed/global', (req, res) => {
 
 app.get('/feed/user/:userId', (req, res) => {
   let userId = req.params && req.params.userId;
-  let limit = 25;
-
+  let limit = 5;
+  let beforeId = req.query['startingTransactionId'] || null; 
+  
   if (isNaN(userId)) {
     res.sendStatus(400).json({ error: "Improper format." });
     return;
   }
 
-  db.myFeed(limit, userId)
+  db.myFeed(limit + 1, userId, beforeId)
     .then((results) => {
-      res.status(200).json({items: results});
+      res.status(200).json(helpers.buildFeedObject(results, limit));
     })
     .catch((err) => {
       console.error('error retrieving user feed: ', err);

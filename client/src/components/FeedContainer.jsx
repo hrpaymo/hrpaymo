@@ -31,8 +31,16 @@ class FeedContainer extends React.Component {
           </button>
         </div>
         {this.state.view === 'mine'
-          ? <Feed title='my feed' transactions={this.props.userFeed} />
-          : <Feed title='global' transactions={this.props.globalFeed} />}
+          ? <Feed 
+              type='mine'
+              userId={this.props.userId}
+              loadMoreFeed={this.props.loadMoreFeed} 
+              transactions={this.props.userFeed} />
+          : <Feed 
+              type='public'
+              userId={this.props.userId}
+              loadMoreFeed={this.props.loadMoreFeed} 
+              transactions={this.props.globalFeed} />}
       </div>
     );
   }

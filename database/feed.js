@@ -44,19 +44,26 @@ var baseQuery = function(queryBuilder) {
    .orderBy('transactions.created_at', 'desc');
 };
 
+var olderThanId = function(queryBuilder, startingTransactionId) {
+  if (startingTransactionId) {
+    queryBuilder.where('transactions.txn_id', '<=', startingTransactionId);
+  }
+}
 
-const globalFeed = function(limit) {
+const globalFeed = function(limit, startingTransactionId) {
   return pg('users_transactions')
     .modify(baseQuery)
+    .modify(olderThanId, startingTransactionId)
     .limit(limit)
     .then(rows => {
       return rows.map(formatOutput);
    })
 }
 
-const myFeed = function(limit, userId) {
+const myFeed = function(limit, userId, startingTransactionId) {
   return pg('users_transactions')
     .modify(baseQuery)
+    .modify(olderThanId, startingTransactionId)
     .limit(limit)
     .where('users_transactions.payer_id', userId)
     .orWhere('users_transactions.payee_id', userId)

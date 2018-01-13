@@ -22,8 +22,6 @@ class App extends React.Component {
   }
 
   loadUserData(userId) {
-    // Feel free to rename.
-    // Here we will load all additional user-specific data
     this.getUserInfo(userId)
     this.getBalance(userId);
     this.getGlobalFeed();
@@ -52,6 +50,49 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  loadMoreFeed(feedType, userId) {
+    let endpoint;
+    let stateRef;
+
+    if (feedType === 'public') {
+      endpoint = '/feed/global';
+      stateRef = 'globalFeed';
+    } else if (feedType == 'mine') {
+      endpoint = `/feed/user/${userId}`;
+      stateRef = 'userFeed';
+    } else {
+      return;
+    }
+
+    let additionalData = {params: {startingTransactionId: this.state[stateRef].nextPageTransactionId}}
+
+    axios(endpoint, additionalData)
+      .then((response) => {
+        // Confirm additional items to load
+        if (response.data && response.data.count > 0) {
+
+          let combinedItems = this.state[stateRef].items.concat(response.data.items);
+
+          // Might be a better design to make a deep copy of state and then 
+          // manipulate. See the module "immutability-helper"
+
+          let newFeedState = {
+            items: combinedItems,
+            count: this.state[stateRef].count + response.data.count,
+            nextPageTransactionId: response.data.nextPageTransactionId,
+            newestTransactionId: this.state[stateRef].newestTransactionId
+          }
+
+          this.setState({
+            [stateRef]: newFeedState
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      }); 
   }
 
   getBalance(userId) {
@@ -103,6 +144,7 @@ class App extends React.Component {
           : <Home
               userFeed={this.state.userFeed}
               globalFeed={this.state.globalFeed}
+              loadMoreFeed={this.loadMoreFeed.bind(this)}
               balance={this.state.balance}
               userInfo={this.state.userInfo}
               /> 
