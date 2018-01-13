@@ -44,22 +44,24 @@ var baseQuery = function(queryBuilder) {
    .orderBy('transactions.txn_id', 'desc');
 };
 
-var olderThanIdQuery = function(queryBuilder, startingTransactionId) {
-  if (startingTransactionId) {
-    queryBuilder.where('transactions.txn_id', '<=', startingTransactionId);
+var olderThanIdQuery = function(queryBuilder, beforeId) {
+  if (beforeId) {
+    console.log('made it here', beforeId);
+    queryBuilder.where('transactions.txn_id', '<=', beforeId);
   }
 }
 
 var sinceIdQuery = function(queryBuilder, sinceId) {
   if (sinceId) {
+    console.log('nope');
     queryBuilder.where('transactions.txn_id', '>', sinceId);
   }
 }
 
-const globalFeed = function(limit, startingTransactionId, sinceId) {
+const globalFeed = function(limit, beforeId, sinceId) {
   return pg('users_transactions')
     .modify(baseQuery)
-    .modify(olderThanIdQuery, startingTransactionId)
+    .modify(olderThanIdQuery, beforeId)
     .modify(sinceIdQuery, sinceId)
     .limit(limit)
     .then(rows => {
@@ -67,17 +69,31 @@ const globalFeed = function(limit, startingTransactionId, sinceId) {
    })
 }
 
-const myFeed = function(limit, userId, startingTransactionId, sinceId) {
-  return pg('users_transactions')
-    .modify(baseQuery)
-    .modify(olderThanIdQuery, startingTransactionId)
-    .modify(sinceIdQuery, sinceId)
-    .limit(limit)
-    .where('users_transactions.payer_id', userId)
-    .orWhere('users_transactions.payee_id', userId)
-    .then(rows => {
-      return rows.map(formatOutput);
-   })
+const myFeed = function(limit, beforeId, sinceId, userId) {
+  console.log(limit,userId,beforeId,sinceId);
+
+  if (beforeId) {
+    return pg('users_transactions')
+      .where(function() {
+        this.where('users_transactions.payer_id', userId).orWhere('users_transactions.payee_id', userId)
+      })
+      .modify(baseQuery)
+      .limit(2)
+      .where('transactions.txn_id', '<=', beforeId)
+      .then(rows => {
+        return rows.map(formatOutput);
+     })
+  } else {
+    return pg('users_transactions')
+      .modify(baseQuery)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .where('users_transactions.payer_id', userId)
+      .orWhere('users_transactions.payee_id', userId)
+      .then(rows => {
+        return rows.map(formatOutput);
+     })
+  }
 }
 
 module.exports = {
