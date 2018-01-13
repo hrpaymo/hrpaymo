@@ -89,6 +89,15 @@ button {
   padding: 10px;
 }
 
+.feed-item-amount {
+  font-weight: bold;
+  color: green;
+}
+
+.feed-item-amount.showDebit {
+  color: red;
+}
+
 .feed-item-avatar {
   border-radius: 50px;
   padding: 15px;

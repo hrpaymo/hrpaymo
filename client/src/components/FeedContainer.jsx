@@ -2,7 +2,6 @@ import React from 'react';
 import Feed from './Feed.jsx'
 import { Link } from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 
 class FeedContainer extends React.Component {
