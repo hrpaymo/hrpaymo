@@ -10,9 +10,6 @@ class LoggedOutHome extends React.Component {
   render() {
     return (
       <div>
-        <NavBar 
-          isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut} />
         <div className='splash'>
           Send money and make purchases with Paymo.
           <Link to="/signup"><button>Create an Account</button></Link>

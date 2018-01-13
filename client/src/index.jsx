@@ -220,7 +220,9 @@ class App extends React.Component {
     const HomeWithProps = (props) => {
       return (
         <div>
-          <Navbar />
+          <Navbar 
+            isLoggedIn={this.props.isLoggedIn} 
+            logUserOut={this.props.logUserOut} />
           {!this.state.isLoggedIn 
             ? <LoggedOutHome 
                 isLoggedIn={this.state.isLoggedIn} 
@@ -259,11 +261,16 @@ class App extends React.Component {
             <Route 
               path="/view?=(:id)" 
               render={HomeWithProps}
-              onEnter={ this.requireAuth }/>
+              onEnter={ this.requireAuth }
+              />
             <Route 
-              path="/view?=(:id)" 
-              render={HomeWithProps} 
-              onEnter={ this.requireAuth }/>
+              path="/:username" 
+              render={routeProps => <Profile {...routeProps} 
+                refreshUserData={this.refreshUserData.bind(this)}
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                userInfo={this.state.userInfo} />} 
+              />
             <Route 
               path="/" 
               render={HomeWithProps} />

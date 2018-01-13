@@ -17,9 +17,6 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <NavBar 
-          isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut} />
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <div className="pay-feed-container">
         <Payment 
