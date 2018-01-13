@@ -14,12 +14,6 @@ class Feed extends React.Component {
     let hasTransactions = this.props.transactions.items && this.props.transactions.items.length > 0;
     let showMoreButton = Boolean(this.props.transactions.nextPageTransactionId);
 
-    // let displayedTransations = this.props.transactions && this.props.transactions.map((transaction) => {
-    //   return (
-    //     <FeedTransaction key={transaction.transactionId} transaction={transaction} />
-    //   );
-    // })
-
     return (
       <div>
         {!hasTransactions
