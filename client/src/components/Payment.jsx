@@ -99,6 +99,7 @@ class Payment extends React.Component {
               style={style.input}
               name='payeeUsername'
               dataSource={this.props.usernames}
+              maxSearchResults={7}
               searchText={this.state.payeeUsername}
               onUpdateInput = {this.onDropdownInput.bind(this)}
             />
