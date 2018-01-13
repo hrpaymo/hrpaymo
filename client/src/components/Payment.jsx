@@ -106,6 +106,7 @@ class Payment extends React.Component {
               floatingLabelText="Who do you want to pay?"
               style={style.input}
               name='payeeUsername'
+              dataSource={usernames}
               searchText={this.state.payeeUsername}
               onUpdateInput = {this.onDropdownInput.bind(this)}
             />
