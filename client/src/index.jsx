@@ -7,6 +7,7 @@ import axios from 'axios';
 
 // ---------- Material UI ---------- //
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // ---------- Componenets ---------- //
 import LoggedOutHome from './components/LoggedOutHome.jsx';
@@ -14,6 +15,12 @@ import Home from './components/Home.jsx';
 import NavBar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#3D95CE',
+  },
+});
 
 class App extends React.Component {
   constructor(props) {

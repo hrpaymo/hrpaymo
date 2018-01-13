@@ -9,7 +9,9 @@ const style = {
   },
   left: {
     display: 'none',
-
+  },
+  log_out: {
+    color: '#fff',
   }
 };
 
@@ -37,14 +39,16 @@ class Navbar extends React.Component {
             <Link to="/"><h1>Hello Paymo</h1></Link>
           </div>
         }
+        iconStyleLeft={style.left}
         iconElementRight={
-          <div className='navbar-menu'>
+          <div>
             {this.props.isLoggedIn && 
               <FlatButton 
+                style={style.log_out}
+                hoverColor='#03A9F4'
                 className='navbar-logout' 
                 onClick={this.logOutAndRedirect.bind(this)} 
                 label="Log Out" 
-                iconStyleLeft={style.left}
               />
             }
           </div>
