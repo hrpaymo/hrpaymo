@@ -4,24 +4,24 @@ import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
-const paper_style = {
+const card_style = {
+  position: 'relative',
   height: 150,
   width: 250,
-  margin: 20,
+  margin: 10,
   textAlign: 'center',
-  display: 'block',
+  display: 'inline-block',
+  float: 'right',
 };
-const av_style = {
-  height: 40,
-  width: 40,
-  margin: 20,
-  'margin-top': 20,
-  textAlign: 'center',
-  display: 'block',
-};
-const div_style = {
-  'margin-bottom': 100
-};
+// const av_style = {
+//   height: 50,
+//   width: 50,
+//   textAlign: 'center',
+//   display: 'block',
+// };
+// const div_style = {
+//   'margin-top': 25
+// };
 // const bal_style = {
 //   'margin-top': 80
 // };
@@ -45,12 +45,14 @@ class MiniProfile extends React.Component {
   render() {
     return (
      
-        <Card>
+        <Card style={card_style}>
           <CardHeader
+            title={this.props.userInfo.displayName}
+            subtitle={this.props.userInfo.username}
             avatar={this.props.userInfo.avatarUrl || '/images/no-image.gif'}
           />
-          <CardTitle title={this.props.userInfo.displayName} subtitle={this.props.userInfo.username} />
-          <Divider/>
+          {/*<CardTitle title={this.props.userInfo.displayName} subtitle={this.props.userInfo.username} />*/}
+          <Divider />
           <CardText>
             Current Balance: ${this.props.balance}
           </CardText>

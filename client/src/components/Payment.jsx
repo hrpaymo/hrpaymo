@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Divider from 'material-ui/Divider';
+import Paper from 'material-ui/Paper';
 
 class Payment extends React.Component {
   constructor (props) {
@@ -59,7 +61,7 @@ class Payment extends React.Component {
 
   render() {
     return (
-      <div className='payment_component'>
+      <Paper className='payment_component container'>
         <label>
           Recipient Username
           <input
@@ -93,7 +95,7 @@ class Payment extends React.Component {
             </label>
           : null
         }
-      </div>
+      </Paper>
     );
   }
 }
