@@ -21,6 +21,9 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <NavBar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <Payment 
           payerId={this.props.userInfo.userId} 
@@ -29,8 +32,8 @@ class Home extends React.Component {
           userId={this.props.userInfo.userId}
           loadMoreFeed={this.props.loadMoreFeed}
           view={this.extractView(this.props.location) || 'mine'}
-          userFeed={this.props.userFeed && this.props.userFeed.items}
-          globalFeed={this.props.globalFeed && this.props.globalFeed.items} 
+          userFeed={this.props.userFeed}
+          globalFeed={this.props.globalFeed} 
         />
       </div>
     );

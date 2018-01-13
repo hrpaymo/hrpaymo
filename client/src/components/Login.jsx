@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import NavBar from './Navbar.jsx';
 
 class Login extends React.Component {
@@ -77,6 +78,7 @@ class Login extends React.Component {
           </span>
         }
         <button onClick={this.logUserIn.bind(this)} >Log in</button>
+        <Link to="/signup">... or create an account</Link>
       </div>
     );
   }

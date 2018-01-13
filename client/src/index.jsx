@@ -194,9 +194,11 @@ class App extends React.Component {
                 {...props}
                 />
             : <Home
+                refreshUserData={this.refreshUserData.bind(this)}
                 isLoggedIn={this.state.isLoggedIn} 
                 logUserOut={this.logUserOut.bind(this)}
                 userFeed={this.state.userFeed} 
+                loadMoreFeed={this.loadMoreFeed.bind(this)}
                 globalFeed={this.state.globalFeed}
                 userInfo={this.state.userInfo}
                 balance={this.state.balance}

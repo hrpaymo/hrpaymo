@@ -23,7 +23,7 @@ class FeedContainer extends React.Component {
             </button>
           </Link>
         </div>
-        {this.state.view === 'mine'
+        {this.props.view === 'mine'
           ? <Feed 
               type='mine'
               userId={this.props.userId}
