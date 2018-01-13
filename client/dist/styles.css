@@ -7,6 +7,11 @@
   align-items: center;
 }
 
+.navbar-logo a {
+  text-decoration: none;
+  color: white;
+}
+
 .navbar-logout {
   text-decoration-style: underline;
   cursor: pointer;
@@ -81,4 +86,9 @@ button {
 .profile-container {
   width: 200px;
   border: 1px solid #444;
+}
+
+.splash {
+  display: flex;
+  flex-direction: column;
 }

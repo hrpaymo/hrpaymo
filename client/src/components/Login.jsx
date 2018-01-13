@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import NavBar from './Navbar.jsx';
 
 class Login extends React.Component {
   constructor (props) {
@@ -29,6 +31,7 @@ class Login extends React.Component {
       .then((response) => {
         let userId = response.data.userId;
         this.props.logUserIn(userId);
+        this.props.history.push('/');
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
@@ -51,6 +54,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
+        <NavBar isLoggedIn={false} />
         <label>
           Username
           <input 
@@ -74,6 +78,7 @@ class Login extends React.Component {
           </span>
         }
         <button onClick={this.logUserIn.bind(this)} >Log in</button>
+        <Link to="/signup">... or create an account</Link>
       </div>
     );
   }

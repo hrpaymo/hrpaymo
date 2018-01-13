@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const db = require('../database/queries.js');
 const helpers = require('./helpers.js');
+var path = require('path');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -149,6 +150,9 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 });
 
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..' , './client/dist/index.html'));
+});
 
 module.exports = app;
 
