@@ -25,6 +25,7 @@ class Home extends React.Component {
           isLoggedIn={this.props.isLoggedIn} 
           logUserOut={this.props.logUserOut} />
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
+        <div className="pay-feed-container">
         <Payment 
           payerId={this.props.userInfo.userId} 
           refreshUserData={this.props.refreshUserData} />
@@ -35,6 +36,7 @@ class Home extends React.Component {
           userFeed={this.props.userFeed}
           globalFeed={this.props.globalFeed} 
         />
+        </div>
       </div>
     );
   }
