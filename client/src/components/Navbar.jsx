@@ -8,7 +8,9 @@ const style = {
   },
   left: {
     display: 'none',
-
+  },
+  log_out: {
+    color: '#fff',
   }
 };
 
@@ -28,17 +30,19 @@ class Navbar extends React.Component {
         style={style.nav}
         title={
           <div className='navbar-logo'>
-            <h1>Hello Paymo</h1>
+            Hello Paymo
           </div>
         }
+        iconStyleLeft={style.left}
         iconElementRight={
-          <div className='navbar-menu'>
+          <div>
             {this.props.isLoggedIn && 
               <FlatButton 
+                style={style.log_out}
+                hoverColor='#03A9F4'
                 className='navbar-logout' 
                 onClick={this.props.logUserOut} 
                 label="Log Out" 
-                iconStyleLeft={style.left}
               />
             }
           </div>

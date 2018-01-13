@@ -16,6 +16,11 @@ body {
   text-decoration-style: underline;
   cursor: pointer;
 }
+.navbar-logo {
+  text-decoration-style: bold;
+  cursor: pointer;
+  color: #fff;
+}
 
 .error-text{
   color: red;
@@ -31,7 +36,7 @@ button {
 }
 
 .pay-feed-container {
-  /*display: flex;*/
+  display: block;
   width: 60%;
   justify-content: center;
   margin: 20px;
@@ -39,6 +44,8 @@ button {
 .feed-container {
   border: 1px solid #ccc;
   width: 100%;
+  padding: 20;
+  position: 'relative';
   margin: 20px;
 }
 
@@ -107,7 +114,34 @@ button {
 .user-info {
 
 }
-/*.form-box {
-  display:flex;
-  border: 1px solid #444;
-}*/
+.pay-button-container {
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.payment-container {
+  width: 100%;
+  padding: 20px;
+  position: 'relative';
+  margin: 20px;
+
+}
+.payment-item-container {
+  display: 'block';
+  justify-content: 'space-evenly';
+}
+.form-box {
+  padding-bottom: 20px;
+}
+.bottom {
+}
+.top {
+  width: 45%;
+}
+.left {
+  float: 'left';
+}
+.right {
+  float: 'right';
+}

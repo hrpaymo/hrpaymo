@@ -3,10 +3,25 @@ import axios from 'axios';
 import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 const style = {
-  background: '#f8f8f8'
+  form: {
+    display: 'block',
+  },
+  input: {
+    background: '#f8f8f8',
+  },
+  button: {
+    lable: {
+      color: '#fff',
+      position: 'relative'
+    },
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    width: 30,
+  }
 }
 
 class Payment extends React.Component {
@@ -67,64 +82,136 @@ class Payment extends React.Component {
 
   render() {
     return (
-      <Paper className='payment-component feed-container'>
-        <label>
-          <div className="form-box">
-            <TextField
-              style={style}
-              name='payeeUsername'
-              value={this.state.payeeUsername}
-              onChange = {this.handleInputChanges.bind(this)}
-              hintText="Enter a username"
-              floatingLabelText="Who do you want to pay?"
-            />
-          </div>
-          <br />
-        </label>
-        <label>
-          <div className="form-box">
-            <TextField
-              style={style}
-              name='amount'
-              value={this.state.amount}
-              onChange = {this.handleInputChanges.bind(this)}
-              hintText="Enter an amount to pay"
-              floatingLabelText="How much to give away?"
-            />
-          </div>
-          <br />
-        </label>
-        <label>
-          <div className="form-box">
-            <TextField
-              style={style}
-              name='note'
-              value={this.state.note}
-              onChange = {this.handleInputChanges.bind(this)}
-              hintText="Leave a comment"
-              floatingLabelText="Got something to say?"
-            />
-          </div>
-          <br />
-        </label>
-        <div className="pay-button-container">
-          <RaisedButton 
-            className='pay-button' 
-            onClick={this.payUser.bind(this)} 
-            label="Pay!" 
-            primary={true} 
-            style={style} 
-          />
+      <Paper className='payment-container' style={style.form}>
+        <div className='payment-item-container'>
+          <label>
+            <div className="form-box top left">
+              <TextField
+                hintText="Enter a username"
+                floatingLabelText="Who do you want to pay?"
+                style={style.input}
+                name='payeeUsername'
+                value={this.state.payeeUsername}
+                onChange = {this.handleInputChanges.bind(this)}
+              /><br />
+            </div>
+          </label>
+          <label>
+            <div className="form-box top right">
+              <TextField
+                style={style.input}
+                name='amount'
+                value={this.state.amount}
+                onChange = {this.handleInputChanges.bind(this)}
+                hintText="Enter an amount"
+                floatingLabelText="How much to give away?"
+              /><br />
+            </div>
+          </label>
+          <label>
+            <div className="form-box bottom">
+              <TextField
+                style={style.input}
+                name='note'
+                value={this.state.note}
+                onChange = {this.handleInputChanges.bind(this)}
+                hintText="Leave a comment"
+                floatingLabelText="Got something to say?"
+                fullWidth={true}
+                multiLine={true}
+              /><br />
+            </div>
+          </label>
         </div>
-        {this.state.paymentFail
-          ? <label className='payment-fail'>
-              Error in payment processing
-            </label>
-          : null
-        }
+
+        <div className="pay-button-container"> 
+          {this.state.paymentFail
+            ? <label className='payment-fail'>
+                Error in payment processing
+              </label>
+            : null
+          }
+
+          <div>
+            <FlatButton 
+              className='pay-button' 
+              onClick={this.payUser.bind(this)} 
+              label="Pay!" 
+              primary={true} 
+              style={style.button} 
+              backgroundColor="#3D95CE"
+              hoverColor='#03A9F4'
+              labelStyle={style.button.lable}
+            />
+          </div>
+
+        </div>
+
       </Paper>
     );
   }
 }
+
+  // render() {
+  //   return (
+  //     <Paper className='payment-container' style={style.form}>
+  //       <div className='payment-item-container'>
+  //         <label>
+  //           To Pay:
+  //           <div className="form-box top left">
+  //           <input
+  //             name='payeeUsername'
+  //             value={this.state.payeeUsername}
+  //             onChange = {this.handleInputChanges.bind(this)}
+  //           />
+  //           </div>
+  //           <br />
+  //         </label>
+  //         <label>
+  //           Amount:
+  //           <div className="form-box top right">
+  //           <input
+  //             name='amount'
+  //             value={this.state.amount}
+  //             onChange = {this.handleInputChanges.bind(this)}
+  //           />
+  //           </div>
+  //           <br />
+  //         </label>
+  //         <label>
+  //           <div className="form-box">
+  //           <input
+  //               name='note'
+  //               value={this.state.note}
+  //               onChange = {this.handleInputChanges.bind(this)}
+  //           />
+  //           </div>
+  //           <br />
+  //         </label>
+  //       </div>
+
+  //       <div className="pay-button-container"> 
+  //         {this.state.paymentFail
+  //           ? <label className='payment-fail'>
+  //               Error in payment processing
+  //             </label>
+  //           : null
+  //         }
+  //         <div>
+  //           <FlatButton 
+  //             className='pay-button' 
+  //             onClick={this.payUser.bind(this)} 
+  //             label="Pay!" 
+  //             primary={true} 
+  //             style={style.button} 
+  //             backgroundColor="#3D95CE"
+  //             hoverColor='#03A9F4'
+  //             labelStyle={style.button.lable}
+  //           />
+  //         </div>
+  //       </div>
+  //     </Paper>
+  //   );
+  // }
 
 export default Payment;
