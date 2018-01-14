@@ -28,10 +28,11 @@ class Home extends React.Component {
             refreshUserData={this.props.refreshUserData} />
           <FeedContainer 
             userId={this.props.userInfo.userId}
-            loadMoreFeed={this.props.loadMoreFeed}
-            view={this.extractView(this.props.location) || 'mine'}
             userFeed={this.props.userFeed}
             globalFeed={this.props.globalFeed} 
+            base='/'
+            loadMoreFeed={this.props.loadMoreFeed}
+            view={this.extractView(this.props.location) || 'mine'}
           />
         </div>
       </div>

@@ -11,10 +11,12 @@ class FeedContainer extends React.Component {
 
   render() {
 
+    console.log(this.state);
+
     return (
       <Paper className='feed-container'>
         <div className='feed-selections'>
-          <Link to="/?view=mine">
+          <Link to={`${this.props.base}?view=mine`}>
             <button className={this.props.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} >
               Mine
             </button>

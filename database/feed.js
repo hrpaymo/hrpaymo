@@ -1,12 +1,17 @@
 const pg = require('./index.js').pg;
 
+// HELPER function to format and manipulate output prior to sending back to server
+
 const formatOutput = (item, userId) => {
+  let amount = null;
 
-  // For private views, convert display amounts to negative, if paid by logged in user
-  let amount = item.amount;
-
-  if (amount && userId && (item.payer_id === userId)) {
-    amount = '-' + amount;
+  // If the logged-in user was involved in the transaction, display amount
+  // otherwise drop
+  if (userId && (userId === item.payer_id || userId === item.payee_id)) {
+    amount = item.amount;
+    if (amount && (userId === item.payer_id)) {
+      amount = '-' + amount;
+    }
   }
 
   return ({
@@ -32,87 +37,124 @@ const formatOutput = (item, userId) => {
   })
 }
 
+// FIELD LIST
+// Public and Private fields
 
-// Does not include amount. For future development, can also filter out private messages
-var baseQueryPublic = function(queryBuilder) {
-  queryBuilder.select('transactions.txn_id',
-      'transactions.note',
-      'transactions.created_at',
-      {payer_id: 'users_transactions.payer_id'}, 
-      {payer_firstName: 'payer.first_name'},
-      {payer_username: 'payer.username'},
-      {payer_lastName: 'payer.last_name'},
-      {payer_avatarUrl: 'payer.avatar_url'},
-      {payee_id: 'users_transactions.payee_id'},
-      {payee_username: 'payee.username'},
-      {payee_firstName: 'payee.first_name'},
-      {payee_lastName: 'payee.last_name'})
-   .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
+const FEED_FIELDS = ['transactions.txn_id',
+  'transactions.note',
+  'transactions.amount',
+  'transactions.created_at',
+  {payer_id: 'users_transactions.payer_id'}, 
+  {payer_firstName: 'payer.first_name'},
+  {payer_username: 'payer.username'},
+  {payer_lastName: 'payer.last_name'},
+  {payer_avatarUrl: 'payer.avatar_url'},
+  {payee_id: 'users_transactions.payee_id'},
+  {payee_username: 'payee.username'},
+  {payee_firstName: 'payee.first_name'},
+  {payee_lastName: 'payee.last_name'}
+];
+
+// MODULAR BUILDING BLOCKS
+// Modular Postgres Queries that can be combined to create various queries
+
+// Basic joins to pull all needed transaction data
+let baseTransactionConnections = function(queryBuilder) {
+  queryBuilder.join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
    .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
    .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
    .orderBy('transactions.txn_id', 'desc');
 };
 
-// Includes amount. For future development, can also filter out private messages
-var baseQueryPrivate = function(queryBuilder) {
-  queryBuilder.select('transactions.txn_id', 
-      'transactions.amount', 
-      'transactions.note',
-      'transactions.created_at',
-      {payer_id: 'users_transactions.payer_id'}, 
-      {payer_firstName: 'payer.first_name'},
-      {payer_username: 'payer.username'},
-      {payer_lastName: 'payer.last_name'},
-      {payer_avatarUrl: 'payer.avatar_url'},
-      {payee_id: 'users_transactions.payee_id'},
-      {payee_username: 'payee.username'},
-      {payee_firstName: 'payee.first_name'},
-      {payee_lastName: 'payee.last_name'})
-   .join('transactions', {'users_transactions.txn_id': 'transactions.txn_id'})
-   .join('users as payee', {'payee.id': 'users_transactions.payee_id'})
-   .join('users as payer', {'payer.id': 'users_transactions.payer_id'})
-   .orderBy('transactions.txn_id', 'desc');
-};
-
-var olderThanIdQuery = function(queryBuilder, beforeId) {
+// Restriction for pulling queries using a "previous page token"
+let olderThanIdQuery = function(queryBuilder, beforeId) {
   if (beforeId) {
-
     queryBuilder.where('transactions.txn_id', '<=', beforeId);
   }
 }
 
-var sinceIdQuery = function(queryBuilder, sinceId) {
+// Pull queries more recent than currently displayed
+let sinceIdQuery = function(queryBuilder, sinceId) {
   if (sinceId) {
     queryBuilder.where('transactions.txn_id', '>', sinceId);
   }
 }
 
-const globalFeed = function(limit, beforeId, sinceId) {
-  return pg('users_transactions')
-    .modify(baseQueryPublic)
-    .modify(olderThanIdQuery, beforeId)
-    .modify(sinceIdQuery, sinceId)
-    .limit(limit)
-    .then(rows => {
-      return rows.map(formatOutput);
-   })
-}
+let mustIncludeUserById = function(queryBuilder, userId) {
+  queryBuilder.where(function() {
+    this.where('users_transactions.payer_id', userId).orWhere('users_transactions.payee_id', userId)
+  });
+};
 
-const myFeed = function(limit, beforeId, sinceId, userId) {
-  return pg('users_transactions')
-    .modify(baseQueryPrivate)
-    .where(function() {
-      this.where('users_transactions.payer_id', userId).orWhere('users_transactions.payee_id', userId)
-    })
-    .modify(olderThanIdQuery, beforeId)
-    .modify(sinceIdQuery, sinceId)
-    .limit(limit)
-    .then(rows => {
-      return rows.map((item) => formatOutput(item, userId));
-    })
-}
+let mustIncludeUserByUsername = function(queryBuilder, username) {
+  console.log(username);
+  if (username) {
+    queryBuilder.where(function() {
+      this.where('payer.username', username).orWhere('payee.username', username)
+    });
+  }
+};
+
+// QUERIES TO SURFACE TO SERVER
+// All queries accept beforeId and sinceId to return transactions before/after a particular transaction ID
 
 module.exports = {
-  globalFeed: globalFeed,
-  myFeed: myFeed
+  // Return most recent transactions, with all public fields.
+  globalFeed: function(limit, beforeId, sinceId) {
+    return pg('users_transactions')
+      .select(...FEED_FIELDS)
+      .modify(baseTransactionConnections)
+      .modify(olderThanIdQuery, beforeId)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .then(rows => {
+        return rows.map(formatOutput);
+     })
+  },
+
+  // Return most recent transactions involving a single user.
+  // Returns public and private fields.
+  myFeed: function(limit, beforeId, sinceId, userId) {
+    return pg('users_transactions')
+      .select(...FEED_FIELDS)
+      .modify(baseTransactionConnections)
+      .modify(mustIncludeUserById, userId)
+      .modify(olderThanIdQuery, beforeId)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .then(rows => {
+        return rows.map((item) => formatOutput(item, userId));
+      })
+  },
+
+  // Return recent transactions involving a single user.
+  // Returns public and private fields. 
+  // GETS transactions filtered by PROFILEID, but FORMATS OUTPUT based on LOGGED-IN USER
+  profileFeed: function(limit, beforeId, sinceId, profileUsername, userId) {
+    return pg('users_transactions')
+      .select(...FEED_FIELDS)
+      .modify(baseTransactionConnections)
+      .modify(mustIncludeUserByUsername, profileUsername)
+      .modify(olderThanIdQuery, beforeId)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .then(rows => {
+        return rows.map((item) => formatOutput(item, userId));
+      })
+  },
+
+  // 
+  profileFeedRelational: function(limit, beforeId, sinceId, profileUsername, userId) {
+    return pg('users_transactions')
+      .select(...FEED_FIELDS)
+      .modify(baseTransactionConnections)
+      .modify(mustIncludeUserByUsername, profileUsername)
+      .modify(mustIncludeUserById, userId)
+      .modify(olderThanIdQuery, beforeId)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .then(rows => {
+        return rows.map((item) => formatOutput(item, userId));
+      })
+  }
 };

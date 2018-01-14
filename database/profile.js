@@ -27,7 +27,7 @@ module.exports = {
       });
   },
 
-  getPublicUserInfo: (username) => {
+  getProfileDataByUsername: (username) => {
     return pg.table('users')
       .where({username: username})
       .select('id', 'username', 'first_name', 'last_name', 'avatar_url')
