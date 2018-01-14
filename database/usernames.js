@@ -5,6 +5,7 @@ module.exports = {
   getUsernames: (userId) => {
     return pg.table('users')
       .select('username')
-      .whereNot('id', userId);
+      .whereNot('id', userId)
+      .orderBy('username');
   }
 }
