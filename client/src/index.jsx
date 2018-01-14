@@ -10,11 +10,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // ---------- Componenets ---------- //
-import LoggedOutHome from './pages/LoggedOutHome.jsx';
-import Home from './pages/Home.jsx';
-import Login from './pages/Login.jsx';
-import SignUp from './pages/SignUp.jsx';
-import Profile from './pages/Profile.jsx';
+import LoggedOutHome from './components/LoggedOutHome.jsx';
+import Home from './components/Home.jsx';
+import Login from './components/Login.jsx';
+import SignUp from './components/SignUp.jsx';
+import Profile from './components/Profile.jsx';
 import Navbar from './components/Navbar.jsx';
 
 
