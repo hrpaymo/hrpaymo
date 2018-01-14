@@ -1,32 +1,34 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar.jsx';
+import NavBar from './Navbar.jsx';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 class Login extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      formData: {
+        username: '',
+        password: '',
+      },
       didLoginFail: false,
-      errorCode: null
+      errorCode: null,
+      errorMessage: '',
+      errorType: ''
     }
   }
 
   handleInputChanges (event) {
-    let target = event.target;
-    this.setState({
-      [target.name]: target.value
-    })
+    const { formData } = this.state;
+    formData[event.target.name] = event.target.value;
+    this.setState({ formData });
   }
 
   logUserIn() {
-    let user = {
-      'username': this.state.username,
-      'password': this.state.password
-    }
-
+    let user = this.state.formData;
+    console.log(user)
     axios.post('/login', user)
       .then((response) => {
         let userId = response.data.userId;
@@ -36,10 +38,12 @@ class Login extends React.Component {
       .catch((error) => {
         if (error.response && error.response.status === 401) {
           console.log('error authenticating user errors', error.response);
+          var message = error.response.data.error;
           this.setState({
             didLoginFail: true,
             errorCode: 401,
-            errorMessage: error.response.data.error
+            errorMessage: message,
+            errorType: message.includes('username') ? 'username' : 'password'
           })
         } else {
           console.log('Error in login component:', error)
@@ -52,32 +56,38 @@ class Login extends React.Component {
   }
 
   render() {
+    const {formData} = this.state;
     return (
       <div>
         <Navbar isLoggedIn={false} />
         <label>
-          Username
-          <input 
+          <TextField
+            value={formData.username}
+            hintText="Username"
+            errorText={this.state.errorType === 'username' && this.state.errorMessage}
+            floatingLabelText="Username"
             name='username'
             onChange = {this.handleInputChanges.bind(this)}
-            />
+          /><br />
         </label>
         <label>
-          Password
-          <input 
+          <TextField
+            value={formData.password}
+            type="password"
+            hintText="Password"
+            errorText={this.state.errorType === 'password' && this.state.errorMessage}
+            floatingLabelText="Password"
             name='password'
             onChange = {this.handleInputChanges.bind(this)}
-            />
+          /><br />
         </label>
         {this.state.didLoginFail && 
           <span className="error-text">
-            {this.state.errorCode === 401
-              ? <span>{this.state.errorMessage}</span>
-              : <span>Our servers are having issues. Please try later</span>
-            }
+            {this.state.errorCode === 401 || <span>Our servers are having issues. Please try later</span>}
           </span>
         }
         <button onClick={this.logUserIn.bind(this)} >Log in</button>
+        <br/>
         <Link to="/signup">... or create an account</Link>
       </div>
     );
