@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import NavBar from '../components/Navbar.jsx';
+import Navbar from '../components/Navbar.jsx';
 
 class SignUp extends React.Component {
   constructor (props) {
@@ -62,7 +62,7 @@ class SignUp extends React.Component {
   render() {
     return (
       <div>
-        <NavBar isLoggedIn={false} />
+        <Navbar isLoggedIn={false} />
         <div className='signup form'>
           <label>
             Username

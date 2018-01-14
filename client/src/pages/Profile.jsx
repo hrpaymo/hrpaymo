@@ -37,7 +37,9 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Navbar/>
+        <Navbar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>

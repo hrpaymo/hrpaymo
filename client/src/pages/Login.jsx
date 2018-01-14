@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import NavBar from '../components/Navbar.jsx';
+import Navbar from '../components/Navbar.jsx';
 
 class Login extends React.Component {
   constructor (props) {
@@ -54,7 +54,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        <NavBar isLoggedIn={false} />
+        <Navbar isLoggedIn={false} />
         <label>
           Username
           <input 
