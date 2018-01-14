@@ -18,6 +18,7 @@ class SignUp extends React.Component {
     }
   }
 
+
   handleInputChanges (event) {
     let target = event.target;
     this.setState({
