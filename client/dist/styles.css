@@ -163,3 +163,6 @@ button {
 .right {
   float: 'right';
 }
+.signup-form {
+  justify-content: 'center';
+}
