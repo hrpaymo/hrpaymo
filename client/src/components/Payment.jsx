@@ -104,7 +104,7 @@ class Payment extends React.Component {
               searchText={this.state.payeeUsername}
               onUpdateInput = {this.onDropdownInput.bind(this)}
             />
-          <br />
+            <br />
           </div>
           <div className="form-box top right">
             <TextField
@@ -115,7 +115,7 @@ class Payment extends React.Component {
               hintText="Enter an amount"
               floatingLabelText="How much to give away?"
             />
-          <br />
+            <br />
           </div>
           <div className="form-box bottom">
             <TextField
@@ -128,7 +128,7 @@ class Payment extends React.Component {
               fullWidth={true}
               multiLine={true}
             />
-          <br />
+            <br />
           </div>
         </div>
 
