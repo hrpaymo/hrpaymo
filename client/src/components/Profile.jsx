@@ -15,7 +15,6 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.match.params.username);
     this.loadProfileData(this.props.match.params.username);
   }
 
@@ -43,7 +42,7 @@ class Home extends React.Component {
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
-            <ProfileHeader profileInfo={this.state.profileInfo}/>
+              <ProfileHeader profileInfo={this.state.profileInfo}/>
             </span>
         }
       </div>

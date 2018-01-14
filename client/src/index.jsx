@@ -225,7 +225,7 @@ class App extends React.Component {
                 isLoggedIn={this.state.isLoggedIn} 
                 logUserOut={this.logUserOut.bind(this)}
                 {...props}
-                />
+              />
             : <Home
                 refreshUserData={this.refreshUserData.bind(this)}
                 isLoggedIn={this.state.isLoggedIn} 
@@ -237,7 +237,7 @@ class App extends React.Component {
                 balance={this.state.balance}
                 usernames={this.state.usernames}
                 {...props}
-                />
+              />
           }
         </div>
       )
@@ -250,27 +250,29 @@ class App extends React.Component {
             <Route 
               exact path="/signup" 
               render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
+            />
             <Route 
               exact path="/login" 
               render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
+            />
             <Route 
               path="/view?=(:id)" 
               render={HomeWithProps}
               onEnter={ this.requireAuth }
-              />
+            />
             <Route 
               path="/:username" 
-              render={routeProps => <Profile {...routeProps} 
-                refreshUserData={this.refreshUserData.bind(this)}
-                isLoggedIn={this.state.isLoggedIn} 
-                logUserOut={this.logUserOut.bind(this)}
-                userInfo={this.state.userInfo} />} 
-              />
+              render={routeProps => 
+                <Profile {...routeProps} 
+                  refreshUserData={this.refreshUserData.bind(this)}
+                  isLoggedIn={this.state.isLoggedIn} 
+                  logUserOut={this.logUserOut.bind(this)}
+                  userInfo={this.state.userInfo} />
+              } />
             <Route 
               path="/" 
-              render={HomeWithProps} />
+              render={HomeWithProps} 
+            />
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>
