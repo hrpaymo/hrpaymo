@@ -34,6 +34,8 @@
     "pg": "^7.4.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-form-validator-core": "^0.3.0",
+    "react-material-ui-form-validator": "^1.0.5",
     "react-router-dom": "^4.2.2",
     "underscore": "^1.8.3",
     "webpack": "^2.2.1"
