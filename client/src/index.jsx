@@ -220,9 +220,6 @@ class App extends React.Component {
     const HomeWithProps = (props) => {
       return (
         <div>
-          <Navbar 
-            isLoggedIn={this.props.isLoggedIn} 
-            logUserOut={this.props.logUserOut} />
           {!this.state.isLoggedIn 
             ? <LoggedOutHome 
                 isLoggedIn={this.state.isLoggedIn} 

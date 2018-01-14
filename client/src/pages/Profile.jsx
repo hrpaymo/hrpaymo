@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar.jsx';
 import Payment from '../components/Payment.jsx';
 import FeedContainer from '../components/FeedContainer.jsx';
-import MiniProfile from '../components/MiniProfile.jsx';
+import ProfileHeader from '../components/ProfileHeader.jsx';
 import axios from 'axios';
 
 class Home extends React.Component {
@@ -15,11 +15,11 @@ class Home extends React.Component {
 
   componentDidMount() {
     console.log(this.props.match.params.username);
-    this.loadProfileData();
+    this.loadProfileData(this.props.match.params.username);
   }
 
   loadProfileData(username) {
-    axios('/fullprofile', {params: {username: username}})
+    axios('/publicprofile', {params: {username: username}})
       .then((response) => {
         this.setState({
           profileInfo: response.data
@@ -34,8 +34,7 @@ class Home extends React.Component {
     return (
       <div>
         <Navbar/>
-        This user is: 
-        {this.state.profileInfo && this.state.profileInfo.username}
+        <ProfileHeader userInfo={this.state.profileInfo}/>
         <Payment 
           payerId={this.props.userInfo.userId} 
           refreshUserData={this.props.refreshUserData} />

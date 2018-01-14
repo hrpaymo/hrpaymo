@@ -1,5 +1,6 @@
 import React from 'react';
 import {List, ListItem} from 'material-ui/List';
+import { Link } from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 
