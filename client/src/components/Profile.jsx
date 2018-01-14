@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from '../components/Navbar.jsx';
-import Payment from '../components/Payment.jsx';
-import FeedContainer from '../components/FeedContainer.jsx';
-import ProfileHeader from '../components/ProfileHeader.jsx';
+import Navbar from './Navbar.jsx';
+import Payment from './Payment.jsx';
+import FeedContainer from './FeedContainer.jsx';
+import ProfileHeader from './ProfileHeader.jsx';
 import axios from 'axios';
 
 class Home extends React.Component {
@@ -37,11 +37,13 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Navbar/>
+        <Navbar 
+          isLoggedIn={this.props.isLoggedIn} 
+          logUserOut={this.props.logUserOut} />
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
-            <ProfileHeader userInfo={this.state.profileInfo}/>
+            <ProfileHeader profileInfo={this.state.profileInfo}/>
             </span>
         }
       </div>
