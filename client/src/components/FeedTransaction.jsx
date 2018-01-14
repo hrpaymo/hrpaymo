@@ -18,7 +18,7 @@ const FeedTransaction = (props) => {
           </span>
         }
         rightAvatar={
-          <div className= {isDebit ? 'feed-item-amount showDebit' : 'feed-item-amount'}>
+          <div className={isDebit ? 'feed-item-amount showDebit' : 'feed-item-amount'}>
             {props.transaction.amount}
           </div>
         }
