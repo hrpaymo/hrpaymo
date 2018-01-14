@@ -26,10 +26,6 @@ class ProfileHeader extends React.Component {
             subtitle={this.props.userInfo.username}
             avatar={this.props.userInfo.avatarUrl || '/images/no-image.gif'}
           />
-          <Divider />
-          <CardText>
-            Username: ${this.props.balance}
-          </CardText>
         </Card>
     );
   }

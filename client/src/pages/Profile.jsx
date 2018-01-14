@@ -9,7 +9,8 @@ class Home extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      profileInfo: {}
+      profileInfo: {},
+      unknownUser: false
     }
   }
 
@@ -26,6 +27,9 @@ class Home extends React.Component {
         });
       })
       .catch((err) =>{
+        this.setState({
+          unknownUser: true
+        })
         console.error(err);
       });
   }
@@ -34,10 +38,12 @@ class Home extends React.Component {
     return (
       <div>
         <Navbar/>
-        <ProfileHeader userInfo={this.state.profileInfo}/>
-        <Payment 
-          payerId={this.props.userInfo.userId} 
-          refreshUserData={this.props.refreshUserData} />
+        {this.state.unknownUser 
+          ? <div>User does not exist</div>
+          : <span>
+            <ProfileHeader userInfo={this.state.profileInfo}/>
+            </span>
+        }
       </div>
     );
   }
