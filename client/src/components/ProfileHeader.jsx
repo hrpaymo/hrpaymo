@@ -22,9 +22,9 @@ class ProfileHeader extends React.Component {
     return (
         <Card style={card_style}>
           <CardHeader
-            title={this.props.userInfo.fullName}
-            subtitle={this.props.userInfo.username}
-            avatar={this.props.userInfo.avatarUrl || '/images/no-image.gif'}
+            title={this.props.profileInfo.fullName}
+            subtitle={this.props.profileInfo.username}
+            avatar={this.props.profileInfo.avatarUrl || '/images/no-image.gif'}
           />
         </Card>
     );

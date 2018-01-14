@@ -41,7 +41,7 @@ class Home extends React.Component {
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
-            <ProfileHeader userInfo={this.state.profileInfo}/>
+            <ProfileHeader profileInfo={this.state.profileInfo}/>
             </span>
         }
       </div>

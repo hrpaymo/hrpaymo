@@ -22,17 +22,17 @@ class Home extends React.Component {
           logUserOut={this.props.logUserOut} />
         <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
         <div className="pay-feed-container">
-        <Payment 
-          payerId={this.props.userInfo.userId}
-          usernames={this.props.usernames}
-          refreshUserData={this.props.refreshUserData} />
-        <FeedContainer 
-          userId={this.props.userInfo.userId}
-          loadMoreFeed={this.props.loadMoreFeed}
-          view={this.extractView(this.props.location) || 'mine'}
-          userFeed={this.props.userFeed}
-          globalFeed={this.props.globalFeed} 
-        />
+          <Payment 
+            payerId={this.props.userInfo.userId}
+            usernames={this.props.usernames}
+            refreshUserData={this.props.refreshUserData} />
+          <FeedContainer 
+            userId={this.props.userInfo.userId}
+            loadMoreFeed={this.props.loadMoreFeed}
+            view={this.extractView(this.props.location) || 'mine'}
+            userFeed={this.props.userFeed}
+            globalFeed={this.props.globalFeed} 
+          />
         </div>
       </div>
     );
