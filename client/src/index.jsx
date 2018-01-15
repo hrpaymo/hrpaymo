@@ -16,8 +16,8 @@ import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
 import Navbar from './components/Navbar.jsx';
-
-
+// ---------- Helper ---------- //
+import feedManipulation from './feedManipulation.js'
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -76,10 +76,8 @@ class App extends React.Component {
   }
 
   getFeed(feedType, userId = null, sinceId) {
-    let endpoint = FEED_ENDPOINTS[feedType];
-    if (feedType === 'userFeed') {
-      endpoint = `${endpoint}/${userId}`;
-    }
+    let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
+
     let params = {
       sinceId: sinceId
     }
@@ -93,22 +91,6 @@ class App extends React.Component {
       });
   }
 
-  mergeFeeds(newerFeed, olderFeed) {
-    // If there is already existing data in the feed, combine them, prepending the 
-    // more recent transactions to the top
-    let combinedItems = (newerFeed.items || []).concat(olderFeed.items || []);
-
-    // Update feed meta-data to accurately reflect combined data
-    let combinedFeedObject = {
-      items: combinedItems,
-      count: (newerFeed.count || 0) + (olderFeed.count || 0),
-      nextPageTransactionId: olderFeed.nextPageTransactionId || null,
-      newestTransactionId: newerFeed.newestTransactionId || null
-    }
-
-    return combinedFeedObject;
-  }
-
   prependNewTransactions(feedType, transactionSummary) {
     // If no results return, do nothing
     if (!transactionSummary || transactionSummary.count === 0) {
@@ -120,7 +102,7 @@ class App extends React.Component {
 
     let newFeedObject = isFeedEmpty
       ? transactionSummary
-      : this.mergeFeeds(transactionSummary, this.state[feedType]);
+      : feedManipulation.mergeFeeds(transactionSummary, this.state[feedType]);
 
     this.setState({
       [feedType]: newFeedObject
@@ -128,11 +110,7 @@ class App extends React.Component {
   }
 
   loadMoreFeed(feedType, userId) {
-    let endpoint = FEED_ENDPOINTS[feedType];
-
-    if (feedType === 'userFeed') {
-      endpoint = `${endpoint}/${userId}`;
-    } 
+    let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
     // Send along the next valid ID you'd like returned back
     // from the database
@@ -145,7 +123,7 @@ class App extends React.Component {
 
         // Confirm there additional items to load
         if (response.data && response.data.count > 0) {
-          let combinedItems = this.mergeFeeds(this.state[feedType], response.data);
+          let combinedItems = feedManipulation.mergeFeeds(this.state[feedType], response.data);
 
           this.setState({
             [feedType]: combinedItems
