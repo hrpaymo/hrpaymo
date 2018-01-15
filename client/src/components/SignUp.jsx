@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import NavBar from './Navbar.jsx';
 import FlatButton from 'material-ui/FlatButton';
 import { ValidatorForm } from 'react-form-validator-core';
@@ -165,6 +166,8 @@ class SignUp extends React.Component {
               value={formData.avatarUrl}
               name="avatarUrl"
             /><br/>
+          <div>
+            <button className='btn' onClick={this.signUserUp.bind(this)}>Create Account</button>
             {this.state.didSignupFail && 
               <span className="error-text">
                 {this.state.errorCode === 422
@@ -173,24 +176,11 @@ class SignUp extends React.Component {
                 }
               </span>
             }
-                
-            <FlatButton 
-              type="submit"
-              label={
-                  (submitted && 'Your form is submitted!') ||
-                  (!submitted && 'Submit')
-              }
-              disabled={submitted}
-              className='signup-button' 
-              onClick={this.signUserUp.bind(this)} 
-              label="Sign up!" 
-              primary={true} 
-              backgroundColor="#3D95CE"
-              hoverColor='#03A9F4'
-              style={style.button} 
-              labelStyle={style.button.label}
-            />
-          </ValidatorForm>
+          </div>
+          <br/>
+          <span>Already a member?</span>
+          <br/>
+          <Link to="/login"><button className='btn'>Sign in</button></Link>
         </div>
       </div>
     );

@@ -133,24 +133,13 @@ class Payment extends React.Component {
         </div>
 
         <div className="pay-button-container"> 
+          <button className='btn' onClick={this.payUser.bind(this)}>Pay</button>
           {this.state.paymentFail
-            ? <label className='payment-fail'>
+            ? <label className='error-text'>
                 Error in payment processing
               </label>
             : null
           }
-          <div>
-            <FlatButton 
-              className='pay-button' 
-              onClick={this.payUser.bind(this)} 
-              label="Pay!" 
-              primary={true} 
-              style={style.button} 
-              backgroundColor="#3D95CE"
-              hoverColor='#03A9F4'
-              labelStyle={style.button.label}
-            />
-          </div>
         </div>
       </Paper>
     );

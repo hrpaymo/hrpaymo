@@ -86,9 +86,16 @@ class Login extends React.Component {
             {this.state.errorCode === 401 || <span>Our servers are having issues. Please try later</span>}
           </span>
         }
-        <button onClick={this.logUserIn.bind(this)} >Log in</button>
+        <button className='btn' onClick={this.logUserIn.bind(this)}>Log In</button>
         <br/>
-        <Link to="/signup">... or create an account</Link>
+        <br/>
+        <div>
+          <span>Don't have an account? Create one!</span>
+          <br/>
+          <Link to="/signup">
+            <button className='btn'>Sign Up</button>
+          </Link>
+        </div>
       </div>
     );
   }
