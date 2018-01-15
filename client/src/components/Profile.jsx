@@ -135,11 +135,11 @@ class Profile extends React.Component {
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut}
-        />
-        {this.state.unknownUser 
-          ? <div>User does not exist</div>
-          : <span>
+          logUserOut={this.props.logUserOut} />
+        <div className='body-container'>
+          {this.state.unknownUser 
+            ? <div>User does not exist</div>
+            : <div className='pay-feed-container'>
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
               />
@@ -159,8 +159,9 @@ class Profile extends React.Component {
                 base={this.props.match.params.username}
                 view={this.extractView()}
               />
-            </span>
-        }
+              </div>
+          }
+        </div>
       </div>
     );
   }
