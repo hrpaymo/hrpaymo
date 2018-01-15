@@ -260,8 +260,11 @@ body {
   color: #A9A9A9;
 }
 
-.feed-item-user {
+.feed-item-user{
   font-weight: bold;
+}
+
+.feed-item-user a {
   color: #000000;
 }
 
