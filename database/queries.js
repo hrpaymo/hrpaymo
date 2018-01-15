@@ -9,8 +9,10 @@ module.exports = {
   signup: signup,
   profile: profile,
   getPasswordAtUsername: login.getPasswordAtUsername,
+  payment: payment.pay,
+  getUsernames: usernames.getUsernames,
   globalFeed: feed.globalFeed,
   myFeed: feed.myFeed,
-  payment: payment.pay,
-  getUsernames: usernames.getUsernames
+  profileFeed: feed.profileFeed,
+  profileFeedRelational: feed.profileFeedRelational
 }

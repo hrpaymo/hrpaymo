@@ -10,8 +10,8 @@ class Feed extends React.Component {
 
   render() {
 
-    let hasTransactions = this.props.transactions.items && this.props.transactions.items.length > 0;
-    let showMoreButton = Boolean(this.props.transactions.nextPageTransactionId);
+    let hasTransactions = this.props.transactions && this.props.transactions.items && this.props.transactions.items.length > 0;
+    let showMoreButton = hasTransactions ? Boolean(this.props.transactions.nextPageTransactionId) : false;
 
     return (
       <div>

@@ -16,7 +16,8 @@ import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
 import Navbar from './components/Navbar.jsx';
-
+// ---------- Helper ---------- //
+import feedManipulation from './feedManipulation.js'
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -43,15 +44,15 @@ class App extends React.Component {
   loadUserData(userId) {
     this.getUserInfo(userId)
     this.getBalance(userId);
-    this.getGlobalFeed();
-    this.getUserFeed(userId);
+    this.getFeed('globalFeed', userId);
+    this.getFeed('userFeed', userId);
     this.getUsernames(userId);
   }
 
   refreshUserData(userId) {
     this.getBalance(userId);
-    this.getGlobalFeed(this.state.globalFeed.newestTransactionId || null);
-    this.getUserFeed(userId, this.state.userFeed.newestTransactionId || null);
+    this.getFeed('globalFeed', userId, this.state.globalFeed.newestTransactionId || null);
+    this.getFeed('userFeed', userId, this.state.userFeed.newestTransactionId || null);
     this.getUsernames(userId)
   }
 
@@ -67,24 +68,17 @@ class App extends React.Component {
     })
   }
 
-  getUserFeed(userId, sinceId = null) {
-    let additionalData = {params: {sinceId: sinceId}}
+  getFeed(feedType, userId = null, sinceId) {
+    let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
-    axios(`/feed/user/${userId}`, additionalData)
+    let params = {
+      sinceId: sinceId,
+      userId: userId
+    }
+
+    axios(endpoint, {params: params})
       .then((response) => {
-        this.prependNewTransactions('mine', response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
-  getGlobalFeed(sinceId = null) {
-    let additionalData = {params: {sinceId: sinceId}}
-
-    axios('/feed/global', additionalData)
-      .then((response) => {
-        this.prependNewTransactions('public', response.data);
+        this.prependNewTransactions(feedType, response.data);
       })
       .catch((err) => {
         console.error(err);
@@ -92,73 +86,41 @@ class App extends React.Component {
   }
 
   prependNewTransactions(feedType, transactionSummary) {
+    // If no results return, do nothing
     if (!transactionSummary || transactionSummary.count === 0) {
       return;
     }
 
-    let stateRef = (feedType === 'public') ? 'globalFeed' : 'userFeed';
+    // If feed was empty, set the returned transactions as the feed
+    let isFeedEmpty = !this.state[feedType].count || this.state[feedType].count === 0;
 
-    // If there is no existing data in the feed, set the transaction summary
-    if (!this.state[stateRef].count || this.state[stateRef].count === 0) {
-        this.setState({
-          [stateRef]: transactionSummary
-        });  
-    } else {
-      // If there is already existing data in the feed, combine them to prepend the new 
-      // transactions to the top
-      let combinedItems = transactionSummary.items.concat(this.state[stateRef].items);
+    let newFeedObject = isFeedEmpty
+      ? transactionSummary
+      : feedManipulation.mergeFeeds(transactionSummary, this.state[feedType]);
 
-      // Might be a better design to make a deep copy of state and then 
-      // manipulate. See the module "immutability-helper"
-
-      let newFeedState = {
-        items: combinedItems,
-        count: (this.state[stateRef].count || 0) + transactionSummary.count,
-        nextPageTransactionId: this.state[stateRef].nextPageTransactionId,
-        newestTransactionId: transactionSummary.newestTransactionId
-      }
-
-      this.setState({
-        [stateRef]: newFeedState
-      })
-    }
+    this.setState({
+      [feedType]: newFeedObject
+    })
   }
 
   loadMoreFeed(feedType, userId) {
-    let endpoint;
-    let stateRef;
+    let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
-    if (feedType === 'public') {
-      endpoint = '/feed/global';
-      stateRef = 'globalFeed';
-    } else if (feedType == 'mine') {
-      endpoint = `/feed/user/${userId}`;
-      stateRef = 'userFeed';
-    } else {
-      return;
+    // Send along the next valid ID you'd like returned back
+    // from the database
+    let params = {
+      beforeId: this.state[feedType].nextPageTransactionId
     }
 
-    let additionalData = {params: {beforeId: this.state[stateRef].nextPageTransactionId}}
-
-    axios(endpoint, additionalData)
+    axios(endpoint, {params: params})
       .then((response) => {
-        // Confirm additional items to load
+
+        // Confirm there additional items to load
         if (response.data && response.data.count > 0) {
-
-          let combinedItems = this.state[stateRef].items.concat(response.data.items);
-
-          // Might be a better design to make a deep copy of state and then 
-          // manipulate. See the module "immutability-helper"
-
-          let newFeedState = {
-            items: combinedItems,
-            count: this.state[stateRef].count + response.data.count,
-            nextPageTransactionId: response.data.nextPageTransactionId,
-            newestTransactionId: this.state[stateRef].newestTransactionId
-          }
+          let combinedItems = feedManipulation.mergeFeeds(this.state[feedType], response.data);
 
           this.setState({
-            [stateRef]: newFeedState
+            [feedType]: combinedItems
           })
         }
       })
@@ -208,14 +170,6 @@ class App extends React.Component {
     })
   }
 
-  requireAuth(nextState, replace) {
-    if (!this.state.isLoggedIn) {
-      replace({
-        pathname: '/login'
-      })
-    }
-  }
-
   render () {
     const HomeWithProps = (props) => {
       return (
@@ -240,8 +194,30 @@ class App extends React.Component {
               />
           }
         </div>
-      )
-    }
+      );
+    };
+
+    const ProfileWithProps = (routeProps) => {
+      return (
+        <div>
+          {!this.state.isLoggedIn 
+            ? <LoggedOutHome 
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                {...routeProps}
+              />
+            : <Profile 
+                key={routeProps.location.pathname}
+                refreshUserData={this.refreshUserData.bind(this)}
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                userInfo={this.state.userInfo}
+                {...routeProps} 
+              />
+          }
+        </div>
+      );
+    };
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -256,19 +232,10 @@ class App extends React.Component {
               render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
             />
             <Route 
-              path="/view?=(:id)" 
-              render={HomeWithProps}
+              path="/:username"
               onEnter={ this.requireAuth }
+              render={ProfileWithProps}
             />
-            <Route 
-              path="/:username" 
-              render={routeProps => 
-                <Profile {...routeProps} 
-                  refreshUserData={this.refreshUserData.bind(this)}
-                  isLoggedIn={this.state.isLoggedIn} 
-                  logUserOut={this.logUserOut.bind(this)}
-                  userInfo={this.state.userInfo} />
-              } />
             <Route 
               path="/" 
               render={HomeWithProps} 

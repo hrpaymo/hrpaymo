@@ -149,12 +149,44 @@ app.post('/pay', (req, res) => {
     })
 });
 
+
+app.get('/publicprofile', (req, res) => {
+  let username = req.query.username;
+  username = username && _.escape(username.replace(/"/g,"'"));
+
+  db.profile.getProfileDataByUsername(username)
+    .then((results) => {
+      let profile = results[0];
+      if (profile) {
+        var userInfo = {
+          userId: profile.id,
+          firstName: _.unescape(profile.first_name),
+          username: _.unescape(profile.username),
+          fullName: _.unescape(profile.first_name + ' ' + profile.last_name),
+          avatarUrl: _.unescape(profile.avatar_url)
+        }
+        res.status(200).json(userInfo);
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .catch((err) => {
+      console.error('error retrieving profile data: ', err);
+      res.sendStatus(500).json({error: 'server error'});
+    }) 
+});
+
+// FEED ENDPOINTS
+
+const FEED_DEFAULT_LENGTH = 5;
+
 app.get('/feed/global', (req, res) => {
-  let limit = 5;
+  let limit = FEED_DEFAULT_LENGTH;
+  let userId = req.query && parseInt(req.query.userId);
   let beforeId = parseInt(req.query['beforeId']) || null; 
   let sinceId = parseInt(req.query['sinceId']) || null;
 
-  db.globalFeed(limit + 1, beforeId, sinceId)
+  db.globalFeed(limit + 1, beforeId, sinceId, userId)
     .then((results) => {
       let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
       res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
@@ -168,7 +200,7 @@ app.get('/feed/global', (req, res) => {
 app.get('/feed/user/:userId', (req, res) => {
   let userId = req.params && parseInt(req.params.userId);
 
-  let limit = 5;
+  let limit = FEED_DEFAULT_LENGTH;
   let beforeId = parseInt(req.query['beforeId']) || null; 
   let sinceId = parseInt(req.query['sinceId']) || null;
 
@@ -188,29 +220,45 @@ app.get('/feed/user/:userId', (req, res) => {
     })
 });
 
-app.get('/publicprofile', (req, res) => {
-  let username = req.query.username;
-  username = username && _.escape(username.replace(/"/g,"'"));
+app.get('/feed/profile', (req, res) => {
+  let profileUsername = req.query.profileUsername;
+  let loggedInUserId = req.query && parseInt(req.query.userId);
 
-  db.profile.getPublicUserInfo(username)
+  profileUsername = profileUsername && _.escape(profileUsername.replace(/"/g,"'"));
+
+  let limit = FEED_DEFAULT_LENGTH;
+  let beforeId = parseInt(req.query['beforeId']) || null; 
+  let sinceId = parseInt(req.query['sinceId']) || null;
+
+  db.profileFeed(limit + 1, beforeId, sinceId, profileUsername, loggedInUserId)
     .then((results) => {
-      let profile = results[0];
-      if (profile) {
-        var userInfo = {
-          userId: profile.id,
-          username: _.unescape(profile.username),
-          fullName: _.unescape(profile.first_name + ' ' + profile.last_name),
-          avatarUrl: _.unescape(profile.avatar_url)
-        }
-        res.status(200).json(userInfo);
-      } else {
-        res.sendStatus(404);
-      }
+      let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
     })
     .catch((err) => {
-      console.error('error retrieving profile data: ', err);
+      console.error('error retrieving user feed: ', err);
       res.sendStatus(500).json({error: 'server error'});
-    }) 
+    })
+});
+
+app.get('/feed/relational', (req, res) => {
+  let profileUsername = req.query.profileUsername;
+  let loggedInUserId = req.query && parseInt(req.query.userId);
+  profileUsername = profileUsername && _.escape(profileUsername.replace(/"/g,"'"));
+
+  let limit = FEED_DEFAULT_LENGTH;
+  let beforeId = parseInt(req.query['beforeId']) || null; 
+  let sinceId = parseInt(req.query['sinceId']) || null;
+
+  db.profileFeedRelational(limit + 1, beforeId, sinceId, profileUsername, loggedInUserId)
+    .then((results) => {
+      let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
+      res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
+    })
+    .catch((err) => {
+      console.error('error retrieving user feed: ', err);
+      res.sendStatus(500).json({error: 'server error'});
+    })
 });
 
 app.get('*', (req, res) => {

@@ -11,31 +11,35 @@ class FeedContainer extends React.Component {
 
   render() {
 
+    let buttons = [];
+    let feedComponent;
+    let viewToDisplay = this.props.view || this.props.feeds[0].urlParam 
+
+    this.props.feeds.forEach((feed) => {
+
+      buttons.push(
+        <Link to={`${this.props.base}?view=${feed.urlParam}`} key={feed.urlParam}>
+          <button className={viewToDisplay === feed.urlParam ? 'feed-buttons selected' : 'feed-buttons'} >
+            {feed.displayLabel}
+          </button>
+        </Link>
+      );
+
+      if (viewToDisplay === feed.urlParam) {
+        feedComponent = <Feed 
+            type={feed.feedType}
+            transactions={feed.data}
+            userId={this.props.userId}
+            loadMoreFeed={this.props.loadMoreFeed} />
+      }
+    });
+
     return (
       <Paper className='feed-container'>
         <div className='feed-selections'>
-          <Link to="/?view=mine">
-            <button className={this.props.view === 'mine' ? 'feed-buttons selected' : 'feed-buttons'} >
-              Mine
-            </button>
-          </Link>
-          <Link to="/?view=public">
-            <button className={this.props.view === 'public' ? 'feed-buttons selected' : 'feed-buttons'} >
-              Public
-            </button>
-          </Link>
+          {buttons}
         </div>
-        {this.props.view === 'mine'
-          ? <Feed 
-              type='mine'
-              userId={this.props.userId}
-              loadMoreFeed={this.props.loadMoreFeed} 
-              transactions={this.props.userFeed} />
-          : <Feed 
-              type='public'
-              userId={this.props.userId}
-              loadMoreFeed={this.props.loadMoreFeed} 
-              transactions={this.props.globalFeed} />}
+        {feedComponent}
       </Paper>
     );
   }

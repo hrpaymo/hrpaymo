@@ -9,18 +9,35 @@ class Home extends React.Component {
     super(props);
   }
 
-  extractView(location) {
-    let search = location.search;
+  extractView() {
+    let search = this.props.location && this.props.location.search;
     return search && search.slice(search.indexOf('=') + 1);
   }
 
   render() {
+    let orderedFeeds = [
+      {
+        displayLabel: 'mine',
+        urlParam: 'mine',
+        feedType: 'userFeed',
+        data: this.props.userFeed
+      },
+      {
+        displayLabel: 'public',
+        urlParam: 'public',
+        feedType: 'globalFeed',
+        data: this.props.globalFeed
+      }
+    ];
+
     return (
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
           logUserOut={this.props.logUserOut} />
-        <MiniProfile balance={this.props.balance} userInfo={this.props.userInfo}/>
+        <MiniProfile 
+          balance={this.props.balance}
+          userInfo={this.props.userInfo}/>
         <div className="pay-feed-container">
           <Payment 
             payerId={this.props.userInfo.userId}
@@ -28,10 +45,10 @@ class Home extends React.Component {
             refreshUserData={this.props.refreshUserData} />
           <FeedContainer 
             userId={this.props.userInfo.userId}
+            base='/'
+            feeds={orderedFeeds}
             loadMoreFeed={this.props.loadMoreFeed}
-            view={this.extractView(this.props.location) || 'mine'}
-            userFeed={this.props.userFeed}
-            globalFeed={this.props.globalFeed} 
+            view={this.extractView()}
           />
         </div>
       </div>
