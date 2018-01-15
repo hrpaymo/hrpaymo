@@ -32,8 +32,6 @@ class App extends React.Component {
       isLoggedIn: false,
       globalFeed: {},
       userFeed: {},
-      profileFeed: {},
-      relationalFeed: {},
       balance: null,
       userInfo: {},
       usernames: []
@@ -210,12 +208,8 @@ class App extends React.Component {
               />
             : <Profile 
                 key={routeProps.location.pathname}
-                getFeed={this.getFeed.bind(this)}
                 refreshUserData={this.refreshUserData.bind(this)}
                 isLoggedIn={this.state.isLoggedIn} 
-                profileFeed={this.state.profileFeed} 
-                loadMoreFeed={this.loadMoreFeed.bind(this)}
-                relationalFeed={this.state.relationalFeed}
                 logUserOut={this.logUserOut.bind(this)}
                 userInfo={this.state.userInfo}
                 {...routeProps} 
