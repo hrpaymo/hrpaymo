@@ -15,19 +15,19 @@ class LoggedOutHome extends React.Component {
           logUserOut={this.props.logUserOut} />
         <div className='body-container'>
           <div className='splash' >
-            <span>Send money and make purchases with Paymo.</span>
-            <br/>
+            <div className='splash-images'>
+              <img src='/images/nexus-image.png' width='316px' height='643px' />
+            </div>
+            <div className='splash-textColumn'>
+              <h1>Send money and make purchases with Paymo.</h1>
 
-            <span>New to Paymo?</span>
-            <br/>
+              <p>New to Paymo?</p>
+              <Link to="/signup"><button className='btn'>Create an account</button></Link>
 
-            <Link to="/signup"><button className='btn'>Create an account</button></Link>
-            <br/>
+              <p>Already a member?</p>
+              <Link to="/login"><button className='btn'>Sign in</button></Link>
 
-            <span>Already a member?</span>
-            <br/>
-            
-            <Link to="/login"><button className='btn'>Sign in</button></Link>
+            </div>
           </div>
         </div>
       </div>
