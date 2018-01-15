@@ -12,9 +12,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // ---------- Componenets ---------- //
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
-import NavBar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
+import Profile from './components/Profile.jsx';
+import Navbar from './components/Navbar.jsx';
+
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -223,7 +225,7 @@ class App extends React.Component {
                 isLoggedIn={this.state.isLoggedIn} 
                 logUserOut={this.logUserOut.bind(this)}
                 {...props}
-                />
+              />
             : <Home
                 refreshUserData={this.refreshUserData.bind(this)}
                 isLoggedIn={this.state.isLoggedIn} 
@@ -235,7 +237,7 @@ class App extends React.Component {
                 balance={this.state.balance}
                 usernames={this.state.usernames}
                 {...props}
-                />
+              />
           }
         </div>
       )
@@ -248,18 +250,29 @@ class App extends React.Component {
             <Route 
               exact path="/signup" 
               render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
+            />
             <Route 
               exact path="/login" 
               render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-              />
+            />
             <Route 
               path="/view?=(:id)" 
               render={HomeWithProps}
-              onEnter={ this.requireAuth }/>
+              onEnter={ this.requireAuth }
+            />
+            <Route 
+              path="/:username" 
+              render={routeProps => 
+                <Profile {...routeProps} 
+                  refreshUserData={this.refreshUserData.bind(this)}
+                  isLoggedIn={this.state.isLoggedIn} 
+                  logUserOut={this.logUserOut.bind(this)}
+                  userInfo={this.state.userInfo} />
+              } />
             <Route 
               path="/" 
-              render={HomeWithProps} />
+              render={HomeWithProps} 
+            />
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NavBar from './Navbar.jsx';
+import Navbar from './Navbar.jsx';
 
 class LoggedOutHome extends React.Component {
   constructor (props) {
@@ -10,7 +10,7 @@ class LoggedOutHome extends React.Component {
   render() {
     return (
       <div>
-        <NavBar 
+        <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
           logUserOut={this.props.logUserOut} />
         <div className='splash'>

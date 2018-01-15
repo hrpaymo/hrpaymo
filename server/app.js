@@ -71,7 +71,6 @@ app.get('/profile', (req, res) => {
   });
 });
 
-
 app.get('/balance', (req, res) => {
   var userId = req.query.userId;
   db.profile.getBalance(parseInt(_.escape(userId.replace(/"/g,"'"))), (err, row) => {
@@ -187,6 +186,31 @@ app.get('/feed/user/:userId', (req, res) => {
       console.error('error retrieving user feed: ', err);
       res.sendStatus(500).json({error: 'server error'});
     })
+});
+
+app.get('/publicprofile', (req, res) => {
+  let username = req.query.username;
+  username = username && _.escape(username.replace(/"/g,"'"));
+
+  db.profile.getPublicUserInfo(username)
+    .then((results) => {
+      let profile = results[0];
+      if (profile) {
+        var userInfo = {
+          userId: profile.id,
+          username: _.unescape(profile.username),
+          fullName: _.unescape(profile.first_name + ' ' + profile.last_name),
+          avatarUrl: _.unescape(profile.avatar_url)
+        }
+        res.status(200).json(userInfo);
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .catch((err) => {
+      console.error('error retrieving profile data: ', err);
+      res.sendStatus(500).json({error: 'server error'});
+    }) 
 });
 
 app.get('*', (req, res) => {

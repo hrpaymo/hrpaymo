@@ -1,5 +1,6 @@
 import React from 'react';
 import {List, ListItem} from 'material-ui/List';
+import { Link } from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 
@@ -12,7 +13,7 @@ const FeedTransaction = (props) => {
         leftAvatar={<Avatar src={props.transaction.payer.avatarUrl || '/images/no-image.gif'} />}
         primaryText={
           <span>
-            <span className='feed-item-user'>{props.transaction.payer.fullName}</span> paid <span className='feed-item-user'>{props.transaction.payee.fullName}</span>
+            <Link to={`/${props.transaction.payer.username}`}><span className='feed-item-user'>{props.transaction.payer.fullName}</span></Link> paid <Link to={`/${props.transaction.payee.username}`}><span className='feed-item-user'>{props.transaction.payee.fullName}</span></Link>
             <p className='feed-item-note'>{props.transaction.note}</p>
           </span>
         }
