@@ -52,10 +52,11 @@ class Payment extends React.Component {
   payUser() {
     let payment = {
       payerId: this.props.payerId,
-      payeeUsername: this.state.payeeUsername,
+      payeeUsername: !this.state.payeeUsername ? this.props.payeeUsername : this.state.payeeUsername,
       amount: this.state.amount,
       note: this.state.note
     };
+    console.log('payment info:', payment);
     axios.post('/pay', payment)
       .then((response) => {
         this.setState({
@@ -89,22 +90,26 @@ class Payment extends React.Component {
   }
 
   render() {
+    console.log('this.props.payeeUsername:', this.props.payeeUsername);
     return (
       <Paper className='payment-container' style={style.form}>
         <div className='payment-item-container'>
           <div className="form-box">
-            <AutoComplete
-              hintText="Enter a username"
-              floatingLabelText="Who do you want to pay?"
-              style={style.input}
-              name='payeeUsername'
-              filter={AutoComplete.caseInsensitiveFilter}
-              dataSource={this.props.usernames}
-              maxSearchResults={7}
-              searchText={this.state.payeeUsername}
-              onUpdateInput = {this.onDropdownInput.bind(this)}
-            />
-            <br />
+            {!this.props.payeeUsername
+            ? <AutoComplete
+                hintText="Enter a username"
+                floatingLabelText="Who do you want to pay?"
+                style={style.input}
+                name='payeeUsername'
+                filter={AutoComplete.caseInsensitiveFilter}
+                dataSource={this.props.usernames ? this.props.usernames : []}
+                maxSearchResults={7}
+                searchText={this.state.payeeUsername}
+                onUpdateInput = {this.onDropdownInput.bind(this)}
+              />
+            : null
+            }
+          <br />
           </div>
           <div className="form-box">
             <TextField
@@ -115,7 +120,7 @@ class Payment extends React.Component {
               hintText="Enter an amount"
               floatingLabelText="How much to give away?"
             />
-            <br />
+          <br />
           </div>
           <div className="form-box">
             <TextField
@@ -128,7 +133,7 @@ class Payment extends React.Component {
               fullWidth={true}
               multiLine={true}
             />
-            <br />
+          <br />
           </div>
         </div>
 

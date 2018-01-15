@@ -57,6 +57,7 @@ class App extends React.Component {
   }
 
   getUsernames(userId) {
+    console.log('getting usersnames from index.jsx');
     axios('/usernames', { params: { userId: userId }})
     .then(response => {
       this.setState({

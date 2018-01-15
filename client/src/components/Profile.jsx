@@ -131,6 +131,7 @@ class Profile extends React.Component {
       orderedFeeds[0].displayLabel = 'Your Feed';
     }
 
+    console.log('in profile, profileInfo:', this.state.profileInfo, 'userId:', this.props.userInfo);
     return (
       <div>
         <Navbar 
@@ -142,6 +143,11 @@ class Profile extends React.Component {
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
                 />
+              <Payment
+                refreshUserData={this.props.refreshUserData}
+                payeeUsername={this.state.profileInfo.username}
+                payerId={this.props.userInfo.userId}
+              />
               <FeedContainer       
                 userId={this.props.userInfo.userId}
                 loadMoreFeed={this.loadMoreFeed.bind(this)}
