@@ -43,7 +43,7 @@ app.get('/usernames', (req, res) => {
     res.json({ usernames: unescapedRows });
   })
   .catch(err => {
-    console.errror('error on get of usernames:', err.message);
+    console.error('error on get of usernames:', err.message);
     res.status(400).json({ error : "Improper format." });
   });
 })

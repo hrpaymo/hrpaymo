@@ -68,7 +68,8 @@ class Login extends React.Component {
               floatingLabelText="Username"
               name='username'
               onChange = {this.handleInputChanges.bind(this)}
-            /><br />
+            />
+          <br />
           <br/>
             <TextField
               value={formData.password}
@@ -78,7 +79,8 @@ class Login extends React.Component {
               floatingLabelText="Password"
               name='password'
               onChange = {this.handleInputChanges.bind(this)}
-            /><br />
+            />
+          <br />
           <br/>
           {this.state.didLoginFail && 
             <span className="error-text">

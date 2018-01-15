@@ -135,20 +135,30 @@ class Profile extends React.Component {
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut} />
+          logUserOut={this.props.logUserOut}
+        />
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
-                />
+              />
+              {this.props.userInfo.username !== this.props.match.params.username
+                ? <Payment
+                    refreshUserData={this.props.refreshUserData}
+                    payeeUsername={this.state.profileInfo.username}
+                    payerId={this.props.userInfo.userId}
+                  />
+                :
+                  null
+              }
               <FeedContainer       
                 userId={this.props.userInfo.userId}
                 loadMoreFeed={this.loadMoreFeed.bind(this)}
                 feeds={orderedFeeds}
                 base={this.props.match.params.username}
                 view={this.extractView()}
-                />
+              />
             </span>
         }
       </div>

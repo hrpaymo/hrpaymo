@@ -34,15 +34,17 @@ class Home extends React.Component {
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut} />
+          logUserOut={this.props.logUserOut}
+        />
         <MiniProfile 
           balance={this.props.balance}
-          userInfo={this.props.userInfo}/>
+          userInfo={this.props.userInfo}
+        />
         <div className="pay-feed-container">
           <Payment 
             payerId={this.props.userInfo.userId}
-            usernames={this.props.usernames}
-            refreshUserData={this.props.refreshUserData} />
+            refreshUserData={this.props.refreshUserData}
+          />
           <FeedContainer 
             userId={this.props.userInfo.userId}
             base='/'
