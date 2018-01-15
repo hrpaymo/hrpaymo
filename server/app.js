@@ -61,6 +61,7 @@ app.get('/profile', (req, res) => {
           userId: ui.id,
           username: _.unescape(ui.username),
           displayName: _.unescape(ui.first_name + ' ' + ui.last_name),
+          createdAt: _.unescape(ui.created_at),
           avatarUrl: _.unescape(ui.avatar_url)
         }
         res.status(200).json(userInfo);
@@ -163,6 +164,7 @@ app.get('/publicprofile', (req, res) => {
           firstName: _.unescape(profile.first_name),
           username: _.unescape(profile.username),
           fullName: _.unescape(profile.first_name + ' ' + profile.last_name),
+          createdAt: _.unescape(profile.created_at),
           avatarUrl: _.unescape(profile.avatar_url)
         }
         res.status(200).json(userInfo);

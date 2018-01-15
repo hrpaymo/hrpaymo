@@ -167,6 +167,10 @@ body {
   position: 'relative';
   margin: 20px;
 }
+.error-text{
+  color: red;
+  margin: 0 20px;
+}
 
 .payment-item-container {
   display: flex;
@@ -294,4 +298,6 @@ body {
   font-weight: bold;
 }
 
-
+.member-tag {
+  margin: 10px;
+}

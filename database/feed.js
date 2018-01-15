@@ -90,7 +90,6 @@ let mustIncludeUserById = function(queryBuilder, userId) {
 };
 
 let mustIncludeUserByUsername = function(queryBuilder, username) {
-  console.log(username);
   if (username) {
     queryBuilder.where(function() {
       this.where('payer.username', username).orWhere('payee.username', username)

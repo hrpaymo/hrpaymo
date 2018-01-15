@@ -127,7 +127,7 @@ class Profile extends React.Component {
     
     // For a user's own profile page, only show a single feed 
     if (this.props.userInfo.username === this.props.match.params.username) {
-      orderedFeeds = orderedFeeds.slice(0,1);
+      orderedFeeds = orderedFeeds.slice(0, 1);
       orderedFeeds[0].displayLabel = 'Your Feed';
     }
 
@@ -135,11 +135,11 @@ class Profile extends React.Component {
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut}
-        />
-        {this.state.unknownUser 
-          ? <div>User does not exist</div>
-          : <span>
+          logUserOut={this.props.logUserOut} />
+        <div className='body-container'>
+          {this.state.unknownUser 
+            ? <div>User does not exist</div>
+            : <div className='pay-feed-container'>
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
               />
@@ -159,8 +159,9 @@ class Profile extends React.Component {
                 base={this.props.match.params.username}
                 view={this.extractView()}
               />
-            </span>
-        }
+              </div>
+          }
+        </div>
       </div>
     );
   }
