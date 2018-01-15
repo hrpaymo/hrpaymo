@@ -6,12 +6,14 @@ import FlatButton from 'material-ui/FlatButton';
 const style = {
   nav: {
     background: '#3D95CE',
+    display: 'flex',
   },
   left: {
     display: 'none',
   },
   log_out: {
     color: '#fff',
+    textDecoration: 'underline',
   }
 };
 
