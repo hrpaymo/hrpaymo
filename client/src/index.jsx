@@ -33,8 +33,7 @@ class App extends React.Component {
       globalFeed: {},
       userFeed: {},
       balance: null,
-      userInfo: {}/*,
-      usernames: []*/
+      userInfo: {}
     }
   }
 
@@ -46,28 +45,13 @@ class App extends React.Component {
     this.getBalance(userId);
     this.getFeed('globalFeed', userId);
     this.getFeed('userFeed', userId);
-    // this.getUsernames(userId);
   }
 
   refreshUserData(userId) {
     this.getBalance(userId);
     this.getFeed('globalFeed', userId, this.state.globalFeed.newestTransactionId || null);
     this.getFeed('userFeed', userId, this.state.userFeed.newestTransactionId || null);
-    // this.getUsernames(userId)
   }
-
-  // getUsernames(userId) {
-  //   console.log('getting usersnames from index.jsx');
-  //   axios('/usernames', { params: { userId: userId }})
-  //   .then(response => {
-  //     this.setState({
-  //       usernames: response.data.usernames
-  //     });
-  //   })
-  //   .catch(err => {
-  //     console.error(err);
-  //   })
-  // }
 
   getFeed(feedType, userId = null, sinceId) {
     let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
@@ -190,7 +174,6 @@ class App extends React.Component {
                 globalFeed={this.state.globalFeed}
                 userInfo={this.state.userInfo}
                 balance={this.state.balance}
-                // usernames={this.state.usernames}
                 {...props}
               />
           }

@@ -37,9 +37,8 @@ class Payment extends React.Component {
     }
   }
 
-  componentWillMount() {
-    console.log('getting usersnames from index.jsx');
-    axios('/usernames', { params: { userId: userId }})
+  componentDidMount() {
+    axios('/usernames', { params: { userId: this.props.payerId }})
     .then(response => {
       this.setState({
         usernames: response.data.usernames
@@ -70,7 +69,6 @@ class Payment extends React.Component {
       amount: this.state.amount,
       note: this.state.note
     };
-    console.log('payment info:', payment);
     axios.post('/pay', payment)
       .then((response) => {
         this.setState({
@@ -104,7 +102,6 @@ class Payment extends React.Component {
   }
 
   render() {
-    console.log('this.props.payeeUsername:', this.props.payeeUsername);
     return (
       <Paper className='payment-container' style={style.form}>
         <div className='payment-item-container'>

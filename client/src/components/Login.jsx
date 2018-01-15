@@ -30,7 +30,6 @@ class Login extends React.Component {
     let user = this.state.formData;
     axios.post('/login', user)
       .then((response) => {
-        // console.log('logUserIn response:', response.data);
         let userId = response.data.userId;
         this.props.logUserIn(userId);
         this.props.history.push('/');
@@ -69,7 +68,8 @@ class Login extends React.Component {
               floatingLabelText="Username"
               name='username'
               onChange = {this.handleInputChanges.bind(this)}
-            /><br />
+            />
+          <br />
           <br/>
             <TextField
               value={formData.password}
@@ -79,7 +79,8 @@ class Login extends React.Component {
               floatingLabelText="Password"
               name='password'
               onChange = {this.handleInputChanges.bind(this)}
-            /><br />
+            />
+          <br />
           <br/>
           {this.state.didLoginFail && 
             <span className="error-text">

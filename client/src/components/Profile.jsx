@@ -131,25 +131,25 @@ class Profile extends React.Component {
       orderedFeeds[0].displayLabel = 'Your Feed';
     }
 
-    console.log('in profile, profileInfo:', this.state.profileInfo, 'userId:', this.props.userInfo);
     return (
       <div>
         <Navbar 
           isLoggedIn={this.props.isLoggedIn} 
-          logUserOut={this.props.logUserOut} />
+          logUserOut={this.props.logUserOut}
+        />
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
-                />
+              />
               <Payment
                 refreshUserData={this.props.refreshUserData}
-                // payeeUsername=
-                //   {this.props.userInfo.username !== this.props.match.params.username
-                //     ? this.state.profileInfo.username
-                //     : undefined
-                //   }
+                payeeUsername=
+                  {this.props.userInfo.username !== this.props.match.params.username
+                    ? this.state.profileInfo.username
+                    : undefined
+                  }
                 payerId={this.props.userInfo.userId}
               />
               <FeedContainer       
@@ -158,7 +158,7 @@ class Profile extends React.Component {
                 feeds={orderedFeeds}
                 base={this.props.match.params.username}
                 view={this.extractView()}
-                />
+              />
             </span>
         }
       </div>
