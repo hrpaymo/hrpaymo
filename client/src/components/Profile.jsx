@@ -143,15 +143,15 @@ class Profile extends React.Component {
               <ProfileHeader 
                 profileInfo={this.state.profileInfo}
               />
-              <Payment
-                refreshUserData={this.props.refreshUserData}
-                payeeUsername=
-                  {this.props.userInfo.username !== this.props.match.params.username
-                    ? this.state.profileInfo.username
-                    : undefined
-                  }
-                payerId={this.props.userInfo.userId}
-              />
+              {this.props.userInfo.username !== this.props.match.params.username
+                ? <Payment
+                    refreshUserData={this.props.refreshUserData}
+                    payeeUsername={this.state.profileInfo.username}
+                    payerId={this.props.userInfo.userId}
+                  />
+                :
+                  null
+              }
               <FeedContainer       
                 userId={this.props.userInfo.userId}
                 loadMoreFeed={this.loadMoreFeed.bind(this)}
