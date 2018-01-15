@@ -182,10 +182,11 @@ const FEED_DEFAULT_LENGTH = 5;
 
 app.get('/feed/global', (req, res) => {
   let limit = FEED_DEFAULT_LENGTH;
+  let userId = req.query && parseInt(req.query.userId);
   let beforeId = parseInt(req.query['beforeId']) || null; 
   let sinceId = parseInt(req.query['sinceId']) || null;
 
-  db.globalFeed(limit + 1, beforeId, sinceId)
+  db.globalFeed(limit + 1, beforeId, sinceId, userId)
     .then((results) => {
       let unescapedResults = JSON.parse(_.unescape(JSON.stringify(results)));
       res.status(200).json(helpers.buildFeedObject(unescapedResults, limit));
@@ -243,7 +244,6 @@ app.get('/feed/profile', (req, res) => {
 app.get('/feed/relational', (req, res) => {
   let profileUsername = req.query.profileUsername;
   let loggedInUserId = req.query && parseInt(req.query.userId);
-  console.log(profileUsername, loggedInUserId);
   profileUsername = profileUsername && _.escape(profileUsername.replace(/"/g,"'"));
 
   let limit = FEED_DEFAULT_LENGTH;

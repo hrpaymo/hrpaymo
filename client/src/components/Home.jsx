@@ -28,7 +28,7 @@ class Home extends React.Component {
         feedType: 'globalFeed',
         data: this.props.globalFeed
       }
-    ]
+    ];
 
     return (
       <div>

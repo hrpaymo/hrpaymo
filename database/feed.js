@@ -103,7 +103,7 @@ let mustIncludeUserByUsername = function(queryBuilder, username) {
 
 module.exports = {
   // Return most recent transactions, with all public fields.
-  globalFeed: function(limit, beforeId, sinceId) {
+  globalFeed: function(limit, beforeId, sinceId, userId) {
     return pg('users_transactions')
       .select(...FEED_FIELDS)
       .modify(baseTransactionConnections)
@@ -111,7 +111,7 @@ module.exports = {
       .modify(sinceIdQuery, sinceId)
       .limit(limit)
       .then(rows => {
-        return rows.map(formatOutput);
+        return rows.map((item) => formatOutput(item, userId));
      })
   },
 

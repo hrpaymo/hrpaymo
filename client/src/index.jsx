@@ -51,14 +51,14 @@ class App extends React.Component {
   loadUserData(userId) {
     this.getUserInfo(userId)
     this.getBalance(userId);
-    this.getFeed('globalFeed');
+    this.getFeed('globalFeed', userId);
     this.getFeed('userFeed', userId);
     this.getUsernames(userId);
   }
 
   refreshUserData(userId) {
     this.getBalance(userId);
-    this.getFeed('globalFeed', this.state.globalFeed.newestTransactionId || null);
+    this.getFeed('globalFeed', userId, this.state.globalFeed.newestTransactionId || null);
     this.getFeed('userFeed', userId, this.state.userFeed.newestTransactionId || null);
     this.getUsernames(userId)
   }
@@ -79,7 +79,8 @@ class App extends React.Component {
     let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
     let params = {
-      sinceId: sinceId
+      sinceId: sinceId,
+      userId: userId
     }
 
     axios(endpoint, {params: params})
@@ -176,14 +177,6 @@ class App extends React.Component {
     })
   }
 
-  requireAuth(nextState, replace) {
-    if (!this.state.isLoggedIn) {
-      replace({
-        pathname: '/login'
-      })
-    }
-  }
-
   render () {
     const HomeWithProps = (props) => {
       return (
@@ -208,8 +201,34 @@ class App extends React.Component {
               />
           }
         </div>
-      )
-    }
+      );
+    };
+
+    const ProfileWithProps = (routeProps) => {
+      return (
+        <div>
+          {!this.state.isLoggedIn 
+            ? <LoggedOutHome 
+                isLoggedIn={this.state.isLoggedIn} 
+                logUserOut={this.logUserOut.bind(this)}
+                {...routeProps}
+              />
+            : <Profile 
+                key={routeProps.location.pathname}
+                getFeed={this.getFeed.bind(this)}
+                refreshUserData={this.refreshUserData.bind(this)}
+                isLoggedIn={this.state.isLoggedIn} 
+                profileFeed={this.state.profileFeed} 
+                loadMoreFeed={this.loadMoreFeed.bind(this)}
+                relationalFeed={this.state.relationalFeed}
+                logUserOut={this.logUserOut.bind(this)}
+                userInfo={this.state.userInfo}
+                {...routeProps} 
+              />
+          }
+        </div>
+      );
+    };
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -224,26 +243,9 @@ class App extends React.Component {
               render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
             />
             <Route 
-              path="/view?=(:id)" 
-              render={HomeWithProps}
-              onEnter={ this.requireAuth }
-            />
-            <Route 
               path="/:username"
-              render={routeProps => 
-                <Profile {...routeProps} 
-                  key={routeProps.location.pathname}
-                  getFeed={this.getFeed.bind(this)}
-                  refreshUserData={this.refreshUserData.bind(this)}
-                  isLoggedIn={this.state.isLoggedIn} 
-                  profileFeed={this.state.profileFeed} 
-                  loadMoreFeed={this.loadMoreFeed.bind(this)}
-                  relationalFeed={this.state.relationalFeed}
-                  logUserOut={this.logUserOut.bind(this)}
-                  userInfo={this.state.userInfo}
-                />
-
-              }
+              onEnter={ this.requireAuth }
+              render={ProfileWithProps}
             />
             <Route 
               path="/" 
