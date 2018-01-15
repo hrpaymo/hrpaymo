@@ -1,4 +1,5 @@
 const pg = require('./index.js').pg;
+const moment = require('moment');
 
 const formatOutput = (item, userId) => {
 
@@ -9,11 +10,13 @@ const formatOutput = (item, userId) => {
     amount = '-' + amount;
   }
 
+  let formattedDate = moment(item.created_at).format('MMMM Do YYYY, h:mm a');
+
   return ({
     transactionId: item.txn_id,
     amount: amount,
     note: item.note,
-    timestamp: item.created_at,
+    timestamp: formattedDate,
     payer: {
       userId: item.payer_id,
       username: item.payer_username,
