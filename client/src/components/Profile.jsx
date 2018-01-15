@@ -5,7 +5,7 @@ import FeedContainer from './FeedContainer.jsx';
 import ProfileHeader from './ProfileHeader.jsx';
 import axios from 'axios';
 
-class Home extends React.Component {
+class Profile extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -50,4 +50,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Profile;
