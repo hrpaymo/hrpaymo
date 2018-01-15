@@ -10,7 +10,7 @@ const style = {
   form: {
   },
   input: {
-    background: '#f8f8f8',
+    background: '#fff',
     flex: 'auto',
   },
   button: {
@@ -148,15 +148,13 @@ class Payment extends React.Component {
           </div>
         </div>
 
-        <div className="pay-button-container"> 
-          <button className='btn' onClick={this.payUser.bind(this)}>Pay</button>
-          {this.state.paymentFail
-            ? <label className='error-text'>
-                Error in payment processing
-              </label>
-            : null
-          }
-        </div>
+        <button className='btn' onClick={this.payUser.bind(this)}>Pay</button>
+        {this.state.paymentFail
+          ? <label className='error-text'>
+              Error in payment processing
+            </label>
+          : null
+        }
       </Paper>
     );
   }
