@@ -5,6 +5,11 @@ import FeedContainer from './FeedContainer.jsx';
 import ProfileHeader from './ProfileHeader.jsx';
 import axios from 'axios';
 
+const FEED_ENDPOINTS = {
+  'profileFeed': '/feed/profile',
+  'relationalFeed': '/feed/relational'
+}
+
 class Profile extends React.Component {
   constructor (props) {
     super(props);
@@ -18,10 +23,10 @@ class Profile extends React.Component {
 
   componentDidMount() {
     let profileUsername = this.props.match.params.username;
-    let loggedInUserId = this.props.userInfo.userId;
+    let userId = this.props.userInfo.userId;
     this.loadProfileData(profileUsername);
-    this.getProfileFeed(profileUsername, loggedInUserId, null);
-    this.getRelationalFeed(profileUsername, loggedInUserId, null);
+    this.getFeed('profileFeed', userId, null, profileUsername);
+    this.getFeed('relationalFeed', userId, null, profileUsername);
   }
 
   prependNewTransactions(feedType, transactionSummary) {
@@ -70,39 +75,111 @@ class Profile extends React.Component {
       });
   }
 
-  getProfileFeed(username, userId, sinceId = null) {
+  getFeed(feedType, userId = null, sinceId = null, profileUsername) {
+    let endpoint = FEED_ENDPOINTS[feedType];
+    if (feedType === 'userFeed') {
+      endpoint = `${endpoint}/${userId}`;
+    }
     let params = {
       sinceId: sinceId,
       userId: userId,
-      profileUsername: username
+      profileUsername: profileUsername
     }
 
-    axios('/feed/global', {params: params})
+    axios(endpoint, {params: params})
       .then((response) => {
-        this.prependNewTransactions('profileFeed', response.data);
+        this.prependNewTransactions(feedType, response.data);
       })
       .catch((err) => {
         console.error(err);
       });
   }
 
-  getRelationalFeed(username, userId, sinceId = null) {
-    let params = {
-      sinceId: sinceId,
-      userId: userId,
-      profileUsername: username
+  mergeFeeds(newerFeed, olderFeed) {
+    // If there is already existing data in the feed, combine them, prepending the 
+    // more recent transactions to the top
+    let combinedItems = (newerFeed.items || []).concat(olderFeed.items || []);
+
+    // Update feed meta-data to accurately reflect combined data
+    let combinedFeedObject = {
+      items: combinedItems,
+      count: (newerFeed.count || 0) + (olderFeed.count || 0),
+      nextPageTransactionId: olderFeed.nextPageTransactionId || null,
+      newestTransactionId: newerFeed.newestTransactionId || null
     }
 
-    axios('/feed/global', {params: params})
+    return combinedFeedObject;
+  }
+
+  prependNewTransactions(feedType, transactionSummary) {
+    // If no results return, do nothing
+    if (!transactionSummary || transactionSummary.count === 0) {
+      return;
+    }
+
+    // If feed was empty, set the returned transactions as the feed
+    let isFeedEmpty = !this.state[feedType].count || this.state[feedType].count === 0;
+
+    let newFeedObject = isFeedEmpty
+      ? transactionSummary
+      : this.mergeFeeds(transactionSummary, this.state[feedType]);
+
+    this.setState({
+      [feedType]: newFeedObject
+    })
+  }
+
+  loadMoreFeed(feedType, userId) {
+    let endpoint = FEED_ENDPOINTS[feedType];
+
+    if (feedType === 'userFeed') {
+      endpoint = `${endpoint}/${userId}`;
+    } 
+
+    // Send along the next valid ID you'd like returned back
+    // from the database
+    let params = {
+      beforeId: this.state[feedType].nextPageTransactionId
+    }
+
+    axios(endpoint, {params: params})
       .then((response) => {
-        this.prependNewTransactions('relationalFeed', response.data);
+
+        // Confirm there additional items to load
+        if (response.data && response.data.count > 0) {
+          let combinedItems = this.mergeFeeds(this.state[feedType], response.data);
+
+          this.setState({
+            [feedType]: combinedItems
+          })
+        }
       })
       .catch((err) => {
         console.error(err);
-      });
+      }); 
+  }
+
+  extractView() {
+    let search = this.props.location && this.props.location.search;
+    return search && search.slice(search.indexOf('=') + 1);
   }
 
   render() {
+    let orderedFeeds = [
+      {
+        displayLabel: `${this.state.profileInfo.firstName}'s Feed`,
+        urlParam: 'all',
+        feedType: 'profileFeed',
+        data: this.state.profileFeed
+      },
+      {
+        displayLabel: `Between You & ${this.state.profileInfo.firstName}`,
+        urlParam: 'mutual',
+        feedType: 'relationalFeed',
+        data: this.state.relationalFeed
+      }
+    ];
+
     return (
       <div>
         <Navbar 
@@ -116,11 +193,10 @@ class Profile extends React.Component {
         }
         <FeedContainer 
           userId={this.props.userInfo.userId}
-          loadMoreFeed={null}
+          loadMoreFeed={this.loadMoreFeed.bind(this)}
+          feeds={orderedFeeds}
           base={this.props.match.params.username}
-          view={'mine'}
-          userFeed={this.state.profileFeed}
-          globalFeed={this.state.relationalFeed} 
+          view={this.extractView()}
           />
       </div>
     );

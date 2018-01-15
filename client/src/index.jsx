@@ -49,15 +49,15 @@ class App extends React.Component {
   loadUserData(userId) {
     this.getUserInfo(userId)
     this.getBalance(userId);
-    this.getGlobalFeed();
-    this.getUserFeed(userId);
+    this.getFeed('globalFeed');
+    this.getFeed('userFeed', userId);
     this.getUsernames(userId);
   }
 
   refreshUserData(userId) {
     this.getBalance(userId);
-    this.getGlobalFeed(this.state.globalFeed.newestTransactionId || null);
-    this.getUserFeed(userId, this.state.userFeed.newestTransactionId || null);
+    this.getFeed('globalFeed', this.state.globalFeed.newestTransactionId || null);
+    this.getFeed('userFeed', userId, this.state.userFeed.newestTransactionId || null);
     this.getUsernames(userId)
   }
 
@@ -73,11 +73,11 @@ class App extends React.Component {
     })
   }
 
-  getUserFeed(userId, sinceId = null) {
-    let feedType = 'userFeed';
+  getFeed(feedType, userId = null, sinceId) {
     let endpoint = FEED_ENDPOINTS[feedType];
-    endpoint = `${endpoint}/${userId}`
-
+    if (feedType === 'userFeed') {
+      endpoint = `${endpoint}/${userId}`;
+    }
     let params = {
       sinceId: sinceId
     }
@@ -91,51 +91,38 @@ class App extends React.Component {
       });
   }
 
-  getGlobalFeed(sinceId = null) {
-    let feedType = 'globalFeed';
-    let endpoint = FEED_ENDPOINTS[feedType];
+  mergeFeeds(newerFeed, olderFeed) {
+    // If there is already existing data in the feed, combine them, prepending the 
+    // more recent transactions to the top
+    let combinedItems = (newerFeed.items || []).concat(olderFeed.items || []);
 
-    let params = {
-      sinceId: sinceId
+    // Update feed meta-data to accurately reflect combined data
+    let combinedFeedObject = {
+      items: combinedItems,
+      count: (newerFeed.count || 0) + (olderFeed.count || 0),
+      nextPageTransactionId: olderFeed.nextPageTransactionId || null,
+      newestTransactionId: newerFeed.newestTransactionId || null
     }
 
-    axios(endpoint, {params: params})
-      .then((response) => {
-        this.prependNewTransactions(feedType, response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    return combinedFeedObject;
   }
 
   prependNewTransactions(feedType, transactionSummary) {
+    // If no results return, do nothing
     if (!transactionSummary || transactionSummary.count === 0) {
       return;
     }
 
     // If feed was empty, set the returned transactions as the feed
-    if (!this.state[feedType].count || this.state[feedType].count === 0) {
-      this.setState({
-        [feedType]: transactionSummary
-      });  
-    } else {
-      // If there is already existing data in the feed, combine them, prepending the 
-      // more recent transactions to the top
-      let combinedItems = transactionSummary.items.concat(this.state[feedType].items);
+    let isFeedEmpty = !this.state[feedType].count || this.state[feedType].count === 0;
 
-      // Update feed meta-data to accurately reflect combined data
-      let newFeedState = {
-        items: combinedItems,
-        count: (this.state[feedType].count || 0) + transactionSummary.count,
-        nextPageTransactionId: this.state[feedType].nextPageTransactionId,
-        newestTransactionId: transactionSummary.newestTransactionId
-      }
+    let newFeedObject = isFeedEmpty
+      ? transactionSummary
+      : this.mergeFeeds(transactionSummary, this.state[feedType]);
 
-      // Set state
-      this.setState({
-        [feedType]: newFeedState
-      })
-    }
+    this.setState({
+      [feedType]: newFeedObject
+    })
   }
 
   loadMoreFeed(feedType, userId) {
@@ -156,20 +143,10 @@ class App extends React.Component {
 
         // Confirm there additional items to load
         if (response.data && response.data.count > 0) {
-
-          // combine the items, appending the 
-          // returned transactions to the bottom
-          let combinedItems = this.state[feedType].items.concat(response.data.items);
-
-          let newFeedState = {
-            items: combinedItems,
-            count: this.state[feedType].count + response.data.count,
-            nextPageTransactionId: response.data.nextPageTransactionId,
-            newestTransactionId: this.state[feedType].newestTransactionId
-          }
+          let combinedItems = this.mergeFeeds(this.state[feedType], response.data);
 
           this.setState({
-            [feedType]: newFeedState
+            [feedType]: combinedItems
           })
         }
       })
@@ -279,7 +256,9 @@ class App extends React.Component {
                   isLoggedIn={this.state.isLoggedIn} 
                   logUserOut={this.logUserOut.bind(this)}
                   userInfo={this.state.userInfo} />
-              } />
+              }
+              onEnter={ this.requireAuth }
+            />
             <Route 
               path="/" 
               render={HomeWithProps} 

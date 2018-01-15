@@ -160,6 +160,7 @@ app.get('/publicprofile', (req, res) => {
       if (profile) {
         var userInfo = {
           userId: profile.id,
+          firstName: _.unescape(profile.first_name),
           username: _.unescape(profile.username),
           fullName: _.unescape(profile.first_name + ' ' + profile.last_name),
           avatarUrl: _.unescape(profile.avatar_url)
