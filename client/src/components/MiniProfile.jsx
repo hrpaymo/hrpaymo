@@ -9,11 +9,17 @@ const style = {
     position: 'relative',
     width: '100%',
     display: 'inline-block',
+    fontWeight: 700,
+    fontSize: '18px',
   },
   title: {
     fontWeight: 700,
     fontSize: '20px',
     margin: '10px'
+  },
+  balance: {
+    marginLeft: '125px',
+    fontSize: '18px',
   }
 };
 
@@ -44,6 +50,10 @@ class MiniProfile extends React.Component {
               />
             }
             />
+          <Divider />
+          <CardText style={style.balance}>
+            <strong>${this.props.balance}</strong>
+          </CardText>
         </Card>
       </Paper>
     );
