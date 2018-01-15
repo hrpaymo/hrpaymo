@@ -36,22 +36,24 @@ class Home extends React.Component {
           isLoggedIn={this.props.isLoggedIn} 
           logUserOut={this.props.logUserOut}
         />
-        <MiniProfile 
-          balance={this.props.balance}
-          userInfo={this.props.userInfo}
-        />
-        <div className="pay-feed-container">
-          <Payment 
-            payerId={this.props.userInfo.userId}
-            refreshUserData={this.props.refreshUserData}
-          />
-          <FeedContainer 
-            userId={this.props.userInfo.userId}
-            base='/'
-            feeds={orderedFeeds}
-            loadMoreFeed={this.props.loadMoreFeed}
-            view={this.extractView()}
-          />
+        <div className="home">
+          <div className="home-leftColumn pay-feed-container">
+            <Payment 
+              payerId={this.props.userInfo.userId}
+              refreshUserData={this.props.refreshUserData} />
+            <FeedContainer 
+              userId={this.props.userInfo.userId}
+              base='/'
+              feeds={orderedFeeds}
+              loadMoreFeed={this.props.loadMoreFeed}
+              view={this.extractView()}
+            />
+          </div>
+          <div className="home-rightColumn">
+            <MiniProfile 
+              balance={this.props.balance}
+              userInfo={this.props.userInfo}/>
+          </div>
         </div>
       </div>
     );

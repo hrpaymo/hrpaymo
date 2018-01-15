@@ -13,7 +13,7 @@ const FeedTransaction = (props) => {
         leftAvatar={<Avatar src={props.transaction.payer.avatarUrl || '/images/no-image.gif'} />}
         primaryText={
           <span>
-            <Link to={`/${props.transaction.payer.username}`}><span className='feed-item-user'>{props.transaction.payer.fullName}</span></Link> paid <Link to={`/${props.transaction.payee.username}`}><span className='feed-item-user'>{props.transaction.payee.fullName}</span></Link>
+            <span className='feed-item-user'><Link to={`/${props.transaction.payer.username}`}>{props.transaction.payer.fullName}</Link></span> paid <span className='feed-item-user'><Link to={`/${props.transaction.payee.username}`}>{props.transaction.payee.fullName}</Link></span>
             <p className='feed-item-note'>{props.transaction.note}</p>
           </span>
         }

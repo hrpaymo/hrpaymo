@@ -8,10 +8,9 @@ const card_style = {
   position: 'relative',
   height: 150,
   width: 250,
-  margin: 10,
-  textAlign: 'center',
-  display: 'inline-block',
-  float: 'right',
+  margin: 20,
+  textAlign: 'left',
+  display: 'inline-block'
 };
 
 class MiniProfile extends React.Component {
@@ -21,7 +20,6 @@ class MiniProfile extends React.Component {
 
   render() {
     return (
-     
         <Card style={card_style}>
           <CardHeader
             title={this.props.userInfo.displayName}
@@ -30,7 +28,7 @@ class MiniProfile extends React.Component {
           />
           <Divider />
           <CardText>
-            Current Balance: ${this.props.balance}
+            Current Balance: <strong>${this.props.balance}</strong>
           </CardText>
         </Card>
     );
