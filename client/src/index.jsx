@@ -25,11 +25,6 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const FEED_ENDPOINTS = {
-  'globalFeed': '/feed/global',
-  'userFeed': '/feed/user'
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props);

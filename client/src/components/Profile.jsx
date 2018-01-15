@@ -25,13 +25,6 @@ class Profile extends React.Component {
     this.getProfileFeeds('relationalFeed', userId, null, profileUsername);
   }
 
-  // componentWillReceiveProps(nextprops) {
-  //   if (this.props.match.url !== nextprops.match.url) {
-  //     console.log('new page')
-  //     router.replace(location);
-  //   }
-  // }
-
   getProfileFeeds(feedType, userId = null, sinceId, profileUsername) {
     let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
