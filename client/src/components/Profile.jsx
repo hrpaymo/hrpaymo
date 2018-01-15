@@ -25,61 +25,19 @@ class Profile extends React.Component {
     let profileUsername = this.props.match.params.username;
     let userId = this.props.userInfo.userId;
     this.loadProfileData(profileUsername);
-    this.getFeed('profileFeed', userId, null, profileUsername);
-    this.getFeed('relationalFeed', userId, null, profileUsername);
+    this.getProfileFeeds('profileFeed', userId, null, profileUsername);
+   // this.getFeed('relationalFeed', userId, null, profileUsername);
   }
 
-  prependNewTransactions(feedType, transactionSummary) {
-    if (!transactionSummary || transactionSummary.count === 0) {
-      return;
-    }
-
-    // If there is no existing data in the feed, set the transaction summary
-    if (!this.state[feedType].count || this.state[feedType].count === 0) {
-        this.setState({
-          [feedType]: transactionSummary
-        });  
-    } else {
-      // If there is already existing data in the feed, combine them to prepend the new 
-      // transactions to the top
-      let combinedItems = transactionSummary.items.concat(this.state[feedType].items);
-
-      // Might be a better design to make a deep copy of state and then 
-      // manipulate. See the module "immutability-helper"
-
-      let newFeedState = {
-        items: combinedItems,
-        count: (this.state[feedType].count || 0) + transactionSummary.count,
-        nextPageTransactionId: this.state[feedType].nextPageTransactionId,
-        newestTransactionId: transactionSummary.newestTransactionId
-      }
-
-      this.setState({
-        [feedType]: newFeedState
-      })
+  componentWillReceiveProps(nextprops) {
+    if (this.props.match.url !== nextprops.match.url) {
+      console.log('new page')
+      router.replace(location);
     }
   }
 
-  loadProfileData(username) {
-    axios('/publicprofile', {params: {username: username}})
-      .then((response) => {
-        this.setState({
-          profileInfo: response.data
-        });
-      })
-      .catch((err) =>{
-        this.setState({
-          unknownUser: true
-        })
-        console.error(err);
-      });
-  }
-
-  getFeed(feedType, userId = null, sinceId = null, profileUsername) {
+  getProfileFeeds(feedType, userId = null, sinceId, profileUsername) {
     let endpoint = FEED_ENDPOINTS[feedType];
-    if (feedType === 'userFeed') {
-      endpoint = `${endpoint}/${userId}`;
-    }
     let params = {
       sinceId: sinceId,
       userId: userId,
@@ -94,6 +52,7 @@ class Profile extends React.Component {
         console.error(err);
       });
   }
+
 
   mergeFeeds(newerFeed, olderFeed) {
     // If there is already existing data in the feed, combine them, prepending the 
@@ -139,7 +98,9 @@ class Profile extends React.Component {
     // Send along the next valid ID you'd like returned back
     // from the database
     let params = {
-      beforeId: this.state[feedType].nextPageTransactionId
+      beforeId: this.state[feedType].nextPageTransactionId,
+      userId: userId,
+      profileUsername: this.props.match.params.username
     }
 
     axios(endpoint, {params: params})
@@ -157,6 +118,21 @@ class Profile extends React.Component {
       .catch((err) => {
         console.error(err);
       }); 
+  }
+
+  loadProfileData(username) {
+    axios('/publicprofile', {params: {username: username}})
+      .then((response) => {
+        this.setState({
+          profileInfo: response.data
+        });
+      })
+      .catch((err) =>{
+        this.setState({
+          unknownUser: true
+        })
+        console.error(err);
+      });
   }
 
   extractView() {
@@ -179,6 +155,12 @@ class Profile extends React.Component {
         data: this.state.relationalFeed
       }
     ];
+    
+    // For a user's own profile page, only show a single feed 
+    if (this.props.userInfo.username === this.props.match.params.username) {
+      orderedFeeds = orderedFeeds.slice(0,1);
+      orderedFeeds[0].displayLabel = 'Your Feed';
+    }
 
     return (
       <div>
@@ -188,16 +170,18 @@ class Profile extends React.Component {
         {this.state.unknownUser 
           ? <div>User does not exist</div>
           : <span>
-              <ProfileHeader profileInfo={this.state.profileInfo}/>
+              <ProfileHeader 
+                profileInfo={this.state.profileInfo}
+                />
+              <FeedContainer       
+                userId={this.props.userInfo.userId}
+                loadMoreFeed={this.loadMoreFeed.bind(this)}
+                feeds={orderedFeeds}
+                base={this.props.match.params.username}
+                view={this.extractView()}
+                />
             </span>
         }
-        <FeedContainer 
-          userId={this.props.userInfo.userId}
-          loadMoreFeed={this.loadMoreFeed.bind(this)}
-          feeds={orderedFeeds}
-          base={this.props.match.params.username}
-          view={this.extractView()}
-          />
       </div>
     );
   }
