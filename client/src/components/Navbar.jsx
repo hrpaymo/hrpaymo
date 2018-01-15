@@ -62,19 +62,3 @@ class Navbar extends React.Component {
 }
 
 export default withRouter(Navbar);
-      // <div className='navbar'>
-      //     <div className='navbar-logo left'>
-      //       <Link to="/"><span>Hello Paymo</span></Link>
-      //     </div>
-      //     <div className='navbar-logout'>
-      //       {this.props.isLoggedIn && 
-      //         <FlatButton 
-      //           style={style.log_out}
-      //           hoverColor='#03A9F4'
-      //           onClick={this.logOutAndRedirect.bind(this)} 
-      //           label="Log Out" 
-      //         />
-      //       }
-      //     </div>
-
-      // </div>
