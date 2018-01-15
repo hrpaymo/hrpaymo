@@ -1,14 +1,21 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f2f2f5;
+  padding: 0;
+}
+
+.body-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .navbar {
   background: #3D95CE;
   color: white;
-  display: flex;
-  justify-content: space-between;
+  margin: 0;
   margin-bottom: 10px;
+  padding: 0 10px;
   align-items: center;
 }
 
@@ -36,8 +43,8 @@ body {
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
+  display: block;
 }
 
 .pay-feed-container {
@@ -50,7 +57,7 @@ body {
   border: 1px solid #ccc;
   width: 100%;
   padding: 20;
-  position: 'relative';
+  position: relative;
   margin: 20px;
 }
 
@@ -90,8 +97,6 @@ body {
 }
 
 .feed-item-container {
-  display: flex;
-  flex-direction: row;
   border-bottom: 1px solid #d3d3d3;
   padding: 10px;
 }
@@ -133,10 +138,17 @@ body {
 }
 
 .splash {
-  display: flex;
-  flex-direction: column;
+  margin: 0 auto;
+  justify-content: center;
 }
-.profile-avatar {
+/*.splash span, .splash button{
+    margin: 10px;
+    position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) ;
+}
+*/.profile-avatar {
   width: 50px;
   height: 50px;
   float: left;
@@ -169,20 +181,6 @@ body {
 }
 .form-box {
   padding-bottom: 20px;
-}
-.bottom {
-}
-.top {
-  width: 45%;
-}
-.left {
-  float: 'left';
-}
-.right {
-  float: 'right';
-}
-.signup-form {
-  justify-content: 'center';
 }
 .btn {
   background: #3D95CE;

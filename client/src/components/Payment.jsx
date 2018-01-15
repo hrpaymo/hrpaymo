@@ -8,10 +8,10 @@ import AutoComplete from 'material-ui/AutoComplete';
 
 const style = {
   form: {
-    display: 'block',
   },
   input: {
     background: '#f8f8f8',
+    flex: 'auto',
   },
   button: {
     label: {
@@ -92,7 +92,7 @@ class Payment extends React.Component {
     return (
       <Paper className='payment-container' style={style.form}>
         <div className='payment-item-container'>
-          <div className="form-box top left">
+          <div className="form-box">
             <AutoComplete
               hintText="Enter a username"
               floatingLabelText="Who do you want to pay?"
@@ -106,7 +106,7 @@ class Payment extends React.Component {
             />
             <br />
           </div>
-          <div className="form-box top right">
+          <div className="form-box">
             <TextField
               style={style.input}
               name='amount'
@@ -117,7 +117,7 @@ class Payment extends React.Component {
             />
             <br />
           </div>
-          <div className="form-box bottom">
+          <div className="form-box">
             <TextField
               style={style.input}
               name='note'
