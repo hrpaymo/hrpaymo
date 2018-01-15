@@ -47,12 +47,41 @@ body {
   display: block;
 }
 
+
 .pay-feed-container {
   display: block;
   width: 60%;
   justify-content: center;
   margin: 20px;
 }
+
+
+/* STYLING FOR PAYMENT COMPONENT */
+
+.payment-container {
+  width: 100%;
+  padding: 20px;
+  position: 'relative';
+  margin: 20px;
+}
+
+.payment-item-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: 'space-evenly';
+}
+
+.payment-amount, .payment-username {
+  flex-basis: 50%;
+}
+
+.payment-note {
+  flex-basis: 100%;
+}
+
+/* STYLING FOR FEED COMPONENT */
+
+
 .feed-container {
   border: 1px solid #ccc;
   width: 100%;
@@ -168,17 +197,7 @@ body {
   align-content: center;
 }
 
-.payment-container {
-  width: 100%;
-  padding: 20px;
-  position: 'relative';
-  margin: 20px;
 
-}
-.payment-item-container {
-  display: 'block';
-  justify-content: 'space-evenly';
-}
 .form-box {
   padding-bottom: 20px;
 }

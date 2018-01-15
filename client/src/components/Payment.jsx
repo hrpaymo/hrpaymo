@@ -105,11 +105,11 @@ class Payment extends React.Component {
     return (
       <Paper className='payment-container' style={style.form}>
         <div className='payment-item-container'>
-          <div className="form-box">
+          <div className="form-box payment-username">
             {!this.props.payeeUsername
             ? <AutoComplete
                 hintText="Enter a username"
-                floatingLabelText="Who do you want to pay?"
+                floatingLabelText="To:"
                 style={style.input}
                 name='payeeUsername'
                 filter={AutoComplete.caseInsensitiveFilter}
@@ -122,25 +122,25 @@ class Payment extends React.Component {
             }
           <br />
           </div>
-          <div className="form-box">
+          <div className="form-box payment-amount">
             <TextField
               style={style.input}
               name='amount'
               value={this.state.amount}
               onChange = {this.handleInputChanges.bind(this)}
               hintText="Enter an amount"
-              floatingLabelText="How much to give away?"
+              floatingLabelText="$"
             />
           <br />
           </div>
-          <div className="form-box">
+          <div className="form-box payment-note">
             <TextField
               style={style.input}
               name='note'
               value={this.state.note}
               onChange = {this.handleInputChanges.bind(this)}
-              hintText="Leave a comment"
-              floatingLabelText="Got something to say?"
+              hintText="for"
+              floatingLabelText="Leave a comment"
               fullWidth={true}
               multiLine={true}
             />
