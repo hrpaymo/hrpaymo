@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: #f2f2f5;
 }
 
@@ -14,17 +14,20 @@ body {
 
 .navbar-logo a {
   text-decoration: none;
-  color: white;
+  cursor: pointer;
+  color: #fff;
 }
 
 .navbar-logout {
   text-decoration-style: underline;
   cursor: pointer;
 }
+
 .navbar-logo {
-  text-decoration-style: bold;
-  cursor: pointer;
-  color: #fff;
+  font-weight: 700;
+  font-family: Verdana;
+  font-size: 24px;
+  letter-spacing: 1px;
 }
 
 .error-text{
@@ -120,7 +123,7 @@ body {
   padding: 10px;
   background-color: #f8f8f8;
   border-top: 1px solid #ccc;
-  justify-content: flex-end;
+  justify-content: center;
 
 }
 
@@ -195,12 +198,14 @@ body {
   -webkit-box-shadow: .5px 1px 0px #666666;
   -moz-box-shadow: .5px 1px 0px #666666;
   box-shadow: .5px 1px 0px #666666;
-  font-family: 'Roboto', sans-serif;
   color: #ffffff;
-  font-size: 20px;
-  padding: 5px 15px 5px 15px;
+  font-size: 15px;
+  font-family: Helvetica;
+  letter-spacing: .5px;
+  padding: 2px 10px 4px 10px;
   border: solid #1f628d 1px;
   text-decoration: none;
+  letter-spacing: .5px;
 }
 
 .btn:hover {

@@ -12,6 +12,7 @@ const style = {
   },
   log_out: {
     color: '#fff',
+    textDecoration: 'underline',
   }
 };
 
