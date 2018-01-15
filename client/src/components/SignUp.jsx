@@ -181,6 +181,7 @@ class SignUp extends React.Component {
           <span>Already a member?</span>
           <br/>
           <Link to="/login"><button className='btn'>Sign in</button></Link>
+          </ValidatorForm>
         </div>
       </div>
     );
