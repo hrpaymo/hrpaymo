@@ -104,24 +104,23 @@ class Payment extends React.Component {
   render() {
     return (
       <Paper className='payment-container' style={style.form}>
-        <div className='payment-item-container'>
-          <div className="form-box payment-username">
-            {!this.props.payeeUsername
-            ? <AutoComplete
-                hintText="Enter a username"
-                floatingLabelText="To:"
-                style={style.input}
-                name='payeeUsername'
-                filter={AutoComplete.caseInsensitiveFilter}
-                dataSource={this.state.usernames ? this.state.usernames : []}
-                maxSearchResults={7}
-                searchText={this.state.payeeUsername}
-                onUpdateInput = {this.onDropdownInput.bind(this)}
-              />
-            : null
+        <div className='payment-item-container'>         
+            {!this.props.payeeUsername && 
+              <div className="form-box payment-username">
+                <AutoComplete
+                  hintText="Enter a username"
+                  floatingLabelText="To:"
+                  style={style.input}
+                  name='payeeUsername'
+                  filter={AutoComplete.caseInsensitiveFilter}
+                  dataSource={this.state.usernames ? this.state.usernames : []}
+                  maxSearchResults={7}
+                  searchText={this.state.payeeUsername}
+                  onUpdateInput = {this.onDropdownInput.bind(this)}
+                />
+              </div>
             }
           <br />
-          </div>
           <div className="form-box payment-amount">
             <TextField
               style={style.input}
