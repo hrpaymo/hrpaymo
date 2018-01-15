@@ -3,14 +3,19 @@ import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import moment from 'moment';
 
-const card_style = {
-  position: 'relative',
-  height: 150,
-  width: 250,
-  margin: 10,
-  textAlign: 'center',
-  display: 'inline-block',
+const style = {
+  card: {
+    position: 'relative',
+    width: '100%',
+    display: 'inline-block',
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: '20px',
+    margin: '10px'
+  }
 };
 
 class ProfileHeader extends React.Component {
@@ -20,15 +25,45 @@ class ProfileHeader extends React.Component {
 
   render() {
     return (
-        <Card style={card_style}>
+      <Paper className='feed-container'>
+        <Card>
           <CardHeader
-            title={this.props.profileInfo.fullName}
-            subtitle={this.props.profileInfo.username}
-            avatar={this.props.profileInfo.avatarUrl || '/images/no-image.gif'}
-          />
+            title={
+              <div>
+                <span style={style.title}>{this.props.profileInfo.fullName}</span>
+                <span> ({this.props.profileInfo.username})</span>
+              </div>
+            }
+            subtitle={
+              <div className='member-tag'>
+                Member since : {moment(this.props.profileInfo.createdAt).format('MMMM Do YYYY')}
+              </div>
+            }
+            avatar={
+              <Avatar 
+                size={100} 
+                src={this.props.profileInfo.avatarUrl || '/images/no-image.gif'}
+              />
+            }
+            />
         </Card>
+      </Paper>
     );
   }
 }
 
 export default ProfileHeader;
+
+
+      // <div className='feed-container'>
+      // <Paper>
+      //   <Avatar 
+      //     size={100} 
+      //     src={this.props.profileInfo.avatarUrl || '/images/no-image.gif'}
+      //   />
+      //   <div>
+      //     {this.props.profileInfo.fullName}
+      //     {this.props.profileInfo.username}
+      //   </div>
+      // </Paper>
+      // </div>

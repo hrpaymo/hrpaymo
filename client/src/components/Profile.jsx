@@ -127,7 +127,7 @@ class Profile extends React.Component {
     
     // For a user's own profile page, only show a single feed 
     if (this.props.userInfo.username === this.props.match.params.username) {
-      orderedFeeds = orderedFeeds.slice(0,1);
+      orderedFeeds = orderedFeeds.slice(0, 1);
       orderedFeeds[0].displayLabel = 'Your Feed';
     }
 
