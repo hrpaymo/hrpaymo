@@ -53,17 +53,3 @@ class ProfileHeader extends React.Component {
 }
 
 export default ProfileHeader;
-
-
-      // <div className='feed-container'>
-      // <Paper>
-      //   <Avatar 
-      //     size={100} 
-      //     src={this.props.profileInfo.avatarUrl || '/images/no-image.gif'}
-      //   />
-      //   <div>
-      //     {this.props.profileInfo.fullName}
-      //     {this.props.profileInfo.username}
-      //   </div>
-      // </Paper>
-      // </div>
