@@ -141,14 +141,14 @@ body {
   margin: 0 auto;
   justify-content: center;
 }
-/*.splash span, .splash button{
+.splash span, .splash button{
     margin: 10px;
     position: absolute;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%) ;
 }
-*/.profile-avatar {
+.profile-avatar {
   width: 50px;
   height: 50px;
   float: left;
