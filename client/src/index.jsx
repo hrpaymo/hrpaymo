@@ -139,8 +139,12 @@ class App extends React.Component {
   }
 
   logUserIn(userId) {
+    // set the userId in the userInfo object as soon as the user logs in
+    var obj = this.state.userInfo;
+    obj.userId = userId;
     this.setState({
-      isLoggedIn: true
+      isLoggedIn: true,
+      userInfo: obj
     })
     this.loadUserData(userId);
   }

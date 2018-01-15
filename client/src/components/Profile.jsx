@@ -130,7 +130,7 @@ class Profile extends React.Component {
       orderedFeeds = orderedFeeds.slice(0, 1);
       orderedFeeds[0].displayLabel = 'Your Feed';
     }
-
+    
     return (
       <div>
         <Navbar 
