@@ -298,16 +298,6 @@ body {
   font-weight: bold;
 }
 
-
-.btn:hover {
-  background: #03A9F4;
-  background-image: -webkit-linear-gradient(top, #05b4ff, #07a7e6);
-  background-image: -moz-linear-gradient(top, #05b4ff, #07a7e6);
-  background-image: -ms-linear-gradient(top, #05b4ff, #07a7e6);
-  background-image: -o-linear-gradient(top, #05b4ff, #07a7e6);
-  background-image: linear-gradient(to bottom, #05b4ff, #07a7e6);
-  text-decoration: none;
-}
 .member-tag {
   margin: 10px;
 }
