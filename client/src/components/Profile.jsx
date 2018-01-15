@@ -145,7 +145,11 @@ class Profile extends React.Component {
                 />
               <Payment
                 refreshUserData={this.props.refreshUserData}
-                payeeUsername={this.state.profileInfo.username}
+                // payeeUsername=
+                //   {this.props.userInfo.username !== this.props.match.params.username
+                //     ? this.state.profileInfo.username
+                //     : undefined
+                //   }
                 payerId={this.props.userInfo.userId}
               />
               <FeedContainer       

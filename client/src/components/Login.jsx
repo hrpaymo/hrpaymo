@@ -30,6 +30,7 @@ class Login extends React.Component {
     let user = this.state.formData;
     axios.post('/login', user)
       .then((response) => {
+        // console.log('logUserIn response:', response.data);
         let userId = response.data.userId;
         this.props.logUserIn(userId);
         this.props.history.push('/');

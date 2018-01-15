@@ -32,10 +32,24 @@ class Payment extends React.Component {
       payeeUsername: '',
       amount: '',
       note: '',
-      paymentFail: false
+      paymentFail: false,
+      usernames: []
     }
   }
 
+  componentWillMount() {
+    console.log('getting usersnames from index.jsx');
+    axios('/usernames', { params: { userId: userId }})
+    .then(response => {
+      this.setState({
+        usernames: response.data.usernames
+      });
+    })
+    .catch(err => {
+      console.error(err);
+    })
+  }
+  
   handleInputChanges (event) {
     let target = event.target;
     this.setState({
@@ -102,7 +116,7 @@ class Payment extends React.Component {
                 style={style.input}
                 name='payeeUsername'
                 filter={AutoComplete.caseInsensitiveFilter}
-                dataSource={this.props.usernames ? this.props.usernames : []}
+                dataSource={this.state.usernames ? this.state.usernames : []}
                 maxSearchResults={7}
                 searchText={this.state.payeeUsername}
                 onUpdateInput = {this.onDropdownInput.bind(this)}

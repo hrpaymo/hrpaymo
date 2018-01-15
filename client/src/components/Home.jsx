@@ -43,7 +43,7 @@ class Home extends React.Component {
         <div className="pay-feed-container">
           <Payment 
             payerId={this.props.userInfo.userId}
-            usernames={this.props.usernames}
+            // usernames={this.props.usernames}
             // callback for after payment succeeds
             refreshUserData={this.props.refreshUserData}
           />
