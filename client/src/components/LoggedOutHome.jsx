@@ -19,9 +19,9 @@ class LoggedOutHome extends React.Component {
               <img src='/images/nexus-image.png' width='316px' height='643px' />
             </div>
             <div className='splash-textColumn'>
-              <h1>Send money and make purchases with Paymo.</h1>
+              <h1>Send money and make purchases with Paywaal.</h1>
 
-              <p>New to Paymo?</p>
+              <p>New to Paywaal?</p>
               <Link to="/signup"><button className='btn'>Create an account</button></Link>
 
               <p>Already a member?</p>
