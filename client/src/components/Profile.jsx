@@ -25,6 +25,12 @@ class Profile extends React.Component {
     this.getProfileFeeds('relationalFeed', userId, null, profileUsername);
   }
 
+  refreshProfileFeeds(userId){
+    this.props.refreshUserData(userId);
+    this.getProfileFeeds('profileFeed', userId, this.state.profileFeed.newestTransactionId || null);
+    this.getProfileFeeds('relationalFeed', userId, this.state.relationalFeed.newestTransactionId || null);
+  }
+
   getProfileFeeds(feedType, userId = null, sinceId, profileUsername) {
     let endpoint = feedManipulation.returnFeedEndpoint(feedType, userId);
 
@@ -145,7 +151,7 @@ class Profile extends React.Component {
               />
               {this.props.userInfo.username !== this.props.match.params.username
                 ? <Payment
-                    refreshUserData={this.props.refreshUserData}
+                    refreshUserData={this.refreshProfileFeeds.bind(this)}
                     payeeUsername={this.state.profileInfo.username}
                     payerId={this.props.userInfo.userId}
                   />
