@@ -26,7 +26,12 @@ class Profile extends React.Component {
   }
 
   refreshProfileFeeds(userId){
+    // Callback function for post-payments
+
+    // Refresh user feed so their balance updates
     this.props.refreshUserData(userId);
+
+    // Refresh profile feeds to reflect new transaction
     this.getProfileFeeds('profileFeed', userId, this.state.profileFeed.newestTransactionId || null);
     this.getProfileFeeds('relationalFeed', userId, this.state.relationalFeed.newestTransactionId || null);
   }
