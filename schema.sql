@@ -44,3 +44,21 @@ INSERT INTO BALANCE (user_id, amount) VALUES (1, 100);
 INSERT INTO BALANCE (user_id, amount) VALUES (2, 100);
 INSERT INTO BALANCE (user_id, amount) VALUES (3, 100);
 INSERT INTO BALANCE (user_id, amount) VALUES (4, 100);
+
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (1, 2);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (2, 3);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (3, 4);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (4, 1);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (2, 1);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (3, 2);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (4, 3);
+INSERT INTO USERS_TRANSACTIONS (payer_id, payee_id) VALUES (1, 4);
+
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (1, 10, 'Hacking fees');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (2, 9, 'Cat food');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (3, 8, 'VOLCANO GO BOOM BOOM!');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (4, 7, 'Roads, bro');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (5, 6, 'Cat peed on me');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (6, 5, 'Will is my name, volcanoes are my game');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (7, 4, 'Gas $$');
+INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (8, 3, 'Get pwned');
