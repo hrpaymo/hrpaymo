@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Payment from './Payment.jsx';
 import FeedContainer from './FeedContainer.jsx';
 import MiniProfile from './MiniProfile.jsx';
+import ContactsList from './ContactsList.jsx';
 
 class Home extends React.Component {
   constructor (props) {
@@ -53,6 +54,7 @@ class Home extends React.Component {
             <MiniProfile 
               balance={this.props.balance}
               userInfo={this.props.userInfo}/>
+            <ContactsList />
           </div>
         </div>
       </div>

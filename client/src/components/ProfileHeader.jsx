@@ -4,6 +4,7 @@ import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import moment from 'moment';
+import ChatWindow from './ChatWindow.jsx';
 
 const style = {
   card: {
@@ -27,6 +28,7 @@ class ProfileHeader extends React.Component {
     return (
       <Paper className='feed-container'>
         <Card>
+          <ChatWindow />
           <CardHeader
             title={
               <div>
