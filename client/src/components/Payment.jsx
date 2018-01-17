@@ -69,7 +69,6 @@ class Payment extends React.Component {
       amount: this.state.amount,
       note: this.state.note
     };
-    console.log('payment', payment)
     axios.post('/pay', payment)
       .then((response) => {
         this.setState({
