@@ -301,3 +301,17 @@ body {
 .member-tag {
   margin: 10px;
 }
+
+/* chat window */
+.chat-box-window {
+  float: right;
+}
+
+.chat-button button {
+  z-index: 200;
+}
+
+.chat-modal {
+  height: 60vw;
+  width: 60vw;
+}
