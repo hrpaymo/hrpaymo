@@ -4,7 +4,7 @@ CREATE DATABASE paymo;
 \connect paymo;
 
 CREATE TABLE USERS (
-  id SERIAL PRIMARY KEY,
+  id NUMERIC(25) PRIMARY KEY,
   username varchar(20) UNIQUE NOT NULL,
   first_name varchar(20) NOT NULL,
   last_name varchar(20) NOT NULL,

@@ -15,8 +15,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // ---------- Componenets ---------- //
 import LoggedOutHome from './components/LoggedOutHome.jsx';
 import Home from './components/Home.jsx';
-import Login from './components/Login.jsx';
-import SignUp from './components/SignUp.jsx';
+// import Login from './components/Login.jsx';
+// import SignUp from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
 import Navbar from './components/Navbar.jsx';
 // ---------- Helper ---------- //
@@ -45,7 +45,7 @@ class App extends React.Component {
   }
 
   loadUserData(userId) {
-    this.getUserInfo(userId)
+    this.getUserInfo(userId);
     this.getBalance(userId);
     this.getFeed('globalFeed', userId);
     this.getFeed('userFeed', userId);
@@ -231,10 +231,10 @@ class App extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <BrowserRouter>
           <Switch>
-            <Route 
+            {/* <Route 
               exact path="/signup" 
               render={routeProps => <SignUp {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
-            />
+            /> */}
             <Route 
               exact path="/login" 
               render={routeProps => <Login {...routeProps} logUserIn={this.logUserIn.bind(this)} />} 
