@@ -33,7 +33,8 @@ class App extends React.Component {
       globalFeed: {},
       userFeed: {},
       balance: null,
-      userInfo: {}
+      userInfo: {},
+      friends: []
     }
   }
 
@@ -45,12 +46,14 @@ class App extends React.Component {
     this.getBalance(userId);
     this.getFeed('globalFeed', userId);
     this.getFeed('userFeed', userId);
+    this.getFriendsList(userId);
   }
 
   refreshUserData(userId) {
     this.getBalance(userId);
     this.getFeed('globalFeed', userId, this.state.globalFeed.newestTransactionId || null);
     this.getFeed('userFeed', userId, this.state.userFeed.newestTransactionId || null);
+    this.getFriendsList(userId);
   }
 
   getFeed(feedType, userId = null, sinceId) {
@@ -138,6 +141,18 @@ class App extends React.Component {
       });
   }
 
+  getFriendsList(userId) {
+    axios('/friends', {params: {userId: userId}})
+      .then((response) => {
+        this.setState({
+          friends: response.data.friends
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   logUserIn(userId) {
     // set the userId in the userInfo object as soon as the user logs in
     var obj = this.state.userInfo;
@@ -155,7 +170,8 @@ class App extends React.Component {
       globalFeed: {},
       userFeed: {},
       balance: null,
-      userInfo: {}
+      userInfo: {},
+      friends: []
     })
   }
 
@@ -178,6 +194,7 @@ class App extends React.Component {
                 globalFeed={this.state.globalFeed}
                 userInfo={this.state.userInfo}
                 balance={this.state.balance}
+                friends={this.state.friends}
                 {...props}
               />
           }

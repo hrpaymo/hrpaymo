@@ -54,7 +54,10 @@ class Home extends React.Component {
             <MiniProfile 
               balance={this.props.balance}
               userInfo={this.props.userInfo}/>
-            <ContactsList />
+            <ContactsList 
+              friends={this.props.friends}
+              uiAvatar={this.props.userInfo.avatarUrl || '/images/no-image.gif'}
+            />
           </div>
         </div>
       </div>
