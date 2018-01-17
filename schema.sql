@@ -34,6 +34,15 @@ CREATE TABLE BALANCE (
   amount NUMERIC(10,2)
 );
 
+CREATE TABLE FRIENDSHIPS (
+  id SERIAL PRIMARY KEY,
+  from_user INT REFERENCES USERS(id),
+  to_user INT REFERENCES USERS(id),
+  verified BOOLEAN NOT NULL,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
 
 INSERT INTO USERS (username, first_name, last_name, phone, password, email, avatar_url) VALUES ('Aaron', 'Aaron', 'Pietsch', 1111111111, 'password', 'aaron@hackreactor.com', 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAIA_wDGAAAAAQAAAAAAAAopAAAAJDY5ZTRkYjlhLTM5OTEtNDZhYS1iNGM4LTRmZTk5NmI0MzFlYw.jpg');
 INSERT INTO USERS (username, first_name, last_name, phone, password, email, avatar_url) VALUES ('Larry', 'Larry', 'Chang', 2222222222, 'password', 'larry@githell.com', 'https://upload.wikimedia.org/wikipedia/commons/7/77/Avatar_cat.png');
@@ -62,3 +71,8 @@ INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (5, 6, 'Cat peed on me');
 INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (6, 5, 'Will is my name, volcanoes are my game');
 INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (7, 4, 'Gas $$');
 INSERT INTO TRANSACTIONS (txn_id, amount, note) VALUES (8, 3, 'Get pwned');
+
+INSERT INTO FRIENDSHIPS (from_user, to_user, verified) VALUES (1, 2, 'false');
+INSERT INTO FRIENDSHIPS (from_user, to_user, verified) VALUES (2, 3, 'true');
+INSERT INTO FRIENDSHIPS (from_user, to_user, verified) VALUES (3, 4, 'true');
+INSERT INTO FRIENDSHIPS (from_user, to_user, verified) VALUES (4, 1, 'false');
