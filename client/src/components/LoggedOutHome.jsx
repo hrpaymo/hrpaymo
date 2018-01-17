@@ -13,10 +13,6 @@ class LoggedOutHome extends React.Component {
     this.initializeLoginButton();
   }
 
-  componentDidUpdate() {
-    this.initializeLoginButton();
-  }
-
   initializeLoginButton() {
     gapi.load('auth2', () => {
       var auth2 = gapi.auth2.getAuthInstance();
