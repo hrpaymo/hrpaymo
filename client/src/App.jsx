@@ -5,6 +5,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import $ from 'jquery';
 import axios from 'axios';
 
+// ---------- React-Redux ---------- //
+import { connect } from 'react-redux';
+
 // ---------- Material UI ---------- //
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -252,4 +255,14 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+
+// ReactDOM.render(<App />, document.getElementById('app'));
+
+
+function mapStateToProps(state) {
+  return {
+
+  };
+}
+
+export default connect(mapStateToProps)(App);
