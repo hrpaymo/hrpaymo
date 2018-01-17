@@ -84,7 +84,6 @@ app.get('/balance', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 app.get('/friends', (req, res) => {
   var userId = req.query.userId;
   db.profile.getFriendsList(parseInt(_.escape(userId.replace(/"/g, "'"))), (err, rows) => {
@@ -97,42 +96,6 @@ app.get('/friends', (req, res) => {
   })
 })
 
-
-app.post('/signup', (req, res) => {
-  // check to see if req fields are empty
-  if(!req.body.username ||
-    !req.body.password ||
-    !req.body.firstName ||
-    !req.body.lastName) {
-      res.status(400).json({ error: "Improper format." });
-      return;
-    }
-
-  let signupData = {};
-  for(let key in req.body) {
-    signupData[_.escape(key.replace(/"/g,"'"))] = _.escape(req.body[key].replace(/"/g,"'"));
-  }
-  db.signup.newUserSignup(signupData, 100)
-    .then(userId => {
-      res.status(201).json({ userId: userId });
-    })
-    .catch(err => {
-      console.error('error on user signup:', err.message);
-      // TODO: send responses depending on what type of error is thrown
-      if(err.constraint.includes('users_user')) {
-        res.status(422).json({ error : "Username must be unique." });
-      } else if(err.constraint.includes('users_email')) {
-        res.status(422).json({ error: "Email must be unique." });
-      } else if(err.constraint.includes('users_phone')) {
-        res.status(422).json({ error: "Phone number must be unique." });
-      } else {
-        res.status(400).json({ error: "Improper format." });
-      }
-    })
-})
-
-=======
->>>>>>> functioning login
 app.post('/pay', (req, res) => {
   // TODO: check if user is still logged in (i.e. check cookie) here. If not, send back appropriate error response.
   let paymentData = {};
