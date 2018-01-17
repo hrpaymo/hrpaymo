@@ -1,3 +1,6 @@
+let axios = require('axios');
+
+let client_id = '636654108787-tpfoiuolsol40okb92hejj1f3912dc7l.apps.googleusercontent.com';
 
 module.exports = {
   buildFeedObject: (items, limit) => {
@@ -15,5 +18,17 @@ module.exports = {
     }
 
     return results;
+  },
+
+  validateIdToken: (token) => {
+  return axios.get('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + token)
+    .then(response => {
+      if (response.data.aud === client_id && (response.data.iss === 'accounts.google.com' || response.data.iss === 'https://accounts.google.com')) {
+        return response.data;
+      }
+    })
+    .catch((err) => {
+      console.log('token validation failed', err);
+    })
   }
 }
