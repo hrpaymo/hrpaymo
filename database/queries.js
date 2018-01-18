@@ -4,9 +4,9 @@ const feed = require('../database/feed.js');
 const profile = require('../database/profile.js');
 const payment = require('../database/pay.js');
 const usernames = require('../database/usernames.js');
+const email = require('../database/email.js');
 
 module.exports = {
-  // signup: signup,
   profile: profile,
   loginOrCreate: login.loginOrCreate,
   payment: payment.pay,
@@ -14,5 +14,6 @@ module.exports = {
   globalFeed: feed.globalFeed,
   myFeed: feed.myFeed,
   profileFeed: feed.profileFeed,
-  profileFeedRelational: feed.profileFeedRelational
+  profileFeedRelational: feed.profileFeedRelational,
+  email: email
 }

@@ -55,7 +55,8 @@ const FEED_FIELDS = ['transactions.txn_id',
   {payee_id: 'users_transactions.payee_id'},
   {payee_username: 'payee.username'},
   {payee_firstName: 'payee.first_name'},
-  {payee_lastName: 'payee.last_name'}
+  {payee_lastName: 'payee.last_name'},
+  {payee_email: 'payee.email'}
 ];
 
 // MODULAR BUILDING BLOCKS
@@ -126,6 +127,17 @@ module.exports = {
       .limit(limit)
       .then(rows => {
         return rows.map((item) => formatOutput(item, userId));
+      })
+  },
+
+  emailFeed: function (limit, sinceId, userId) {
+    return pg('users_transactions')
+      .select(...FEED_FIELDS)
+      .modify(baseTransactionConnections)
+      .modify(sinceIdQuery, sinceId)
+      .limit(limit)
+      .then(rows => {
+        return rows
       })
   },
 
