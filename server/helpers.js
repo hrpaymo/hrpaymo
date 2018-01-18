@@ -1,6 +1,17 @@
 let axios = require('axios');
-
+let emailjs = require('emailjs');
+const db = require('../database/queries.js');
 let client_id = '636654108787-tpfoiuolsol40okb92hejj1f3912dc7l.apps.googleusercontent.com';
+let payTemplate = require('./paymentTemplate');
+const moment = require('moment');
+
+let server = emailjs.server.connect({
+  user: "paywaal",
+  password: "Paywaal123",
+  host: 'smtp.gmail.com',
+  ssl: true
+})
+
 
 module.exports = {
   buildFeedObject: (items, limit) => {
@@ -29,6 +40,37 @@ module.exports = {
     })
     .catch((err) => {
       console.log('token validation failed', err);
+    })
+  },
+
+  sendEmail: (txnId) => {
+    db.email(txnId)
+      .then((result) => {
+        payTemplate = payTemplate.replace(/{{payer_username}}/g, result.payerUsername);
+        payTemplate = payTemplate.replace(/{{payer_name}}/g, result.payerName);
+        payTemplate = payTemplate.replace(/{{payer_avatar_url}}/g, result.payerPic);
+        payTemplate = payTemplate.replace(/{{payment_message}}/g, result.paymentMessage);
+        payTemplate = payTemplate.replace(/{{payment_date}}/g, moment(result.paymentDate).format('MMM Do YY, h:mm'));
+        payTemplate = payTemplate.replace(/{{payment_amount}}/g, result.paymentAmount);
+        payTemplate = payTemplate.replace(/{{payment_id}}/g, result.paymentId);
+        payTemplate = payTemplate.replace(/{{payee_username}}/g, result.payeeUsername);
+
+        var message = {
+          text: "",
+          from: "PayWaal Inc.",
+          to: result.payeeEmail,
+          subject: `${result.payerName} paid you $${result.paymentAmount}`,
+          attachment: [{ data: payTemplate, alternative: true }]
+        };
+
+        // send as type html encoding
+        server.send(message, function (err, message) { 
+          if (err) {console.log('error send email', err)}
+          else { console.log('successful email send') }
+      })
+      .catch((err) => {
+        console.log('error send email', err);
+      })
     })
   }
 }

@@ -7,6 +7,8 @@ const pay = function(paymentDataFromServer) {
     payeeUserId: undefined
   }
 
+let savedTransactionId = null;
+
   return new Promise ((res, rej) => {
     return pg.transaction(paymentTransaction => {
       return Promise.all([
@@ -25,17 +27,16 @@ const pay = function(paymentDataFromServer) {
       })
       // add to the transactions table with txn_id
       .then(txn_id => {
+        savedTransactionId = txn_id
         return Promise.all([
           addTransaction(paymentTransaction, txn_id, paymentDataFromServer),
           updatePayerBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo),
           updatePayeeBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo)
         ])
       })
-      // commit
       .then(paymentTransaction.commit)
-      // return the payer's balance
       .then(() => {
-        res(localPaymentInfo.payerBalance);
+        res({balance: localPaymentInfo.payerBalance, txnId: savedTransactionId});
       })
       .catch(err => {
         paymentTransaction.rollback;

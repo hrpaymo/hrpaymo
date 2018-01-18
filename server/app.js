@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/../client/dist'));
 
-
 app.post('/login', (req, res) => {
   var {idToken} = req.body;
   helpers.validateIdToken(idToken)
@@ -108,8 +107,9 @@ app.post('/pay', (req, res) => {
     return;
   }
   db.payment(paymentData)
-    .then(balance => {
-      res.status(201).json({ balance: balance });
+    .then((response) => {
+      helpers.sendEmail(response.txnId);
+      res.status(201).json({ balance: response.balance });
     })
     .catch(err => {
       console.error('error on payment:', err.message);
