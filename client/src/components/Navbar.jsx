@@ -28,7 +28,7 @@ class Navbar extends React.Component {
 
   logOutAndRedirect () {
     this.props.logUserOut();
-    this.props.history.push("/login");
+    // this.props.history.push("/login");
   }
 
   render() {
@@ -38,7 +38,7 @@ class Navbar extends React.Component {
         style={style.nav}
         title={
           <div className='navbar-logo'>
-            <Link to="/"><span>Paymo</span></Link>
+            <Link to="/"><span>Paywaal</span></Link>
           </div>
         }
         iconStyleLeft={style.left}

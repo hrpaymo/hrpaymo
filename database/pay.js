@@ -7,6 +7,8 @@ const pay = function(paymentDataFromServer) {
     payeeUserId: undefined
   }
 
+let savedTransactionId = null;
+
   return new Promise ((res, rej) => {
     return pg.transaction(paymentTransaction => {
       return Promise.all([
@@ -19,23 +21,22 @@ const pay = function(paymentDataFromServer) {
         .transacting(paymentTransaction)
         .returning('txn_id')
         .insert({
-          payer_id: parseInt(paymentDataFromServer.payerId),
+          payer_id: paymentDataFromServer.payerId,
           payee_id: localPaymentInfo.payeeUserId
         })
       })
       // add to the transactions table with txn_id
       .then(txn_id => {
+        savedTransactionId = txn_id
         return Promise.all([
           addTransaction(paymentTransaction, txn_id, paymentDataFromServer),
           updatePayerBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo),
           updatePayeeBalance(paymentTransaction, paymentDataFromServer, localPaymentInfo)
         ])
       })
-      // commit
       .then(paymentTransaction.commit)
-      // return the payer's balance
       .then(() => {
-        res(localPaymentInfo.payerBalance);
+        res({balance: localPaymentInfo.payerBalance, txnId: savedTransactionId});
       })
       .catch(err => {
         paymentTransaction.rollback;
@@ -67,11 +68,11 @@ const getPayeeInfo = function(paymentTransaction, localPaymentInfo, paymentDataF
   .where({username: paymentDataFromServer.payeeUsername})
   .then(rows => {
     // if no user or payer userid === payee userid, throw error
-    if(rows.length === 0 || rows[0].id === parseInt(paymentDataFromServer.payerId)) {
+    if(rows.length === 0 || rows[0].id === paymentDataFromServer.payerId) {
       throw new Error('Invalid payee username:', paymentDataFromServer.payeeUsername);
     }
     localPaymentInfo.payeeBalance = parseFloat(rows[0].amount);
-    localPaymentInfo.payeeUserId = parseInt(rows[0].id);
+    localPaymentInfo.payeeUserId = rows[0].id;
   })
 }
 
@@ -90,7 +91,7 @@ const updatePayerBalance = function(paymentTransaction, paymentDataFromServer, l
   return pg.table('balance')
   .transacting(paymentTransaction)
   .update({ amount: localPaymentInfo.payerBalance })
-  .where({ user_id: parseInt(paymentDataFromServer.payerId) })
+  .where({ user_id: paymentDataFromServer.payerId })
 }
 
 const updatePayeeBalance = function(paymentTransaction, paymentDataFromServer, localPaymentInfo) {
