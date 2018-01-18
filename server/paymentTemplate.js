@@ -52,8 +52,9 @@ module.exports = `<div style="margin:0 auto;max-width:320px">
             <span>{{payment_date}}</span>
 
             
-            
-            <span style="color:#009200;float:right">+$ {{payment_amount}}</span>
+            <br>
+            <br>
+            <span style="color:#009200">+$ {{payment_amount}}</span>
             
         </td>
     </tr>

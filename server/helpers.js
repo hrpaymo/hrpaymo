@@ -46,14 +46,14 @@ module.exports = {
   sendEmail: (txnId) => {
     db.email(txnId)
       .then((result) => {
-        payTemplate = payTemplate.replace('{{payer_username}}', result.payerUsername);
-        payTemplate = payTemplate.replace('{{payer_name}}', result.payerName);
-        payTemplate = payTemplate.replace('{{payer_avatar_url}}', result.payerPic);
-        payTemplate = payTemplate.replace('{{payment_message}}', result.paymentMessage);
-        payTemplate = payTemplate.replace('{{payment_date}}', moment(result.paymentDate).format('MMMM Do YYYY, h:mm'));
-        payTemplate = payTemplate.replace('{{payment_amount}}', result.paymentAmount);
-        payTemplate = payTemplate.replace('{{payment_id}}', result.paymentId);
-        payTemplate = payTemplate.replace('{{payee_username}}', result.payeeUsername);
+        payTemplate = payTemplate.replace(/{{payer_username}}/g, result.payerUsername);
+        payTemplate = payTemplate.replace(/{{payer_name}}/g, result.payerName);
+        payTemplate = payTemplate.replace(/{{payer_avatar_url}}/g, result.payerPic);
+        payTemplate = payTemplate.replace(/{{payment_message}}/g, result.paymentMessage);
+        payTemplate = payTemplate.replace(/{{payment_date}}/g, moment(result.paymentDate).format('MMM Do YY, h:mm'));
+        payTemplate = payTemplate.replace(/{{payment_amount}}/g, result.paymentAmount);
+        payTemplate = payTemplate.replace(/{{payment_id}}/g, result.paymentId);
+        payTemplate = payTemplate.replace(/{{payee_username}}/g, result.payeeUsername);
 
         var message = {
           text: "",

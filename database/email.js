@@ -2,7 +2,6 @@ const pg = require('./index.js').pg;
 const feed = require('./feed.js');
 
 module.exports = function (txnId) {
-  console.log('transactionid', txnId);
   return feed.emailFeed(5, txnId-1, 1)
   .then((results) => {
     return {
