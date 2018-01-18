@@ -6,7 +6,7 @@ module.exports = function (txnId) {
   .then((results) => {
     return {
       payerUsername: results[0].payer_username,
-      payerName: results[0].payer_firstName + results[0].payer_lastName,
+      payerName: results[0].payer_firstName + ' ' + results[0].payer_lastName,
       payerPic: results[0].payer_avatarUrl,
       paymentMessage: results[0].note,
       paymentDate: results[0].created_at,
