@@ -69,14 +69,14 @@ module.exports = `<div style="margin:0 auto;max-width:320px">
                 <tr>
                     
                     <td style="padding:5px 0;text-align:center;background-color:#3c95d2">
-                        <a href="https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?k=71f384a3-315a-4bdf-9c0d-94778ece5feb" style="text-decoration:none;color:#fff;display:block;width:100%" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?k%3D71f384a3-315a-4bdf-9c0d-94778ece5feb&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEkzadFMkqR1zfUL-jgqSdFMqg4QA">
+                        <a href="https://paywaal.herokuapp.com/" style="text-decoration:none;color:#fff;display:block;width:100%" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?k%3D71f384a3-315a-4bdf-9c0d-94778ece5feb&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEkzadFMkqR1zfUL-jgqSdFMqg4QA">
                                 Like
                         </a>
                     </td>
                     
                     
                     <td style="padding:5px 0;text-align:center;background-color:#3c95d2">
-                        <a href="https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?login=1" style="text-decoration:none;color:#fff;display:block;width:100%" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?login%3D1&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEosqiXFpsVzAjCxHQundwr0lUkHg">
+                        <a href="https://paywaal.herokuapp.com/" style="text-decoration:none;color:#fff;display:block;width:100%" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://paywaal.herokuapp.com/story/5a5660735a877f6e3861921c?login%3D1&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEosqiXFpsVzAjCxHQundwr0lUkHg">
                             Comment
                         </a>
                     </td>
@@ -102,7 +102,7 @@ module.exports = `<div style="margin:0 auto;max-width:320px">
     
 <div style="color:#999;font-size:12px;margin-top:10px;padding-top:10px;border-top:1px dotted #ccc">
     <div style="width:50%;padding:5px;text-align:center;background-color:#3c95d2">
-        <a href="http://www.paywaal.herokuapp.com/referrals?campaign_service=email&amp;campaign_template=payment.received" style="text-decoration:none;color:#000;display:block;width:100%;font-size:12px" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://www.paywaal.herokuapp.com/referrals?campaign_service%3Demail%26campaign_template%3Dpayment.received&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEXMRbfd9Zsl2zCF5oORPMP0ZQ5vg">
+        <a href="http://www.paywaal.herokuapp.com/" style="text-decoration:none;color:#000;display:block;width:100%;font-size:12px" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://www.paywaal.herokuapp.com/referrals?campaign_service%3Demail%26campaign_template%3Dpayment.received&amp;source=gmail&amp;ust=1516318033795000&amp;usg=AFQjCNEXMRbfd9Zsl2zCF5oORPMP0ZQ5vg">
             <div style="font-size:14px;color:#fff">Invite Friends!</div>
         </a>
     </div>
